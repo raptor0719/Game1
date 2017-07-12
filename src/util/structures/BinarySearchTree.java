@@ -16,6 +16,12 @@ public class BinarySearchTree<T> {
 		return root == null;
 	}
 
+	/**
+	 * Inserts this node into the BST using the given comparator. For any given
+	 * sub-tree, all elements in the left sub-tree will be less then the root.
+	 * All elements in the right sub-tree will be greater than or equal to the
+	 * root.
+	 */
 	public void insert(final T data) {
 		if (data == null)
 			return;
@@ -40,7 +46,33 @@ public class BinarySearchTree<T> {
 		}
 	}
 
-	public boolean
+	/**
+	 * Descends the BST searching for the target using the given comparator.
+	 * Returns null if the tree is empty or if the target is not found in
+	 * the tree.
+	 */
+	public T search(final T target) {
+		if (target == null)
+			return null;
+
+		if (root == null)
+			return null;
+
+		return searchRecursive(target, root);
+	}
+
+	private T searchRecursive(final T target, final Node<T> current) {
+		if (current == null)
+			return null;
+
+		if (comparator.compare(target, current.data) == 0)
+			return current.data;
+
+		if (comparator.compare(target, current.data) < 0)
+			return searchRecursive(target, current.leftChild);
+		else
+			return searchRecursive(target, current.rightChild);
+	}
 
 	private static class Node<T> {
 		public Node<T> leftChild;
