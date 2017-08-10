@@ -73,6 +73,8 @@ public class BinarySearchTree<T> {
 		else
 			return searchRecursive(target, current.rightChild);
 	}
+	
+	// TODO: Need to add remove functionality
 
 	private static class Node<T> {
 		public Node<T> leftChild;
