@@ -1,4 +1,4 @@
-package logical.nav;
+package util.geometry;
 
 public class Point {
 	private final int x;
