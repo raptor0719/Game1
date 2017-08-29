@@ -5,15 +5,17 @@ import java.util.List;
 
 import logical.nav.NavNodeTriangle;
 
+// TODO: This object should be read only once created, create a builder for this
+// 		and remove the addNode method
 public class NavGridCell {
 	private final List<NavNodeTriangle> nodes;
-	private final int posx;
-	private final int posy;
+	private final int xPos;
+	private final int yPos;
 
-	public NavGridCell(final int posx, final int posy) {
+	public NavGridCell(final int xPos, final int yPos) {
 		nodes = new ArrayList<NavNodeTriangle>(5);
-		this.posx = posx;
-		this.posy = posy;
+		this.xPos = xPos;
+		this.yPos = yPos;
 	}
 
 	public void addNode(final NavNodeTriangle node) {
@@ -26,11 +28,11 @@ public class NavGridCell {
 	}
 
 	public int getX() {
-		return posx;
+		return xPos;
 	}
 
 	public int getY() {
-		return posy;
+		return yPos;
 	}
 
 	@Override
@@ -44,9 +46,9 @@ public class NavGridCell {
 
 		final NavGridCell o1 = (NavGridCell)o;
 
-		if (posx != o1.getX())
+		if (xPos != o1.getX())
 			return false;
-		if (posy != o1.getY())
+		if (yPos != o1.getY())
 			return false;
 
 		return true;

@@ -15,7 +15,7 @@ public class NavNodeTriangle {
 		return triangle;
 	}
 
-	/*
+	/**
 	 * Create a copy of the internal array so it is read only
 	 */
 	public NavNodeTriangle[] getNavNode(final int index) {
