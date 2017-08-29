@@ -23,6 +23,9 @@ public class TestDisplay extends JFrame {
 
 		this.setSize(800, 600);
 		this.add(panel);
+		this.setTitle("RaptorEngine");
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocation(500, 300);
 
 		this.setVisible(true);
 	}
