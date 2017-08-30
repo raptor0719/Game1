@@ -8,11 +8,12 @@ public class BinaryTree<T> {
 
 	/**
 	 * Sets the data at the current active node's
-	 * left child to the given object.
+	 * left child to the given object. Specifying
+	 * null will still create a new node in the tree.
 	 * @param data the data to set with
 	 */
 	public void setLeft(final T data) {
-		if (current == null || data == null)
+		if (current == null)
 			return;
 
 		if (current.leftChild == null) {
@@ -28,11 +29,12 @@ public class BinaryTree<T> {
 
 	/**
 	 * Sets the data at the current active node's
-	 * right child to the given object.
+	 * right child to the given object. Specifying
+	 * null will still create a new node in the tree.
 	 * @param data the data to set with
 	 */
 	public void setRight(final T data) {
-		if (current == null || data == null)
+		if (current == null)
 			return;
 
 		if (current.rightChild == null) {

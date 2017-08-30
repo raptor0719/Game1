@@ -15,6 +15,8 @@ public class NavGridSpecification {
 	public NavGridSpecification(final int dimension) {
 		if (dimension < MINIMUM_DIMENSION)
 			throw new IllegalArgumentException(String.format("Specified dimension cannot be less than %d", MINIMUM_DIMENSION));
+		else if (!isPowerOfTwo(dimension))
+			throw new IllegalArgumentException("Specified dimension must be a power of two");
 
 		this.arrayGrid = new NavGridCell[dimension][dimension];
 	}
@@ -50,5 +52,17 @@ public class NavGridSpecification {
 
 	public int getDimension() {
 		return arrayGrid.length;
+	}
+	
+	private boolean isPowerOfTwo(final int num) {
+		int i = num;
+		while (true) {
+			if (i == 1)
+				return true;
+			else if (i < 1)
+				return false;
+			
+			i /= 2;
+		}
 	}
 }
