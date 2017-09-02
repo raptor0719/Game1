@@ -1,6 +1,6 @@
 package logical.nav.grid;
 
-import logical.nav.NavNodeTriangle;
+import logical.nav.graph.NavNodeTriangle;
 
 public class NavGridSpecification {
 	private static final int MINIMUM_DIMENSION = 2;

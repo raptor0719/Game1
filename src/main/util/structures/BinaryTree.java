@@ -102,6 +102,32 @@ public class BinaryTree<T> {
 	}
 
 	/**
+	 * Returns the data at the current active node's left child.
+	 * Returns null if the tree is empty, or if the current
+	 * active node does not have a left child.
+	 * @return
+	 */
+	public T getLeft() {
+		if (current == null || current.leftChild == null)
+			return null;
+
+		return current.leftChild.data;
+	}
+
+	/**
+	 * Returns the data at the current active node's right child.
+	 * Returns null if the tree is empty, or if the current
+	 * active node does not have a right child.
+	 * @return
+	 */
+	public T getRight() {
+		if (current == null || current.rightChild == null)
+			return null;
+
+		return current.rightChild.data;
+	}
+
+	/**
 	 * Resets the current active node to the root of the tree. Does
 	 * nothing if the tree has no elements.
 	 */

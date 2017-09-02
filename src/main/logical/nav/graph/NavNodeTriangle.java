@@ -1,4 +1,4 @@
-package logical.nav;
+package logical.nav.graph;
 
 import util.geometry.Triangle;
 

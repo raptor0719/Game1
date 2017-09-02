@@ -3,7 +3,7 @@ package logical.nav.grid;
 import java.util.ArrayList;
 import java.util.List;
 
-import logical.nav.NavNodeTriangle;
+import logical.nav.graph.NavNodeTriangle;
 
 // TODO: This object should be read only once created, create a builder for this
 // 		and remove the addNode method

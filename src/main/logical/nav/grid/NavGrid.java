@@ -1,5 +1,6 @@
 package logical.nav.grid;
 
+import logical.nav.graph.NavNodeTriangle;
 import util.structures.BinaryTree;
 
 public class NavGrid {
@@ -10,12 +11,28 @@ public class NavGrid {
 		this.tree = new BinaryTree<NavGridCell>();
 		this.dimension = spec.getDimension();
 
-		createGridTree(dimension);
+		createGridTree(spec);
 	}
 
-	private void createGridTree(final int dimension) {
+	public NavNodeTriangle[] getNodes(final int xPos, final int yPos) {
+		if (xPos >= dimension || yPos >= dimension)
+			throw new RuntimeException("Attempted retrieving nodes ");
+
+		traverseTree(xPos, yPos);
+
+		return tree.getCurrent().getNodes();
+	}
+
+	private void createGridTree(final NavGridSpecification spec) {
 		// The depth from the root is equal to the dimension of the grid
-		generateEmptyTree(dimension);
+		generateEmptyTree(spec.getDimension());
+
+		for (int x = 0; x != spec.getDimension(); x++) {
+			for (int y = 0; y != spec.getDimension(); y++) {
+				traverseTree(x, y);
+				tree.setCurrent(spec.getCell(x, y));
+			}
+		}
 	}
 
 	/* INTERNAL */
@@ -36,6 +53,9 @@ public class NavGrid {
 			tree.moveToLeft();
 		else
 			tree.moveToRight();
+
+		if (tree.getLeft() == null && tree.getRight() == null)
+			return;
 
 		traverseTree_x(xPos, yPos, dim/2);
 	}
