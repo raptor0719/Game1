@@ -16,7 +16,7 @@ public class NavGrid {
 
 	public NavNodeTriangle[] getNodes(final int xPos, final int yPos) {
 		if (xPos >= dimension || yPos >= dimension)
-			throw new RuntimeException("Attempted retrieving nodes ");
+			throw new RuntimeException(String.format("Attempted retrieving nodes in cell (%d,%d) which is out of the dimension (%d)", xPos, yPos, dimension));
 
 		traverseTree(xPos, yPos);
 
