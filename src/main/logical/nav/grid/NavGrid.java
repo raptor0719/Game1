@@ -1,100 +1,68 @@
 package logical.nav.grid;
 
 import logical.nav.graph.NavNodeTriangle;
-import util.structures.BinaryTree;
 
 public class NavGrid {
-	private final BinaryTree<NavGridCell> tree;
-	private final int dimension;
+	private static final int MINIMUM_DIMENSION = 2;
+	private static final int DEFAULT_DIMENSION = 8;
 
-	public NavGrid(final NavGridSpecification spec) {
-		this.tree = new BinaryTree<NavGridCell>();
-		this.dimension = spec.getDimension();
+	private final NavGridCell[][] arrayGrid;
 
-		createGridTree(spec);
+	public NavGrid() {
+		this(DEFAULT_DIMENSION);
 	}
 
-	public NavNodeTriangle[] getNodes(final int xPos, final int yPos) {
-		if (xPos >= dimension || yPos >= dimension)
-			throw new RuntimeException(String.format("Attempted retrieving nodes in cell (%d,%d) which is out of the dimension (%d)", xPos, yPos, dimension));
+	public NavGrid(final int dimension) {
+		if (dimension < MINIMUM_DIMENSION)
+			throw new IllegalArgumentException(String.format("Specified dimension cannot be less than %d", MINIMUM_DIMENSION));
+		else if (!isPowerOfTwo(dimension))
+			throw new IllegalArgumentException("Specified dimension must be a power of two");
 
-		traverseTree(xPos, yPos);
-
-		return tree.getCurrent().getNodes();
+		this.arrayGrid = new NavGridCell[dimension][dimension];
 	}
 
-	private void createGridTree(final NavGridSpecification spec) {
-		// The depth from the root is equal to the dimension of the grid
-		generateEmptyTree(spec.getDimension());
+	public void setCell(final int xPos, final int yPos, final NavGridCell cell) {
+		if (xPos >= arrayGrid.length)
+			throw new IllegalArgumentException("Specified xPos exceeds grid size");
+		else if (yPos >= arrayGrid[0].length)
+			throw new IllegalArgumentException("Specified yPos exceeds grid size");
+		else if (cell == null)
+			throw new IllegalArgumentException("Specified NavGridCell must be non-null");
 
-		for (int x = 0; x != spec.getDimension(); x++) {
-			for (int y = 0; y != spec.getDimension(); y++) {
-				traverseTree(x, y);
-				tree.setCurrent(spec.getCell(x, y));
-			}
+		arrayGrid[xPos][yPos] = cell;
+	}
+
+	public void setCell(final int xPos, final int yPos, final int cellX, final int cellY, final NavNodeTriangle... triangles) {
+		final NavGridCell cell = new NavGridCell(cellX, cellY);
+
+		for (final NavNodeTriangle t : triangles)
+			cell.addNode(t);
+
+		setCell(xPos, yPos, cell);
+	}
+
+	public NavGridCell getCell(final int x, final int y) {
+		if (x >= arrayGrid.length)
+			throw new IllegalArgumentException("Specified xPos exceeds grid size");
+		else if (y >= arrayGrid[0].length)
+			throw new IllegalArgumentException("Specified yPos exceeds grid size");
+
+		return arrayGrid[x][y];
+	}
+
+	public int getDimension() {
+		return arrayGrid.length;
+	}
+
+	private boolean isPowerOfTwo(final int num) {
+		int i = num;
+		while (true) {
+			if (i == 1)
+				return true;
+			else if (i < 1)
+				return false;
+
+			i /= 2;
 		}
-	}
-
-	/* INTERNAL */
-
-	// TODO: Tree traversal should also maybe be moved into an externalized
-	// class to improve testability
-	private void traverseTree(final int xPos, final int yPos) {
-		tree.resetToRoot();
-
-		if (tree.getCurrent() == null)
-			throw new RuntimeException("Attempted to traverse tree when empty");
-
-		traverseTree_x(xPos, yPos, dimension);
-	}
-
-	private void traverseTree_y(final int xPos, final int yPos, final int dim) {
-		if (yPos < dim/2)
-			tree.moveToLeft();
-		else
-			tree.moveToRight();
-
-		if (tree.getLeft() == null && tree.getRight() == null)
-			return;
-
-		traverseTree_x(xPos, yPos, dim/2);
-	}
-
-	private void traverseTree_x(final int xPos, final int yPos, final int dim) {
-		if (xPos < dim/2)
-			tree.moveToLeft();
-		else
-			tree.moveToRight();
-
-		traverseTree_y(xPos, yPos, dim);
-	}
-
-	// TODO: Empty tree generation should be externalized into a provider class
-	// to improve testability
-	private void generateEmptyTree(final int depth) {
-		tree.resetToRoot();
-
-		// Generate the root
-		tree.setCurrent(null);
-
-		// Generate the tree
-		generateEmptyTree_Recursive(depth);
-	}
-
-	private void generateEmptyTree_Recursive(final int depth) {
-		if (depth <= 0)
-			return;
-
-		// Generate the left tree
-		tree.setLeft(null);
-		tree.moveToLeft();
-		generateEmptyTree_Recursive(depth-1);
-		tree.moveToParent();
-
-		// Generate the right tree
-		tree.setRight(null);
-		tree.moveToRight();
-		generateEmptyTree_Recursive(depth-1);
-		tree.moveToParent();
 	}
 }

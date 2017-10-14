@@ -1,35 +1,36 @@
 package logical.nav.graph;
 
+import java.util.Set;
+
+import logical.nav.graph.api.GraphEdge;
+import logical.nav.graph.api.GraphNode;
 import util.geometry.Triangle;
 
-public class NavNodeTriangle {
-	private final NavNodeTriangle[] navNodes;
+public class NavNodeTriangle implements GraphNode<Triangle>{
+	private final Set<GraphEdge<Triangle>> connections;
 	private final Triangle triangle;
 
-	protected NavNodeTriangle(final NavNodeTriangle[] navNodes, final Triangle triangle) {
-		this.navNodes = navNodes;
+	protected NavNodeTriangle(final Set<GraphEdge<Triangle>> connections, final Triangle triangle) {
+		this.connections = connections;
 		this.triangle = triangle;
 	}
 
-	public Triangle getTriangle() {
+	@Override
+	public Triangle getData() {
 		return triangle;
 	}
 
-	/**
-	 * Create a copy of the internal array so it is read only
-	 */
-	public NavNodeTriangle[] getNavNode(final int index) {
-		final NavNodeTriangle[] navNodesCpy = new NavNodeTriangle[navNodes.length];
-		System.arraycopy(navNodes, 0, navNodesCpy, 0, navNodes.length);
-		return navNodesCpy;
+	@Override
+	public Set<GraphEdge<Triangle>> getConnections() {
+		return connections;
 	}
 
 	public static class NavNodeTriangleBuilder {
-		private NavNodeTriangle[] navNodes;
+		private Set<GraphEdge<Triangle>> connections;
 		private Triangle triangle;
 
-		public NavNodeTriangleBuilder navNodes(final NavNodeTriangle... navNodes) {
-			this.navNodes = navNodes;
+		public NavNodeTriangleBuilder connections(final Set<GraphEdge<Triangle>> connections) {
+			this.connections = connections;
 			return this;
 		}
 
@@ -39,7 +40,7 @@ public class NavNodeTriangle {
 		}
 
 		public NavNodeTriangle build() {
-			return new NavNodeTriangle(navNodes, triangle);
+			return new NavNodeTriangle(connections, triangle);
 		}
 	}
 }
