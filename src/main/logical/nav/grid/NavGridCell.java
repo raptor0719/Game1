@@ -3,28 +3,28 @@ package logical.nav.grid;
 import java.util.ArrayList;
 import java.util.List;
 
-import logical.nav.graph.NavNodeTriangle;
+import logical.nav.graph.NavNode;
 
 // TODO: This object should be read only once created, create a builder for this
 // 		and remove the addNode method
 public class NavGridCell {
-	private final List<NavNodeTriangle> nodes;
+	private final List<NavNode> nodes;
 	private final int xPos;
 	private final int yPos;
 
 	public NavGridCell(final int xPos, final int yPos) {
-		nodes = new ArrayList<NavNodeTriangle>(5);
+		nodes = new ArrayList<NavNode>(5);
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}
 
-	public void addNode(final NavNodeTriangle node) {
+	public void addNode(final NavNode node) {
 		if (node != null)
 			nodes.add(node);
 	}
 
-	public NavNodeTriangle[] getNodes() {
-		return nodes.toArray(new NavNodeTriangle[nodes.size()]);
+	public NavNode[] getNodes() {
+		return nodes.toArray(new NavNode[nodes.size()]);
 	}
 
 	public int getX() {

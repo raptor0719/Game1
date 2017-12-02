@@ -2,18 +2,34 @@ package logical.nav;
 
 import java.util.List;
 
-import logical.nav.grid.NavGridTree;
+import logical.nav.api.INavigationMap;
+import logical.nav.api.IPathFinder;
+import logical.nav.api.IPathMaterializer;
+import logical.nav.graph.api.IGraphNode;
+import logical.nav.graph.api.IGraphSearch;
 import util.geometry.Point;
+import util.geometry.Triangle;
 
-public class NavMap {
+public class NavMap implements IPathFinder {
+	private final INavigationMap<Triangle> navMap;
+	private final IGraphSearch<Triangle> graphSearch;
+	private final IPathMaterializer<Triangle> pathMaterializer;
 
-	private final NavGridTree navGrid;
-
-	public NavMap(final NavGridTree navGrid) {
-		this.navGrid = navGrid;
+	public NavMap(final INavigationMap<Triangle> navMap, final IGraphSearch<Triangle> graphSearch, final IPathMaterializer<Triangle> pathMaterializer) {
+		this.navMap = navMap;
+		this.graphSearch = graphSearch;
+		this.pathMaterializer = pathMaterializer;
 	}
 
-	public List<Point> getPath(final Point start, final Point end) {
-		return null;
+	@Override
+	public List<Point> findPath(final Point start, final Point end) {
+		final IGraphNode<Triangle> startNode = navMap.resolvePoint(start);
+		final IGraphNode<Triangle> endNode = navMap.resolvePoint(end);
+
+		final List<? extends IGraphNode<Triangle>> nodePath = graphSearch.findPath(startNode, endNode);
+
+		final List<Point> cartesianPath = pathMaterializer.materialize(nodePath);
+
+		return cartesianPath;
 	}
 }

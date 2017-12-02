@@ -1,6 +1,6 @@
 package logical.nav.grid;
 
-import logical.nav.graph.NavNodeTriangle;
+import logical.nav.graph.NavNode;
 
 public class NavGrid {
 	private static final int MINIMUM_DIMENSION = 2;
@@ -32,10 +32,10 @@ public class NavGrid {
 		arrayGrid[xPos][yPos] = cell;
 	}
 
-	public void setCell(final int xPos, final int yPos, final int cellX, final int cellY, final NavNodeTriangle... triangles) {
+	public void setCell(final int xPos, final int yPos, final int cellX, final int cellY, final NavNode... triangles) {
 		final NavGridCell cell = new NavGridCell(cellX, cellY);
 
-		for (final NavNodeTriangle t : triangles)
+		for (final NavNode t : triangles)
 			cell.addNode(t);
 
 		setCell(xPos, yPos, cell);

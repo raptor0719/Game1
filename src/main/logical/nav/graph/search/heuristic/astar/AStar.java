@@ -1,9 +1,9 @@
-package logical.nav.graph.search.astar;
+package logical.nav.graph.search.heuristic.astar;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class AStar<T>{
+public class AStar<T> {
 	public int nodesExpanded = 0;
 
 	public AStar() {}
