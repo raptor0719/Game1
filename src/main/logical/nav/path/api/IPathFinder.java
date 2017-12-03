@@ -1,4 +1,4 @@
-package logical.nav.api;
+package logical.nav.path.api;
 
 import java.util.List;
 

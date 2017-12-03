@@ -3,10 +3,10 @@ package logical.nav;
 import java.util.List;
 
 import logical.nav.api.INavigationMap;
-import logical.nav.api.IPathFinder;
-import logical.nav.api.IPathMaterializer;
 import logical.nav.graph.api.IGraphNode;
 import logical.nav.graph.api.IGraphSearch;
+import logical.nav.path.api.IPathFinder;
+import logical.nav.path.api.IPathMaterializer;
 import util.geometry.Point;
 import util.geometry.Triangle;
 
