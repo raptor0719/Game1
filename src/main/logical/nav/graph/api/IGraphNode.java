@@ -4,5 +4,5 @@ import java.util.Set;
 
 public interface IGraphNode<D> {
 	public D getData();
-	public Set<? extends IGraphEdge<D>> getConnections();
+	public Set<? extends IGraphEdge<? extends IGraphNode<D>>> getConnections();
 }

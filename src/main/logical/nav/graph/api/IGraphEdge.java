@@ -1,6 +1,6 @@
 package logical.nav.graph.api;
 
-public interface IGraphEdge<D> {
+public interface IGraphEdge<T extends IGraphNode<?>> {
 	public int getCost();
-	public IGraphNode<D> getDestination();
+	public T getDestination();
 }

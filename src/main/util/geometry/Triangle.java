@@ -17,12 +17,12 @@ public class Triangle {
 		System.arraycopy(points, 0, tmp, 0, 3);
 		return tmp;
 	}
-	
-	public Line[] getLines() {
-		final Line[] lines = new Line[3];
-		lines[0] = new Line(points[0], points[1]);
-		lines[1] = new Line(points[1], points[2]);
-		lines[2] = new Line(points[2], points[0]);
+
+	public LineSegment[] getLines() {
+		final LineSegment[] lines = new LineSegment[3];
+		lines[0] = new LineSegment(points[0], points[1]);
+		lines[1] = new LineSegment(points[1], points[2]);
+		lines[2] = new LineSegment(points[2], points[0]);
 		return lines;
 	}
 }

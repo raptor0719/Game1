@@ -2,12 +2,11 @@ package logical.nav.grid;
 
 import logical.nav.api.INavigationMap;
 import logical.nav.graph.NavNode;
-import logical.nav.graph.api.IGraphNode;
 import util.geometry.Point;
 import util.geometry.Triangle;
 import util.structures.BinaryTree;
 
-public class NavGridTree implements INavigationMap<Triangle> {
+public class NavGridTree implements INavigationMap<NavNode> {
 	private final BinaryTree<NavGridCell> tree;
 	private final NavGrid grid;
 
@@ -19,13 +18,13 @@ public class NavGridTree implements INavigationMap<Triangle> {
 	}
 
 	@Override
-	public IGraphNode<Triangle> resolvePoint(final Point p) {
+	public NavNode resolvePoint(final Point p) {
 		final NavNode[] nodes = getNodes(p);
-		
+
 		for (final NavNode node : nodes)
 			if (isPointInTriangle(p, node.getData()))
 				return node;
-		
+
 		return null;
 	}
 
@@ -37,19 +36,19 @@ public class NavGridTree implements INavigationMap<Triangle> {
 
 		return tree.getCurrent().getNodes();
 	}
-	
+
 	// should this be a part of the Triangle class?
 	private boolean isPointInTriangle(final Point p, final Triangle t) {
 		final Point p0 = t.getPoints()[0];
 		final Point p1 = t.getPoints()[1];
 		final Point p2 = t.getPoints()[2];
-		
+
 		// Calculate Area of all 4 triangles (A, A1, A2, A3)
 		final float A = getTriangleArea(t);
 		final float A1 = getTriangleArea(new Triangle(p, p0, p1));
 		final float A2 = getTriangleArea(new Triangle(p, p1, p2));
 		final float A3 = getTriangleArea(new Triangle(p, p2, p0));
-		
+
 		// May need to watch floating point precision here
 		return (A1 + A2 + A3) == A;
 	}
@@ -57,16 +56,16 @@ public class NavGridTree implements INavigationMap<Triangle> {
 	// Area= [x1(y2-y3)+x2(y3-y1)+x3(y1-y2)]/2
 	private float getTriangleArea(final Triangle t) {
 		final Point[] points = t.getPoints();
-		
+
 		final int x1 = points[0].getX();
 		final int y1 = points[0].getY();
-		
+
 		final int x2 = points[1].getX();
 		final int y2 = points[1].getY();
-		
+
 		final int x3 = points[2].getX();
 		final int y3 = points[2].getY();
-		
+
 		return (x1*(y2-y3)+x2*(y3-y1)+x3*(y1-y2))/2;
 	}
 

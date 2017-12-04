@@ -19,7 +19,7 @@ public class BreadthFirstTest {
 
 		final ValuePair<TestNode, TestNode> se = buildGraph(conns, 0, 2);
 
-		final List<? extends IGraphNode<Integer>> path = new BreadthFirst<Integer>().findPath(se.getValue1(), se.getValue2());
+		final List<TestNode> path = new BreadthFirst<TestNode>().findPath(se.getValue1(), se.getValue2());
 
 		System.out.println(path);
 	}
@@ -100,11 +100,11 @@ public class BreadthFirstTest {
 		}
 	}
 
-	private class TestEdge implements IGraphEdge<Integer> {
+	private class TestEdge implements IGraphEdge<TestNode> {
 		private final int cost;
-		private final IGraphNode<Integer> dest;
+		private final TestNode dest;
 
-		public TestEdge(final int cost, final IGraphNode<Integer> dest) {
+		public TestEdge(final int cost, final TestNode dest) {
 			this.cost = cost;
 			this.dest = dest;
 		}
@@ -115,7 +115,7 @@ public class BreadthFirstTest {
 		}
 
 		@Override
-		public IGraphNode<Integer> getDestination() {
+		public TestNode getDestination() {
 			return dest;
 		}
 	}
