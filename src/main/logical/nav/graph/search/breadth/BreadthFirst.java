@@ -8,10 +8,10 @@ import logical.nav.graph.api.IGraphEdge;
 import logical.nav.graph.api.IGraphNode;
 import logical.nav.graph.api.IGraphSearch;
 
-public class BreadthFirst<T extends IGraphNode<?>> implements IGraphSearch<T> {
+public class BreadthFirst implements IGraphSearch {
 
 	@Override
-	public List<T> findPath(final T start, final T end) {
+	public List<IGraphNode> findPath(final IGraphNode start, final IGraphNode end) {
 		/*
 		 * 1. Queue start into queue Q
 		 * 2. Set A to dequeue of Q
@@ -22,24 +22,24 @@ public class BreadthFirst<T extends IGraphNode<?>> implements IGraphSearch<T> {
 		if (start.equals(end))
 			return null;
 
-		final List<T> path = new LinkedList<T>();
+		final List<IGraphNode> path = new LinkedList<IGraphNode>();
 		path.add(start);
 
-		final Queue<List<T>> Q = new LinkedList<List<T>>();
-		Q.add(makePath(new LinkedList<T>(), start));
+		final Queue<List<IGraphNode>> Q = new LinkedList<List<IGraphNode>>();
+		Q.add(makePath(new LinkedList<IGraphNode>(), start));
 
-		List<T> A;
+		List<IGraphNode> A;
 		while (!Q.isEmpty()) {
 			A = Q.poll();
 
 			if (A == null)
 				break;
 
-			final T tail = getTail(A);
+			final IGraphNode tail = getTail(A);
 
-			for (final IGraphEdge<? extends IGraphNode<?>> e : tail.getConnections()) {
-				@SuppressWarnings("unchecked")
-				final T n = (T) e.getDestination();
+			for (final IGraphEdge e : tail.getConnections()) {
+				// Based on what is around this, this should never be a problem
+				final IGraphNode n = e.getDestination();
 
 				if (n.equals(end))
 					return makePath(A, n);
@@ -51,14 +51,14 @@ public class BreadthFirst<T extends IGraphNode<?>> implements IGraphSearch<T> {
 		return null;
 	}
 
-	private List<List<T>> expand(final List<T> path) {
-		final T tail = getTail(path);
+	private List<List<IGraphNode>> expand(final List<IGraphNode> path) {
+		final IGraphNode tail = getTail(path);
 
-		final List<List<T>> paths = new LinkedList<List<T>>();
+		final List<List<IGraphNode>> paths = new LinkedList<List<IGraphNode>>();
 
-		for (final IGraphEdge<? extends IGraphNode<?>> e : tail.getConnections()) {
-			@SuppressWarnings("unchecked")
-			final T n = (T) e.getDestination();
+		for (final IGraphEdge e : tail.getConnections()) {
+			// Based on what is around this, this should never be a problem
+			final IGraphNode n = e.getDestination();
 
 			paths.add(makePath(path, n));
 		}
@@ -66,15 +66,15 @@ public class BreadthFirst<T extends IGraphNode<?>> implements IGraphSearch<T> {
 		return paths;
 	}
 
-	private List<T> makePath(final List<T> path, final T node) {
-		final List<T> list = new LinkedList<T>();
+	private List<IGraphNode> makePath(final List<IGraphNode> path, final IGraphNode node) {
+		final List<IGraphNode> list = new LinkedList<IGraphNode>();
 		list.addAll(path);
 		list.add(node);
 
 		return list;
 	}
 
-	private T getTail(final List<T> path) {
+	private IGraphNode getTail(final List<IGraphNode> path) {
 		return path.get(path.size()-1);
 	}
 }

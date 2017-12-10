@@ -2,15 +2,15 @@ package logical.nav.graph;
 
 import java.util.Set;
 
-import logical.nav.graph.api.IGraphNode;
+import logical.nav.graph.api.IDataGraphNode;
 import util.geometry.Triangle;
 
-public class NavNode implements IGraphNode<Triangle> {
+public class NavNode implements IDataGraphNode<Triangle> {
 	private final int id;
 	private final Triangle triangle;
 	private final Set<NavEdge> connections;
 
-	protected NavNode(final int id, final Triangle triangle, final Set<NavEdge> connections) {
+	public NavNode(final int id, final Triangle triangle, final Set<NavEdge> connections) {
 		this.id = id;
 		this.triangle = triangle;
 		this.connections = connections;

@@ -2,6 +2,6 @@ package logical.nav.graph.api;
 
 import java.util.List;
 
-public interface IGraphSearch<T extends IGraphNode<?>> {
-	public List<T> findPath(final T start, final T end);
+public interface IGraphSearch {
+	public List<IGraphNode> findPath(final IGraphNode start, final IGraphNode end);
 }
