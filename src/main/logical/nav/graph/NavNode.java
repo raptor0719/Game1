@@ -45,6 +45,10 @@ public class NavNode implements IDataGraphNode<Triangle> {
 		return false;
 	}
 
+	public void addEdge(final NavEdge edge) {
+		connections.add(edge);
+	}
+
 	public static class NavNodeBuilder {
 		private int id;
 		private Triangle triangle;

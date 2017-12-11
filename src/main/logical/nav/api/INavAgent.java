@@ -1,10 +1,11 @@
 package logical.nav.api;
 
-import util.geometry.Vector;
+import java.util.List;
+
+import util.geometry.Point;
 
 public interface INavAgent {
-	public int getX();
-	public int getY();
-	public Vector getMovementSpeed();
+	public Point getPosition();
+	public boolean setPath(final List<Point> path);
 	public void move();
 }

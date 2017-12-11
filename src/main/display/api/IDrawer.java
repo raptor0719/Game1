@@ -7,5 +7,5 @@ import java.awt.Graphics2D;
  * <p> Example: {@link Graphics2D} </p>
  */
 public interface IDrawer {
-// TODO: Should have standard object drawing methods here
+	public void drawOval(final int x, final int y, final int sizeX, final int sizeY);
 }

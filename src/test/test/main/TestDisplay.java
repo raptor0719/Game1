@@ -1,4 +1,4 @@
-package display;
+package test.main;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -11,17 +11,21 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
+import logical.nav.api.INavAgent;
+import logical.nav.path.api.IPathFinder;
+import util.geometry.Point;
+
 public class TestDisplay extends JFrame {
 	private static final long serialVersionUID = 3754897033232484338L;
 
 	private final MyPanel panel;
-	private final Player player;
+	private final TestAgent player;
 
 	public TestDisplay() {
-		player = new Player(400,300);
+		player = new TestAgent(100, 100, 10);
 		panel = new MyPanel(player);
 
-		this.setSize(800, 600);
+		this.setSize(800, 800);
 		this.add(panel);
 		this.setTitle("RaptorEngine");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -32,11 +36,11 @@ public class TestDisplay extends JFrame {
 
 	private static class MyPanel extends JPanel {
 		private static final long serialVersionUID = 1703223292209679374L;
-		private final Player player;
+		private final TestAgent player;
 		private final LogicalTimer timer;
 		private final GraphicsTimer gtimer;
 
-		public MyPanel(final Player p) {
+		public MyPanel(final TestAgent p) {
 			player = p;
 
 			timer = new LogicalTimer(p);
@@ -45,9 +49,10 @@ public class TestDisplay extends JFrame {
 			gtimer = new GraphicsTimer(this);
 			gtimer.start();
 
-			this.setSize(800, 600);
+			this.setSize(800, 800);
 			this.setVisible(true);
-			this.addMouseListener(new MyMouseListener(p));
+// TODO: MAKE SURE TO ADD THIS BACK IN
+//			this.addMouseListener(new MyMouseListener(p));
 		}
 
 		@Override
@@ -56,18 +61,18 @@ public class TestDisplay extends JFrame {
 
 			Graphics2D g2d = (Graphics2D)g;
 
-			player.draw(g2d);
+			player.draw(new TestDrawer(g2d));
 		}
 	}
 
 	private static class LogicalTimer extends Timer {
 		private static final long serialVersionUID = 7336213152017273761L;
 
-		public LogicalTimer(final Player p) {
+		public LogicalTimer(final INavAgent p) {
 			super(0, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					p.update();
+					p.move();
 				}
 			});
 
@@ -90,72 +95,13 @@ public class TestDisplay extends JFrame {
 		}
 	}
 
-	private static class Player {
-		public int posX;
-		public int posY;
-
-		public int dx;
-		public int dy;
-
-		public int destX;
-		public int destY;
-
-		public boolean isMoving;
-
-		public Player(final int x, final int y) {
-			posX = x;
-			posY = y;
-
-			dx = 1;
-			dy = 1;
-
-			destX = 0;
-			destY = 0;
-
-			isMoving = false;
-		}
-
-		public void draw(Graphics2D drawer) {
-			drawer.fillOval(posX, posY, 10, 10);
-		}
-
-		public void update() {
-			if (!isMoving)
-				return;
-
-			if (destX > posX) {
-				if (posX+dx > destX)
-					posX = destX;
-				else
-					posX += dx;
-			} else if (destX < posX)
-				if (posX-dx < destX)
-					posX = destX;
-				else
-					posX -= dx;
-
-			if (destY > posY) {
-				if (posY+dy > destY)
-					posY = destY;
-				else
-					posY += dy;
-			} else if (destY < posY)
-				if (posY-dy < destY)
-					posY = destY;
-				else
-					posY -= dy;
-
-
-			if (destX == posX && destY == posY)
-				isMoving = false;
-		}
-	}
-
 	private static class MyMouseListener implements MouseInputListener {
-		private final Player player;
+		private final INavAgent player;
+		private final IPathFinder nav;
 
-		public MyMouseListener(final Player p) {
+		public MyMouseListener(final INavAgent p, final IPathFinder nav) {
 			player = p;
+			this.nav = nav;
 		}
 
 		@Override
@@ -182,9 +128,7 @@ public class TestDisplay extends JFrame {
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			player.destX = arg0.getX();
-			player.destY = arg0.getY();
-			player.isMoving = true;
+			player.setPath(nav.findPath(player.getPosition(), new Point(arg0.getX(), arg0.getY())));
 		}
 
 		@Override

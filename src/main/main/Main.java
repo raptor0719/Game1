@@ -1,6 +1,6 @@
 package main;
 
-import display.TestDisplay;
+import test.main.TestDisplay;
 
 public class Main {
 

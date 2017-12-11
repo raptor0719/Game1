@@ -28,4 +28,32 @@ public class LineSegment {
 
 		return distance;
 	}
+
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o)
+			return true;
+		if (o == null)
+			return false;
+		if (!(o instanceof LineSegment))
+			return false;
+
+		final LineSegment ls = (LineSegment)o;
+
+		// case where points match up
+		if (a.equals(ls.a)) {
+			if (b.equals(ls.b))
+				return true;
+			return false;
+		}
+
+		// case where points are reversed
+		if (a.equals(ls.b)) {
+			if (b.equals(ls.a))
+				return true;
+			return false;
+		}
+
+		return false;
+	}
 }
