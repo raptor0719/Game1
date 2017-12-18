@@ -73,4 +73,9 @@ public class NavNode implements IDataGraphNode<Triangle> {
 			return new NavNode(id, triangle, connections);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "NavNode:[id=" + id + "]";
+	}
 }

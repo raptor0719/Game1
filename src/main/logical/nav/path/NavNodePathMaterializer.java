@@ -1,5 +1,6 @@
 package logical.nav.path;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import logical.nav.graph.NavEdge;
@@ -7,27 +8,73 @@ import logical.nav.graph.NavNode;
 import logical.nav.path.api.IPathMaterializer;
 import util.geometry.LineSegment;
 import util.geometry.Point;
+import util.geometry.Triangle;
 import util.structures.ValuePair;
 
 public class NavNodePathMaterializer implements IPathMaterializer<NavNode> {
 	@Override
-	public List<Point> materialize(final List<NavNode> nodePath) {
+	public List<Point> materialize(final List<NavNode> nodePath, final Point start, final Point end) {
 		/*
-		 * TODO
-		 * Problem right now is we still have to search through each NavNode's connections
-		 * to find out which connection leads to the next node in the path. What we should
-		 * do is create a modified NavNode for a completed path that only has 1 connection.
+		 * At this point we can assume the path has been sanitized.
+		 * That means, each node in the path will only have ONE connection
+		 * and that connection will lead to the next node in the path.
+		 *
+		 * We can also assume that a path WILL exist. If one doesnt, it is in error.
 		 */
 
+		if (nodePath == null || nodePath.size() < 2)
+			throw new RuntimeException("Path materialization requires a path with at least 2 nodes.");
 
-		return null;
+		NavNode current = nodePath.remove(0);
+
+		if (!pointsIsInTriangle(current.getData(), start))
+			throw new RuntimeException("Start point is NOT within the starting node of the path.");
+
+		final List<Point> path = new ArrayList<Point>(nodePath.size() + 2);
+		path.add(start);
+
+		while (!nodePath.isEmpty()) {
+			final NavNode next = nodePath.remove(0);
+
+			final ValuePair<LineSegment, LineSegment> adjEdges = findAdjacentEdges(current, next);
+			final LineSegment adjSegment = findSegment(adjEdges.getValue1(), adjEdges.getValue2());
+			final Point mid = getMidpoint(adjSegment);
+
+			path.add(mid);
+
+			current = next;
+		}
+
+		path.add(end);
+
+		return path;
+	}
+
+	private boolean pointsIsInTriangle(final Triangle t, final Point p) {
+		final Triangle t1 = new Triangle(t.getPoints()[0], t.getPoints()[1], p);
+		final Triangle t2 = new Triangle(t.getPoints()[1], t.getPoints()[2], p);
+		final Triangle t3 = new Triangle(t.getPoints()[2], t.getPoints()[0], p);
+		final double area = t1.getArea() + t2.getArea() + t3.getArea();
+		return t.getArea() == area;
+	}
+
+	private Point getMidpoint(final LineSegment l) {
+		final int x1 = l.getPoints().getValue1().getX();
+		final int y1 = l.getPoints().getValue1().getY();
+		final int x2 = l.getPoints().getValue2().getX();
+		final int y2 = l.getPoints().getValue2().getY();
+
+		final int x = (x1 + x2)/2;
+		final int y = (y1 + y2)/2;
+
+		return new Point(x, y);
 	}
 
 	private ValuePair<LineSegment, LineSegment> findAdjacentEdges(final NavNode a, final NavNode b) {
 		for (final NavEdge e : a.getConnections())
 			if (e.getDestination().equals(b))
 				return e.getAdjacentEdges();
-		return null;
+		throw new RuntimeException("Consecutive nodes in path had no adjacent edge.");
 	}
 
 	private LineSegment findSegment(final LineSegment l1, final LineSegment l2) {

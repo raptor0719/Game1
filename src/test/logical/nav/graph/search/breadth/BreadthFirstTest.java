@@ -15,11 +15,21 @@ public class BreadthFirstTest {
 
 	@Test
 	public void test() {
-		final boolean[][] conns = new boolean[][] {{false, true, false},{false, false, true},{true, false, false}};
+		final int[][] conns = new int[][] {
+			{0, 1, 0, 0, 0, 0, 0, 0, 0, 1},
+			{1, 0, 1, 0, 0, 0, 0, 0, 0, 0},
+			{0, 1, 0, 1, 0, 0, 0, 0, 0, 0},
+			{0, 0, 1, 0, 1, 0, 0, 0, 0, 0},
+			{0, 0, 0, 1, 0, 1, 0, 0, 0, 0},
+			{0, 0, 0, 0, 1, 0, 1, 0, 0, 0},
+			{0, 0, 0, 0, 0, 1, 0, 1, 0, 0},
+			{0, 0, 0, 0, 0, 0, 1, 0, 1, 0},
+			{0, 0, 0, 0, 0, 0, 0, 1, 0, 1},
+			{1, 0, 0, 0, 0, 0, 0, 0, 1, 0},};
 
-		final ValuePair<TestNode, TestNode> se = buildGraph(conns, 0, 2);
+		final ValuePair<TestNode, TestNode> se = buildGraph(conns, 3, 6);
 
-		final List<TestNode> path = new BreadthFirst<TestNode>().findPath(se.getValue1(), se.getValue2());
+		final List<IGraphNode> path = new BreadthFirst().findPath(se.getValue1(), se.getValue2());
 
 		System.out.println(path);
 	}
@@ -28,7 +38,7 @@ public class BreadthFirstTest {
 
 	/* HELPER METHODS */
 
-	private ValuePair<TestNode, TestNode> buildGraph(final boolean[][] connectionGraph, final int start, final int end) {
+	private ValuePair<TestNode, TestNode> buildGraph(final int[][] connectionGraph, final int start, final int end) {
 		if (connectionGraph.length == 0 || connectionGraph[0].length == 0)
 			throw new IllegalArgumentException("Given matrix must have length greater than 0.");
 		if (connectionGraph.length != connectionGraph[0].length)
@@ -39,13 +49,13 @@ public class BreadthFirstTest {
 		final List<TestNode> nodes = new ArrayList<TestNode>(connectionGraph.length);
 
 		for (int i = 0; i != connectionGraph.length; i++)
-			nodes.add(new TestNode(i, new HashSet<TestEdge>()));
+			nodes.add(new TestNode(i));
 
 		for (int i = 0; i != connectionGraph.length; i++) {
 			final TestNode node = nodes.get(i);
 
 			for (int j = 0; j != connectionGraph[i].length; j++) {
-				if (connectionGraph[i][j]) {
+				if (connectionGraph[i][j] == 1) {
 					final TestEdge newEdge = new TestEdge(0, nodes.get(j));
 					node.addConnection(newEdge);
 				}
@@ -57,18 +67,13 @@ public class BreadthFirstTest {
 
 	/* TEST CLASSES */
 
-	private class TestNode implements IGraphNode<Integer> {
-		private final int data;
+	private class TestNode implements IGraphNode {
+		private final int id;
 		private final Set<TestEdge> connections;
 
-		public TestNode(final int data, final Set<TestEdge> connections) {
-			this.data = data;
-			this.connections = connections;
-		}
-
-		@Override
-		public Integer getData() {
-			return data;
+		public TestNode(final int id) {
+			this.id = id;
+			connections = new HashSet<TestEdge>();
 		}
 
 		@Override
@@ -76,31 +81,31 @@ public class BreadthFirstTest {
 			return connections;
 		}
 
-		public void addConnection(final TestEdge conn) {
-			connections.add(conn);
+		public void addConnection(final TestEdge e) {
+			connections.add(e);
 		}
 
 		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
+		public boolean equals(final Object o) {
+			if (this == o)
 				return true;
-			if (obj == null)
+			if (o == null)
 				return false;
-			if (getClass() != obj.getClass())
+			if (!(o instanceof TestNode))
 				return false;
-			TestNode other = (TestNode) obj;
-			if (data != other.data)
-				return false;
-			return true;
+			final TestNode o2 = (TestNode)o;
+			if (this.id == o2.id)
+				return true;
+			return false;
 		}
 
 		@Override
 		public String toString() {
-			return "" + data;
+			return "" + this.id;
 		}
 	}
 
-	private class TestEdge implements IGraphEdge<TestNode> {
+	private class TestEdge implements IGraphEdge {
 		private final int cost;
 		private final TestNode dest;
 
@@ -117,6 +122,20 @@ public class BreadthFirstTest {
 		@Override
 		public TestNode getDestination() {
 			return dest;
+		}
+
+		@Override
+		public boolean equals(final Object o) {
+			if (this == o)
+				return true;
+			if (o == null)
+				return false;
+			if (!(o instanceof TestEdge))
+				return false;
+			final TestEdge o2 = (TestEdge)o;
+			if (this.dest == o2.dest)
+				return true;
+			return false;
 		}
 	}
 }

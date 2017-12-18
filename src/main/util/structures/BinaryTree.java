@@ -20,7 +20,7 @@ public class BinaryTree<T> {
 			final Node<T> newNode = new Node<T>(data);
 			newNode.parent = current;
 			newNode.isLeft = true;
-			current.leftChild = new Node<T>(data);
+			current.leftChild = newNode;
 			return;
 		}
 
@@ -41,7 +41,7 @@ public class BinaryTree<T> {
 			final Node<T> newNode = new Node<T>(data);
 			newNode.parent = current;
 			newNode.isLeft = false;
-			current.rightChild = new Node<T>(data);
+			current.rightChild = newNode;
 			return;
 		}
 
@@ -54,7 +54,7 @@ public class BinaryTree<T> {
 	 * @param data the data to set with
 	 */
 	public void setCurrent(final T data) {
-		if (current == null) {
+		if (current == null && root == null) {
 			final Node<T> newNode = new Node<T>(data);
 			current = newNode;
 			root = current;
@@ -138,34 +138,48 @@ public class BinaryTree<T> {
 	/**
 	 * Moves the current active node to it's own left child. Does
 	 * nothing if the left child is null.
+	 * @return Whether it moved or not
 	 */
-	public void moveToLeft() {
+	public boolean moveToLeft() {
 		if (current == null || current.leftChild == null)
-			return;
+			return false;
 
 		current = current.leftChild;
+		return true;
 	}
 
 	/**
 	 * Moves the current active node to it's own right child. Does
 	 * nothing if the right child is null.
+	 * @return Whether it moved or not
 	 */
-	public void moveToRight() {
+	public boolean moveToRight() {
 		if (current == null || current.rightChild == null)
-			return;
+			return false;
 
 		current = current.rightChild;
+		return true;
 	}
 
 	/**
 	 * Moves the current active node to it's own parent. Nothing
 	 * will happen if the parent is null.
+	 * @return Whether it moved or not
 	 */
-	public void moveToParent() {
+	public boolean moveToParent() {
 		if (current == null || current.parent == null)
-			return;
+			return false;
 
 		current = current.parent;
+		return true;
+	}
+
+	public boolean hasLeft() {
+		return current.leftChild != null;
+	}
+
+	public boolean hasRight() {
+		return current.rightChild != null;
 	}
 
 	// Internal

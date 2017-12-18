@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -22,7 +24,7 @@ public class TestDisplay extends JFrame {
 	private final TestAgent player;
 
 	public TestDisplay() {
-		player = new TestAgent(100, 100, 10);
+		player = new TestAgent(100, 100, 1);
 		panel = new MyPanel(player);
 
 		this.setSize(800, 800);
@@ -39,6 +41,7 @@ public class TestDisplay extends JFrame {
 		private final TestAgent player;
 		private final LogicalTimer timer;
 		private final GraphicsTimer gtimer;
+		private final MyMouseListener mml;
 
 		public MyPanel(final TestAgent p) {
 			player = p;
@@ -51,8 +54,9 @@ public class TestDisplay extends JFrame {
 
 			this.setSize(800, 800);
 			this.setVisible(true);
-// TODO: MAKE SURE TO ADD THIS BACK IN
-//			this.addMouseListener(new MyMouseListener(p));
+
+			mml = new MyMouseListener(p, TestMapFactory.getMap1());
+			this.addMouseListener(mml);
 		}
 
 		@Override
@@ -61,7 +65,14 @@ public class TestDisplay extends JFrame {
 
 			Graphics2D g2d = (Graphics2D)g;
 
+			g2d.drawRect(300, 300, 200, 200);
+
+//			System.out.println(player.getPath().size());
+			for (final Point p : mml.previousPath)
+				g2d.fillOval(p.getX(), p.getY(), 10, 10);
+
 			player.draw(new TestDrawer(g2d));
+
 		}
 	}
 
@@ -76,7 +87,7 @@ public class TestDisplay extends JFrame {
 				}
 			});
 
-			this.setDelay(1);
+			this.setDelay(10);
 		}
 	}
 
@@ -98,6 +109,7 @@ public class TestDisplay extends JFrame {
 	private static class MyMouseListener implements MouseInputListener {
 		private final INavAgent player;
 		private final IPathFinder nav;
+		public List<Point> previousPath = new LinkedList<Point>();
 
 		public MyMouseListener(final INavAgent p, final IPathFinder nav) {
 			player = p;
@@ -128,7 +140,13 @@ public class TestDisplay extends JFrame {
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			player.setPath(nav.findPath(player.getPosition(), new Point(arg0.getX(), arg0.getY())));
+			previousPath.clear();
+
+			final List<Point> path = nav.findPath(player.getPosition(), new Point(arg0.getX(), arg0.getY()));
+			player.setPath(path);
+
+			for (Point p : path)
+				previousPath.add(p);
 		}
 
 		@Override

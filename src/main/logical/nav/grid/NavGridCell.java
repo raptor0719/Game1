@@ -1,4 +1,4 @@
-package logical.nav.grid;
+		package logical.nav.grid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +52,10 @@ public class NavGridCell {
 			return false;
 
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "NavGridCell:[xPos=" + xPos + ",yPos=" + yPos + "]";
 	}
 }

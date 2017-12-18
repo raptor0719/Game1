@@ -1,5 +1,6 @@
 package test.main;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -33,6 +34,8 @@ public class TestAgent implements INavAgent, IDrawable {
 		this.destY = 0;
 
 		this.isMoving = false;
+
+		path = new LinkedList<Point>();
 	}
 
 	@Override
@@ -55,6 +58,10 @@ public class TestAgent implements INavAgent, IDrawable {
 		isMoving = true;
 
 		return true;
+	}
+
+	public Queue<Point> getPath() {
+		return path;
 	}
 
 	@Override

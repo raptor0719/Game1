@@ -9,17 +9,28 @@ import util.structures.BinaryTree;
 public class NavGridTree implements INavigationMap<NavNode> {
 	private final BinaryTree<NavGridCell> tree;
 	private final NavGrid grid;
+	private final int realXSize;
+	private final int realYSize;
 
-	public NavGridTree(final NavGrid grid) {
+	public NavGridTree(final NavGrid grid, final int realXSize, final int realYSize) {
 		this.tree = new BinaryTree<NavGridCell>();
 		this.grid = grid;
+
+		if (realXSize % grid.getDimension() != 0 || realYSize % grid.getDimension() != 0)
+			throw new RuntimeException("Size of actual space must be divisible by the grid dimensions.");
+
+		this.realXSize = realXSize;
+		this.realYSize = realYSize;
 
 		createGridTree(grid);
 	}
 
 	@Override
 	public NavNode resolvePoint(final Point p) {
-		final NavNode[] nodes = getNodes(p);
+		// Don't confuse the true coordinate with the cell coordinate
+		final Point cellCoord = convertRealToCell(p);
+		System.out.println("Cell coordinates are: " + cellCoord);
+		final NavNode[] nodes = getNodes(cellCoord);
 
 		for (final NavNode node : nodes)
 			if (isPointInTriangle(p, node.getData()))
@@ -33,8 +44,31 @@ public class NavGridTree implements INavigationMap<NavNode> {
 			throw new RuntimeException(String.format("Attempted retrieving nodes in cell (%d,%d) which is out of the dimension (%d)", point.getX(), point.getY(), grid.getDimension()));
 
 		traverseTree(point.getX(), point.getY());
+		System.out.println("Tree query resulted in " + tree.getCurrent());
 
 		return tree.getCurrent().getNodes();
+	}
+
+	// Translates the true coordinates given to a cell coordinate
+	private Point convertRealToCell(final Point p) {
+		final int xPartitionSize = realXSize / grid.getDimension();
+		final int YPartitionSize = realYSize / grid.getDimension();
+
+		final int x = findPartition(p.getX(), xPartitionSize, grid.getDimension());
+		final int y = findPartition(p.getY(), YPartitionSize, grid.getDimension());
+
+		return new Point(x,y);
+	}
+
+	private int findPartition(final int val, final int partitionSize, final int max) {
+		int iter = 1;
+		while(iter <= max) {
+			if (val < iter*partitionSize) {
+				return iter-1;
+			}
+			iter++;
+		}
+		throw new RuntimeException("Given point out of bounds");
 	}
 
 	// should this be a part of the Triangle class?
@@ -70,8 +104,11 @@ public class NavGridTree implements INavigationMap<NavNode> {
 	}
 
 	private void createGridTree(final NavGrid spec) {
-		// The depth from the root is equal to the dimension of the grid
-		generateEmptyTree(spec.getDimension());
+		// The depth from the root is equal to the dimension of the grid\
+		if (spec.getDimension() == 8)
+			generateEmptyTree(6);
+		else
+			throw new RuntimeException("A dimension of 8 is required currently for nav grids.");
 
 		for (int x = 0; x != spec.getDimension(); x++) {
 			for (int y = 0; y != spec.getDimension(); y++) {
@@ -88,29 +125,40 @@ public class NavGridTree implements INavigationMap<NavNode> {
 	private void traverseTree(final int xPos, final int yPos) {
 		tree.resetToRoot();
 
-		if (tree.getCurrent() == null)
+		if (!tree.hasLeft())
 			throw new RuntimeException("Attempted to traverse tree when empty");
 
 		traverseTree_x(xPos, yPos, grid.getDimension());
 	}
 
 	private void traverseTree_y(final int xPos, final int yPos, final int dim) {
+//		System.out.println("Deciding y with: xPos=" + xPos + ", yPos=" + yPos + ", dim=" + dim);
+		boolean moved;
 		if (yPos < dim/2)
-			tree.moveToLeft();
+			moved = tree.moveToLeft();
 		else
-			tree.moveToRight();
+			moved = tree.moveToRight();
 
-		if (tree.getLeft() == null && tree.getRight() == null)
+		if (!moved)
+			throw new RuntimeException("Excepected to be able to move but couldnt.");
+
+ 		if (!tree.hasLeft() && !tree.hasRight())
 			return;
 
 		traverseTree_x(xPos, yPos, dim/2);
 	}
 
 	private void traverseTree_x(final int xPos, final int yPos, final int dim) {
+//		System.out.println("Deciding x with: xPos=" + xPos + ", yPos=" + yPos + ", dim=" + dim);
+
+		boolean moved;
 		if (xPos < dim/2)
-			tree.moveToLeft();
+			moved = tree.moveToLeft();
 		else
-			tree.moveToRight();
+			moved = tree.moveToRight();
+
+		if (!moved)
+			throw new RuntimeException("Excepected to be able to move but couldnt.");
 
 		traverseTree_y(xPos, yPos, dim);
 	}
@@ -133,14 +181,18 @@ public class NavGridTree implements INavigationMap<NavNode> {
 
 		// Generate the left tree
 		tree.setLeft(null);
-		tree.moveToLeft();
+		if (!tree.moveToLeft())
+			throw new RuntimeException();
 		generateEmptyTree_Recursive(depth-1);
-		tree.moveToParent();
+		if (!tree.moveToParent())
+			throw new RuntimeException();
 
 		// Generate the right tree
 		tree.setRight(null);
-		tree.moveToRight();
+		if (!tree.moveToRight())
+			throw new RuntimeException();
 		generateEmptyTree_Recursive(depth-1);
-		tree.moveToParent();
+		if (!tree.moveToParent())
+			throw new RuntimeException();
 	}
 }
