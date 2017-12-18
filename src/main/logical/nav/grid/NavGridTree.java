@@ -13,7 +13,7 @@ public class NavGridTree implements INavigationMap<NavNode> {
 	private final int realYSize;
 
 	public NavGridTree(final NavGrid grid, final int realXSize, final int realYSize) {
-		this.tree = new BinaryTree<NavGridCell>();
+		tree = new BinaryTree<NavGridCell>();
 		this.grid = grid;
 
 		if (realXSize % grid.getDimension() != 0 || realYSize % grid.getDimension() != 0)
@@ -32,6 +32,11 @@ public class NavGridTree implements INavigationMap<NavNode> {
 		System.out.println("Cell coordinates are: " + cellCoord);
 		final NavNode[] nodes = getNodes(cellCoord);
 
+		System.out.print("Node list is: ");
+		for (NavNode n : nodes)
+			System.out.print(n + ", ");
+		System.out.println("");
+
 		for (final NavNode node : nodes)
 			if (isPointInTriangle(p, node.getData()))
 				return node;
@@ -43,10 +48,70 @@ public class NavGridTree implements INavigationMap<NavNode> {
 		if (point.getX() >= grid.getDimension() || point.getY() >= grid.getDimension())
 			throw new RuntimeException(String.format("Attempted retrieving nodes in cell (%d,%d) which is out of the dimension (%d)", point.getX(), point.getY(), grid.getDimension()));
 
+		test();
+
 		traverseTree(point.getX(), point.getY());
 		System.out.println("Tree query resulted in " + tree.getCurrent());
 
 		return tree.getCurrent().getNodes();
+	}
+
+	private void test() {
+		System.out.println("============");
+		tree.resetToRoot();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		System.out.println(tree.getCurrent());
+		System.out.println("============");
+		tree.resetToRoot();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToRight();
+		System.out.println(tree.getCurrent());
+		System.out.println("============");
+		tree.resetToRoot();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToRight();
+		tree.moveToLeft();
+		System.out.println(tree.getCurrent());
+		System.out.println("============");
+		tree.resetToRoot();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToRight();
+		tree.moveToRight();
+		System.out.println(tree.getCurrent());
+		System.out.println("============");
+		tree.resetToRoot();
+		tree.moveToRight();
+		tree.moveToRight();
+		tree.moveToRight();
+		tree.moveToRight();
+		tree.moveToRight();
+		tree.moveToRight();
+		System.out.println(tree.getCurrent());
+		System.out.println("============");
+		tree.resetToRoot();
+		tree.moveToRight();
+		tree.moveToLeft();
+		tree.moveToLeft();
+		tree.moveToRight();
+		tree.moveToRight();
+		tree.moveToRight();
+		System.out.println(tree.getCurrent());
+		System.out.println("============");
 	}
 
 	// Translates the true coordinates given to a cell coordinate
@@ -110,10 +175,12 @@ public class NavGridTree implements INavigationMap<NavNode> {
 		else
 			throw new RuntimeException("A dimension of 8 is required currently for nav grids.");
 
+		System.out.println("Begin tree population");
 		for (int x = 0; x != spec.getDimension(); x++) {
 			for (int y = 0; y != spec.getDimension(); y++) {
 				traverseTree(x, y);
 				tree.setCurrent(spec.getCell(x, y));
+				System.out.println("Coord:x=" + x + ",y=" + y + " populated with " + spec.getCell(x, y));
 			}
 		}
 	}

@@ -45,6 +45,11 @@ public class NavNode implements IDataGraphNode<Triangle> {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return "NavNode:[id=" + id + "]";
+	}
+
 	public void addEdge(final NavEdge edge) {
 		connections.add(edge);
 	}
@@ -72,10 +77,5 @@ public class NavNode implements IDataGraphNode<Triangle> {
 		public NavNode build() {
 			return new NavNode(id, triangle, connections);
 		}
-	}
-
-	@Override
-	public String toString() {
-		return "NavNode:[id=" + id + "]";
 	}
 }
