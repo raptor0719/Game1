@@ -37,8 +37,11 @@ public class NavNodePathMaterializer implements IPathMaterializer<NavNode> {
 			final NavNode next = nodePath.remove(0);
 
 			final ValuePair<LineSegment, LineSegment> adjEdges = findAdjacentEdges(current, next);
+			System.out.println("Adjacent edge is " + adjEdges);
 			final LineSegment adjSegment = findSegment(adjEdges.getValue1(), adjEdges.getValue2());
+			System.out.println("Resolved segment is " + adjSegment);
 			final Point mid = getMidpoint(adjSegment);
+			System.out.println("Midpoint is " + mid);
 
 			path.add(mid);
 
@@ -95,6 +98,9 @@ public class NavNodePathMaterializer implements IPathMaterializer<NavNode> {
 	private boolean pointIsOnLineSegment(final Point c, final LineSegment l) {
 		final Point a = l.getPoints().getValue1();
 		final Point b = l.getPoints().getValue2();
+
+		if (a.equals(c) || b.equals(c))
+			return true;
 
 		final double lLengthSquared = l.getLength() * l.getLength();
 

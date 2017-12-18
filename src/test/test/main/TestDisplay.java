@@ -29,11 +29,11 @@ public class TestDisplay extends JFrame {
 
 		this.setSize(800, 800);
 		this.add(panel);
-		this.setTitle("RaptorEngine");
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setTitle("RaptorEngine");
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setLocation(500, 300);
 
-		this.setVisible(true);
+		setVisible(true);
 	}
 
 	private static class MyPanel extends JPanel {
@@ -53,10 +53,10 @@ public class TestDisplay extends JFrame {
 			gtimer.start();
 
 			this.setSize(800, 800);
-			this.setVisible(true);
+			setVisible(true);
 
 			mml = new MyMouseListener(p, TestMapFactory.getMap1());
-			this.addMouseListener(mml);
+			addMouseListener(mml);
 		}
 
 		@Override
@@ -87,7 +87,7 @@ public class TestDisplay extends JFrame {
 				}
 			});
 
-			this.setDelay(10);
+			setDelay(10);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class TestDisplay extends JFrame {
 				}
 			});
 
-			this.setDelay(17);
+			setDelay(17);
 		}
 	}
 
@@ -143,6 +143,9 @@ public class TestDisplay extends JFrame {
 			previousPath.clear();
 
 			final List<Point> path = nav.findPath(player.getPosition(), new Point(arg0.getX(), arg0.getY()));
+			if (path == null) {
+				return;
+			}
 			player.setPath(path);
 
 			for (Point p : path)

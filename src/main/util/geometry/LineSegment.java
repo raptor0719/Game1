@@ -56,4 +56,9 @@ public class LineSegment {
 
 		return false;
 	}
+
+	@Override
+	public String toString() {
+		return "LineSegment:[a=" + a + ",b=" + b + "]";
+	}
 }

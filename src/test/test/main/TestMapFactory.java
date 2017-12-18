@@ -13,7 +13,7 @@ import logical.nav.graph.search.breadth.BreadthFirst;
 import logical.nav.graph.transformer.NavNodeTransformer;
 import logical.nav.grid.NavGrid;
 import logical.nav.grid.NavGridCell;
-import logical.nav.grid.NavGridTree;
+import logical.nav.grid.NavGridPointResolver;
 import logical.nav.path.NavNodePathMaterializer;
 import logical.nav.path.api.IPathFinder;
 import logical.nav.path.api.IPathMaterializer;
@@ -344,7 +344,7 @@ public class TestMapFactory {
 		grid.setCell(7, 7, cell77);
 
 		/* NAV MAP */
-		final NavGridTree gridTree = new NavGridTree(grid, 800, 800);
+		final NavGridPointResolver gridTree = new NavGridPointResolver(grid, 800, 800);
 		final IGraphSearch graphSearch = new BreadthFirst();
 		final ITransformer<List<IGraphNode>, List<NavNode>> nodeTransform = new NavNodeTransformer();
 		final IPathMaterializer<NavNode> pathMaterializer = new NavNodePathMaterializer();
