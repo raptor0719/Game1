@@ -37,11 +37,8 @@ public class NavNodePathMaterializer implements IPathMaterializer<NavNode> {
 			final NavNode next = nodePath.remove(0);
 
 			final ValuePair<LineSegment, LineSegment> adjEdges = findAdjacentEdges(current, next);
-			System.out.println("Adjacent edge is " + adjEdges);
 			final LineSegment adjSegment = findSegment(adjEdges.getValue1(), adjEdges.getValue2());
-			System.out.println("Resolved segment is " + adjSegment);
 			final Point mid = getMidpoint(adjSegment);
-			System.out.println("Midpoint is " + mid);
 
 			path.add(mid);
 

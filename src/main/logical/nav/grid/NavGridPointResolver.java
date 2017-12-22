@@ -24,13 +24,7 @@ public class NavGridPointResolver implements INavigationMap<NavNode> {
 	public NavNode resolvePoint(final Point p) {
 		// Don't confuse the true coordinate with the cell coordinate
 		final Point cellCoord = convertRealToCell(p);
-//		System.out.println("Cell coordinates are: " + cellCoord);
 		final NavNode[] nodes = getNodes(cellCoord);
-
-//		System.out.print("Node list is: ");
-//		for (NavNode n : nodes)
-//			System.out.print(n + ", ");
-//		System.out.println("");
 
 		for (final NavNode node : nodes)
 			if (isPointInTriangle(p, node.getData()))

@@ -1,7 +1,6 @@
 package util.geometry;
 
 public class Triangle {
-
 	private final Point[] points;
 	private final double area;
 
@@ -31,6 +30,21 @@ public class Triangle {
 
 	public double getArea() {
 		return area;
+	}
+
+	public boolean isIntersectedByLine(final LineSegment ls) {
+		for (final LineSegment line : getLines())
+			if (line.intersectsWith(ls))
+				return true;
+		return false;
+	}
+
+	public boolean containsPoint(final Point p) {
+		final Triangle t1 = new Triangle(getPoints()[0], getPoints()[1], p);
+		final Triangle t2 = new Triangle(getPoints()[1], getPoints()[2], p);
+		final Triangle t3 = new Triangle(getPoints()[2], getPoints()[0], p);
+		final double area = t1.getArea() + t2.getArea() + t3.getArea();
+		return getArea() == area;
 	}
 
 	private double calcArea(final Point a, final Point b, final Point c) {
