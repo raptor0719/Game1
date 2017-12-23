@@ -107,6 +107,6 @@ public class TestAgent implements INavAgent, IDrawable {
 
 	@Override
 	public void draw(final IDrawer drawer) {
-		drawer.drawOval(posX, posY, 10, 10);
+		drawer.drawOval(posX-5, posY-5, 10, 10);
 	}
 }

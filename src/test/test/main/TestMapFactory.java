@@ -1,5 +1,6 @@
 package test.main;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,7 +15,7 @@ import logical.nav.graph.transformer.NavNodeTransformer;
 import logical.nav.grid.NavGrid;
 import logical.nav.grid.NavGridCell;
 import logical.nav.grid.NavGridPointResolver;
-import logical.nav.path.NavNodePathMaterializer;
+import logical.nav.path.UnpathableAwareNavNodePathMaterializer;
 import logical.nav.path.api.IPathFinder;
 import logical.nav.path.api.IPathMaterializer;
 import util.geometry.LineSegment;
@@ -343,11 +344,24 @@ public class TestMapFactory {
 		grid.setCell(7, 6, cell76);
 		grid.setCell(7, 7, cell77);
 
+		/* OUT OF BOUNDS TRIANGLES */
+		final Point oob00 = new Point(301, 301);
+		final Point oob10 = new Point(499, 301);
+		final Point oob01 = new Point(301, 499);
+		final Point oob11 = new Point(499, 499);
+
+		final Triangle oobT1 = new Triangle(oob00, oob10, oob11);
+		final Triangle oobT2 = new Triangle(oob00, oob01, oob11);
+
+		final List<Triangle> unpathableTriangles = new ArrayList<Triangle>(2);
+		unpathableTriangles.add(oobT1);
+		unpathableTriangles.add(oobT2);
+
 		/* NAV MAP */
 		final NavGridPointResolver gridTree = new NavGridPointResolver(grid, 800, 800);
 		final IGraphSearch graphSearch = new BreadthFirst();
 		final ITransformer<List<IGraphNode>, List<NavNode>> nodeTransform = new NavNodeTransformer();
-		final IPathMaterializer<NavNode> pathMaterializer = new NavNodePathMaterializer();
+		final IPathMaterializer<NavNode> pathMaterializer = new UnpathableAwareNavNodePathMaterializer(unpathableTriangles);
 
 		final NavMap newNav = new NavMap(gridTree, graphSearch, nodeTransform, pathMaterializer);
 

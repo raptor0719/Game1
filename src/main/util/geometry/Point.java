@@ -34,6 +34,10 @@ public class Point {
 		return distance;
 	}
 
+	public boolean isOnLineSegment(final LineSegment ls) {
+		return pointIsOnLineSegment(this, ls);
+	}
+
 	@Override
 	public boolean equals(final Object o) {
 		if (this == o)
@@ -59,5 +63,30 @@ public class Point {
 	/* STATIC METHODS */
 	public static Point toPoint(final Vector v) {
 		return new Point(v);
+	}
+
+	/* INTERNALS */
+
+	private boolean pointIsOnLineSegment(final Point c, final LineSegment l) {
+		final Point a = l.getPoints().getValue1();
+		final Point b = l.getPoints().getValue2();
+
+		if (a.equals(c) || b.equals(c))
+			return true;
+
+		final double lLengthSquared = l.getLength() * l.getLength();
+
+		final int cross = crossProduct(a, b, c);
+		final int dot = dotProduct(a, b, c);
+
+		return (cross == 0 && dot > 0 && dot < lLengthSquared);
+	}
+
+	private int crossProduct(final Point a, final Point b, final Point c) {
+		return ((c.getY() - a.getY()) * (b.getX() - a.getX())) - ((c.getX() - a.getX()) * (b.getY() - a.getY()));
+	}
+
+	private int dotProduct(final Point a, final Point b, final Point c) {
+		return ((c.getX() - a.getX()) * (b.getX() - a.getX())) + ((c.getY() - a.getY()) * (b.getY() - a.getY()));
 	}
 }

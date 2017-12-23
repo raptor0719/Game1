@@ -26,11 +26,20 @@ public class LineSegment {
 
 	/**
 	 * @param ls - the intersecting line segment
-	 * @return The single point of intersection between the calling object and parameter ls or
-	 * null if there is no such single point. (Single point is clarified here because multiple
-	 * points of intersection will occur if the 2 segments are collinear and overlap)
+	 * @return The single point of intersection between the calling object and parameter ls.
+	 * Will return null if either the segments do not intersect at all or have multiple points
+	 * of intersection.
 	 */
 	public Point getIntersectionPoint(final LineSegment ls) {
+		if (this.equals(ls))
+			return null;
+
+		{// Finish fast if the two segments have a common endpoint
+		// NOTE: this also covers the case that the lines are collinear and overlap only at ONE point
+			final Point commonEndpoint = getCommonEndpoint(this, ls);
+			if (commonEndpoint != null)
+				return commonEndpoint;
+		}
 		/*
 		 * p = this starting point
 		 * q = ls starting point
@@ -50,10 +59,12 @@ public class LineSegment {
 		final Vector qMinusP = q.minus(p);
 		final int qMinPCrossR = (qMinusP).cross(r);
 
-		if (rCrossS == 0 && qMinPCrossR == 0) // is collinear
+		if (rCrossS == 0 && qMinPCrossR == 0) { // is collinear
 			return null;
-		else if (rCrossS == 0 && qMinPCrossR != 0) // is parallel
+		}
+		else if (rCrossS == 0 && qMinPCrossR != 0) { // is parallel
 			return null;
+		}
 		else if (rCrossS != 0) { // POSSIBLY intersects
 			final float t = (float)qMinusP.cross(s) / rCrossS;
 			final float u = (float)qMinPCrossR / rCrossS;
@@ -136,5 +147,17 @@ public class LineSegment {
 
 	private int round(final float f) {
 		return Math.round(f);
+	}
+
+	private Point getCommonEndpoint(final LineSegment ls1, final LineSegment ls2) {
+		final ValuePair<Point, Point> points1 = ls1.getPoints();
+		final ValuePair<Point, Point> points2 = ls2.getPoints();
+
+		if (points1.getValue1().equals(points2.getValue1()) || points1.getValue1().equals(points2.getValue2()))
+			return points1.getValue1();
+		else if (points1.getValue2().equals(points2.getValue1()) || points1.getValue2().equals(points2.getValue2()))
+			return points1.getValue2();
+
+		return null;
 	}
 }

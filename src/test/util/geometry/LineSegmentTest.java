@@ -88,6 +88,16 @@ public class LineSegmentTest {
 	}
 
 	@Test
+	public void intersection_endPointsTouch_collinear() {
+		final LineSegment seg1 = createSegment(createPoint(30,30), createPoint(60,30));
+		final LineSegment seg2 = createSegment(createPoint(0,30), createPoint(30,30));
+
+		final Point intersection = seg1.getIntersectionPoint(seg2);
+
+		Assert.assertThat(intersection, equalTo(createPoint(30,30)));
+	}
+
+	@Test
 	public void intersection_doesNotIntersect() {
 		final LineSegment seg1 = createSegment(createPoint(30,30), createPoint(13,0));
 		final LineSegment seg2 = createSegment(createPoint(1,3), createPoint(9,15));

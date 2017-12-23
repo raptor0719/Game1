@@ -47,10 +47,17 @@ public class Triangle {
 		return getArea() == area;
 	}
 
+	@Override
+	public String toString() {
+		return "Triangle:[p0=" + points[0] + ",p1=" + points[1] + ",p2=" + points[2] + "]";
+	}
+
+	/* INTERNALS */
+
 	private double calcArea(final Point a, final Point b, final Point c) {
 		final int term1 = a.getX() * (b.getY() - c.getY());
 		final int term2 = b.getX() * (c.getY() - a.getY());
 		final int term3 = c.getX() * (a.getY() - b.getY());
-		return (term1 + term2 + term3)/2;
+		return Math.abs((term1 + term2 + term3)/2D);
 	}
 }
