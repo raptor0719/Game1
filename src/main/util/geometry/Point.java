@@ -60,11 +60,6 @@ public class Point {
 		return "Point:[x=" + x + ",y=" + y + "]";
 	}
 
-	/* STATIC METHODS */
-	public static Point toPoint(final Vector v) {
-		return new Point(v);
-	}
-
 	/* INTERNALS */
 
 	private boolean pointIsOnLineSegment(final Point c, final LineSegment l) {

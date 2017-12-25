@@ -35,6 +35,22 @@ public class DoubleVector {
 		return "DoubleVector:[x=" + x + ", y=" + y + "]";
 	}
 
+	@Override
+	public boolean equals(final Object o) {
+		if (o == null)
+			return false;
+		if (this == o)
+			return true;
+		if (!(o instanceof DoubleVector))
+			return false;
+		final DoubleVector o2 = (DoubleVector)o;
+		if (o2.getX() != getX())
+			return false;
+		if (o2.getY() != getY())
+			return false;
+		return true;
+	}
+
 	/* STATIC METHODS */
 
 	/**

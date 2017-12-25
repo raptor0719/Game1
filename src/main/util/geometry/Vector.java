@@ -45,6 +45,22 @@ public class Vector {
 		return "Vector:[x=" + x + ",y=" + y + "]";
 	}
 
+	@Override
+	public boolean equals(final Object o) {
+		if (o == null)
+			return false;
+		if (this == o)
+			return true;
+		if (!(o instanceof Vector))
+			return false;
+		final Vector o2 = (Vector)o;
+		if (o2.getX() != getX())
+			return false;
+		if (o2.getY() != getY())
+			return false;
+		return true;
+	}
+
 	/* STATIC METHODS */
 
 	public static Vector toVector(final Point p) {
