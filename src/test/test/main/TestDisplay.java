@@ -25,7 +25,7 @@ public class TestDisplay extends JFrame {
 	private final TestAgent player;
 
 	public TestDisplay() {
-		player = new TestAgent(100, 100, 50);
+		player = new TestAgent(100, 100, 80);
 		panel = new MyPanel(player);
 
 		this.setSize(800, 800);
@@ -68,9 +68,8 @@ public class TestDisplay extends JFrame {
 
 			g2d.drawRect(300, 300, 200, 200);
 
-//			System.out.println(player.getPath().size());
 			for (final Point p : mml.previousPath)
-				g2d.fillOval(p.getX(), p.getY(), 10, 10);
+				g2d.fillOval(p.getX()-5, p.getY()-5, 10, 10);
 
 			g2d.setColor(Color.BLUE);
 			player.draw(new TestDrawer(g2d));
