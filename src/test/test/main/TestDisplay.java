@@ -1,5 +1,6 @@
 package test.main;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -24,7 +25,7 @@ public class TestDisplay extends JFrame {
 	private final TestAgent player;
 
 	public TestDisplay() {
-		player = new TestAgent(100, 100, 1);
+		player = new TestAgent(100, 100, 50);
 		panel = new MyPanel(player);
 
 		this.setSize(800, 800);
@@ -71,7 +72,9 @@ public class TestDisplay extends JFrame {
 			for (final Point p : mml.previousPath)
 				g2d.fillOval(p.getX(), p.getY(), 10, 10);
 
+			g2d.setColor(Color.BLUE);
 			player.draw(new TestDrawer(g2d));
+			g2d.setColor(Color.BLACK);
 
 		}
 	}

@@ -7,11 +7,14 @@ import java.util.Queue;
 import display.api.IDrawable;
 import display.api.IDrawer;
 import logical.nav.api.INavAgent;
+import util.geometry.DoubleVector;
 import util.geometry.Point;
+import util.geometry.Vector;
 
 public class TestAgent implements INavAgent, IDrawable {
 	private int dx;
 	private int dy;
+	private int speed;
 
 	private int posX;
 	private int posY;
@@ -23,9 +26,15 @@ public class TestAgent implements INavAgent, IDrawable {
 
 	private Queue<Point> path;
 
+	private long millisSinceLastTick;
+
+	private double fracX;
+	private double fracY;
+
 	public TestAgent(final int xPos, final int yPos, final int speed) {
 		this.dx = speed;
 		this.dy = speed;
+		this.speed = speed;
 
 		this.posX = xPos;
 		this.posY = yPos;
@@ -36,6 +45,11 @@ public class TestAgent implements INavAgent, IDrawable {
 		this.isMoving = false;
 
 		path = new LinkedList<Point>();
+
+		millisSinceLastTick = System.currentTimeMillis();
+
+		fracX = 0;
+		fracY = 0;
 	}
 
 	@Override
@@ -66,6 +80,10 @@ public class TestAgent implements INavAgent, IDrawable {
 
 	@Override
 	public void move() {
+		tempMove();
+	}
+
+	private void currentMove() {
 		if (!isMoving)
 			return;
 
@@ -102,6 +120,73 @@ public class TestAgent implements INavAgent, IDrawable {
 			} else {
 				isMoving = false;
 			}
+		}
+	}
+
+	private void tempMove() {
+		final long currentTime = System.currentTimeMillis();
+		final double F = (currentTime - millisSinceLastTick)/(float)1000;
+		millisSinceLastTick = currentTime;
+
+		if (!isMoving)
+			return;
+
+		if (posX == destX && posY == destY) {
+			if (path.isEmpty()) {
+				isMoving = false;
+				return;
+			}
+			final Point nextPoint = path.poll();
+			destX = nextPoint.getX();
+			destY = nextPoint.getY();
+		}
+
+		final double MS = speed * F;
+		DoubleVector V = DoubleVector.unitVectorTowardPoint(getPosition(), new Point(destX, destY)).scale(MS);
+		DoubleVector VplusFrac = new DoubleVector(V.getX() + fracX, V.getY() + fracY);
+
+		fracX = VplusFrac.getX() % 1;
+		fracY = VplusFrac.getY() % 1;
+
+		Vector MOVE = new Vector((int)VplusFrac.getX(), (int)VplusFrac.getY());
+		Vector toDest = new Vector(destX - posX, destY - posY);
+
+		while (MOVE.getMagnitude() > toDest.getMagnitude()) {
+			posX = destX;
+			posY = destY;
+
+			if (path.isEmpty()) {
+				isMoving = false;
+				return;
+			}
+
+			final Point nextPoint = path.poll();
+			destX = nextPoint.getX();
+			destY = nextPoint.getY();
+
+			final double Leftover = MOVE.getMagnitude() - toDest.getMagnitude();
+			V = DoubleVector.unitVectorTowardPoint(getPosition(), new Point(destX, destY)).scale(Leftover);
+			VplusFrac = new DoubleVector(V.getX() + fracX, V.getY() + fracY);
+
+			fracX = VplusFrac.getX() % 1;
+			fracY = VplusFrac.getY() % 1;
+
+			MOVE = new Vector((int)VplusFrac.getX(), (int)VplusFrac.getY());
+			toDest = new Vector(destX - posX, destY - posY);
+		}
+
+		posX = MOVE.getX() + posX;
+		posY = MOVE.getY() + posY;
+
+		if (posX == destX && posY == destY) {
+			if (path.isEmpty()) {
+				isMoving = false;
+				return;
+			}
+
+			final Point nextPoint = path.poll();
+			destX = nextPoint.getX();
+			destY = nextPoint.getY();
 		}
 	}
 
