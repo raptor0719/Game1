@@ -74,7 +74,16 @@ public class VectorTest {
 	public void unitVector() {
 		final Vector v1 = getVector(3, 4);
 
-		final DoubleVector expected = new DoubleVector(0.6, 0.8);
+		final DoubleVector expected =getVector(0.6, 0.8);
+
+		Assert.assertThat(v1.unitVector(), equalTo(expected));
+	}
+
+	@Test
+	public void unitVector_oppositeDirection() {
+		final Vector v1 = getVector(-3, -4);
+
+		final DoubleVector expected = getVector(-0.6, -0.8);
 
 		Assert.assertThat(v1.unitVector(), equalTo(expected));
 	}
@@ -83,7 +92,7 @@ public class VectorTest {
 	public void unitVector_vertical() {
 		final Vector v1 = getVector(0, 10);
 
-		final DoubleVector expected = new DoubleVector(0, 1);
+		final DoubleVector expected = getVector(0, 1.0);
 
 		Assert.assertThat(v1.unitVector(), equalTo(expected));
 	}
@@ -92,7 +101,7 @@ public class VectorTest {
 	public void unitVector_vertical_oppositeDirection() {
 		final Vector v1 = getVector(0, -10);
 
-		final DoubleVector expected = new DoubleVector(0, -1);
+		final DoubleVector expected = getVector(0, -1.0);
 
 		Assert.assertThat(v1.unitVector(), equalTo(expected));
 	}
@@ -101,7 +110,16 @@ public class VectorTest {
 	public void unitVector_horizontal_oppositeDirection() {
 		final Vector v1 = getVector(-7, 0);
 
-		final DoubleVector expected = new DoubleVector(-1, 0);
+		final DoubleVector expected = getVector(-1.0, 0);
+
+		Assert.assertThat(v1.unitVector(), equalTo(expected));
+	}
+
+	@Test
+	public void unitVector_zeroLength() {
+		final Vector v1 = getVector(0, 0);
+
+		final DoubleVector expected = getVector(0.0, 0.0);
 
 		Assert.assertThat(v1.unitVector(), equalTo(expected));
 	}
@@ -145,6 +163,10 @@ public class VectorTest {
 
 	private Vector getVector(final int x, final int y) {
 		return new Vector(x, y);
+	}
+
+	private DoubleVector getVector(final double x, final double y) {
+		return new DoubleVector(x, y);
 	}
 
 	private <T> Matcher<T> equalTo(final T obj) {

@@ -70,6 +70,9 @@ public class DoubleVector {
 	private static DoubleVector getUnitVector(final DoubleVector v) {
 		final double magnitude = calculateMagnitude(v);
 
+		if (magnitude == 0.0)
+			return new DoubleVector(0, 0);
+
 		final double unitX = v.getX() / magnitude;
 		final double unitY = v.getY() / magnitude;
 
