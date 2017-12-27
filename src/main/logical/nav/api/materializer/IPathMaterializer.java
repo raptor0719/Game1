@@ -1,8 +1,8 @@
-package logical.nav.path.api;
+package logical.nav.api.materializer;
 
 import java.util.List;
 
-import logical.nav.graph.api.IGraphNode;
+import logical.nav.api.graph.structures.IGraphNode;
 import util.geometry.Point;
 
 public interface IPathMaterializer<D extends IGraphNode> {

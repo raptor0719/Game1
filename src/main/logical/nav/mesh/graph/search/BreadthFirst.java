@@ -1,12 +1,12 @@
-package logical.nav.graph.search.breadth;
+package logical.nav.mesh.graph.search;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import logical.nav.graph.api.IGraphEdge;
-import logical.nav.graph.api.IGraphNode;
-import logical.nav.graph.api.IGraphSearch;
+import logical.nav.api.graph.IGraphSearch;
+import logical.nav.api.graph.structures.IGraphEdge;
+import logical.nav.api.graph.structures.IGraphNode;
 
 public class BreadthFirst implements IGraphSearch {
 

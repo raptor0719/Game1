@@ -5,19 +5,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import logical.nav.NavMap;
-import logical.nav.graph.NavEdge;
-import logical.nav.graph.NavNode;
-import logical.nav.graph.api.IGraphNode;
-import logical.nav.graph.api.IGraphSearch;
-import logical.nav.graph.search.breadth.BreadthFirst;
-import logical.nav.graph.transformer.NavNodeTransformer;
-import logical.nav.grid.NavGrid;
-import logical.nav.grid.NavGridCell;
-import logical.nav.grid.NavGridPointResolver;
-import logical.nav.path.UnpathableAwareNavNodePathMaterializer;
-import logical.nav.path.api.IPathFinder;
-import logical.nav.path.api.IPathMaterializer;
+import logical.nav.api.INavigator;
+import logical.nav.api.graph.IGraphSearch;
+import logical.nav.api.graph.structures.IGraphNode;
+import logical.nav.api.materializer.IPathMaterializer;
+import logical.nav.mesh.NavMeshNavigator;
+import logical.nav.mesh.graph.search.BreadthFirst;
+import logical.nav.mesh.graph.structures.NavMeshEdge;
+import logical.nav.mesh.graph.structures.NavMeshNode;
+import logical.nav.mesh.graph.transformer.NavNodeTransformer;
+import logical.nav.mesh.materializer.NavMeshPathMaterializer;
+import logical.nav.mesh.resolver.NavMeshPointResolver;
+import logical.nav.mesh.resolver.grid.NavMeshGrid;
+import logical.nav.mesh.resolver.grid.NavMeshGridCell;
 import util.geometry.LineSegment;
 import util.geometry.Point;
 import util.geometry.Triangle;
@@ -25,7 +25,7 @@ import util.structures.ValuePair;
 import util.transformer.ITransformer;
 
 public class TestMapFactory {
-	public static IPathFinder getMap1() {
+	public static INavigator getMap1() {
 		/* POINTS */
 		final Point point_0_0 = new Point(0,0);
 		final Point point_800_0 = new Point(800,0);
@@ -55,16 +55,16 @@ public class TestMapFactory {
 		final Triangle tri9 = new Triangle(point_0_300, point_400_300, point_0_0);
 
 		/* GRAPH */
-		final NavNode node0 = new NavNode(0, tri0, emptySet());
-		final NavNode node1 = new NavNode(1, tri1, emptySet());
-		final NavNode node2 = new NavNode(2, tri2, emptySet());
-		final NavNode node3 = new NavNode(3, tri3, emptySet());
-		final NavNode node4 = new NavNode(4, tri4, emptySet());
-		final NavNode node5 = new NavNode(5, tri5, emptySet());
-		final NavNode node6 = new NavNode(6, tri6, emptySet());
-		final NavNode node7 = new NavNode(7, tri7, emptySet());
-		final NavNode node8 = new NavNode(8, tri8, emptySet());
-		final NavNode node9 = new NavNode(9, tri9, emptySet());
+		final NavMeshNode node0 = new NavMeshNode(0, tri0, emptySet());
+		final NavMeshNode node1 = new NavMeshNode(1, tri1, emptySet());
+		final NavMeshNode node2 = new NavMeshNode(2, tri2, emptySet());
+		final NavMeshNode node3 = new NavMeshNode(3, tri3, emptySet());
+		final NavMeshNode node4 = new NavMeshNode(4, tri4, emptySet());
+		final NavMeshNode node5 = new NavMeshNode(5, tri5, emptySet());
+		final NavMeshNode node6 = new NavMeshNode(6, tri6, emptySet());
+		final NavMeshNode node7 = new NavMeshNode(7, tri7, emptySet());
+		final NavMeshNode node8 = new NavMeshNode(8, tri8, emptySet());
+		final NavMeshNode node9 = new NavMeshNode(9, tri9, emptySet());
 
 		/* LINES */
 		// Lines B, D, G, and I have "e" editions which are the longer of the two
@@ -84,193 +84,193 @@ public class TestMapFactory {
 		final LineSegment lineJ = makeLine(point_0_0, point_400_300);
 
 		/* EDGES */
-		node0.addEdge(new NavEdge(0, node9, getAdjPair(lineJ, lineJ)));
-		node0.addEdge(new NavEdge(0, node1, getAdjPair(lineA, lineA)));
-		node1.addEdge(new NavEdge(0, node0, getAdjPair(lineA, lineA)));
-		node1.addEdge(new NavEdge(0, node2, getAdjPair(lineBe, lineB)));
-		node2.addEdge(new NavEdge(0, node1, getAdjPair(lineB, lineBe)));
-		node2.addEdge(new NavEdge(0, node3, getAdjPair(lineC, lineC)));
-		node3.addEdge(new NavEdge(0, node2, getAdjPair(lineC, lineC)));
-		node3.addEdge(new NavEdge(0, node4, getAdjPair(lineD, lineDe)));
-		node4.addEdge(new NavEdge(0, node3, getAdjPair(lineDe, lineD)));
-		node4.addEdge(new NavEdge(0, node5, getAdjPair(lineE, lineE)));
-		node5.addEdge(new NavEdge(0, node4, getAdjPair(lineE, lineE)));
-		node5.addEdge(new NavEdge(0, node6, getAdjPair(lineF, lineF)));
-		node6.addEdge(new NavEdge(0, node5, getAdjPair(lineF, lineF)));
-		node6.addEdge(new NavEdge(0, node7, getAdjPair(lineGe, lineG)));
-		node7.addEdge(new NavEdge(0, node6, getAdjPair(lineG, lineGe)));
-		node7.addEdge(new NavEdge(0, node8, getAdjPair(lineH, lineH)));
-		node8.addEdge(new NavEdge(0, node7, getAdjPair(lineH, lineH)));
-		node8.addEdge(new NavEdge(0, node9, getAdjPair(lineI, lineIe)));
-		node9.addEdge(new NavEdge(0, node8, getAdjPair(lineIe, lineI)));
-		node9.addEdge(new NavEdge(0, node0, getAdjPair(lineJ, lineJ)));
+		node0.addEdge(new NavMeshEdge(0, node9, getAdjPair(lineJ, lineJ)));
+		node0.addEdge(new NavMeshEdge(0, node1, getAdjPair(lineA, lineA)));
+		node1.addEdge(new NavMeshEdge(0, node0, getAdjPair(lineA, lineA)));
+		node1.addEdge(new NavMeshEdge(0, node2, getAdjPair(lineBe, lineB)));
+		node2.addEdge(new NavMeshEdge(0, node1, getAdjPair(lineB, lineBe)));
+		node2.addEdge(new NavMeshEdge(0, node3, getAdjPair(lineC, lineC)));
+		node3.addEdge(new NavMeshEdge(0, node2, getAdjPair(lineC, lineC)));
+		node3.addEdge(new NavMeshEdge(0, node4, getAdjPair(lineD, lineDe)));
+		node4.addEdge(new NavMeshEdge(0, node3, getAdjPair(lineDe, lineD)));
+		node4.addEdge(new NavMeshEdge(0, node5, getAdjPair(lineE, lineE)));
+		node5.addEdge(new NavMeshEdge(0, node4, getAdjPair(lineE, lineE)));
+		node5.addEdge(new NavMeshEdge(0, node6, getAdjPair(lineF, lineF)));
+		node6.addEdge(new NavMeshEdge(0, node5, getAdjPair(lineF, lineF)));
+		node6.addEdge(new NavMeshEdge(0, node7, getAdjPair(lineGe, lineG)));
+		node7.addEdge(new NavMeshEdge(0, node6, getAdjPair(lineG, lineGe)));
+		node7.addEdge(new NavMeshEdge(0, node8, getAdjPair(lineH, lineH)));
+		node8.addEdge(new NavMeshEdge(0, node7, getAdjPair(lineH, lineH)));
+		node8.addEdge(new NavMeshEdge(0, node9, getAdjPair(lineI, lineIe)));
+		node9.addEdge(new NavMeshEdge(0, node8, getAdjPair(lineIe, lineI)));
+		node9.addEdge(new NavMeshEdge(0, node0, getAdjPair(lineJ, lineJ)));
 
 		/* NAV GRID CELLS */
-		final NavGridCell cell00 = new NavGridCell(0, 0);
+		final NavMeshGridCell cell00 = new NavMeshGridCell(0, 0);
 		cell00.addNode(node0);
 		cell00.addNode(node9);
-		final NavGridCell cell01 = new NavGridCell(0, 1);
+		final NavMeshGridCell cell01 = new NavMeshGridCell(0, 1);
 		cell01.addNode(node9);
-		final NavGridCell cell02 = new NavGridCell(0, 2);
+		final NavMeshGridCell cell02 = new NavMeshGridCell(0, 2);
 		cell02.addNode(node9);
-		final NavGridCell cell03 = new NavGridCell(0, 3);
+		final NavMeshGridCell cell03 = new NavMeshGridCell(0, 3);
 		cell03.addNode(node8);
-		final NavGridCell cell04 = new NavGridCell(0, 4);
+		final NavMeshGridCell cell04 = new NavMeshGridCell(0, 4);
 		cell04.addNode(node7);
 		cell04.addNode(node8);
-		final NavGridCell cell05 = new NavGridCell(0, 5);
+		final NavMeshGridCell cell05 = new NavMeshGridCell(0, 5);
 		cell05.addNode(node6);
-		final NavGridCell cell06 = new NavGridCell(0, 6);
+		final NavMeshGridCell cell06 = new NavMeshGridCell(0, 6);
 		cell06.addNode(node6);
-		final NavGridCell cell07 = new NavGridCell(0, 7);
+		final NavMeshGridCell cell07 = new NavMeshGridCell(0, 7);
 		cell07.addNode(node5);
 		cell07.addNode(node6);
 
-		final NavGridCell cell10 = new NavGridCell(1, 0);
+		final NavMeshGridCell cell10 = new NavMeshGridCell(1, 0);
 		cell10.addNode(node0);
 		cell10.addNode(node9);
-		final NavGridCell cell11 = new NavGridCell(1, 1);
+		final NavMeshGridCell cell11 = new NavMeshGridCell(1, 1);
 		cell11.addNode(node0);
 		cell11.addNode(node9);
-		final NavGridCell cell12 = new NavGridCell(1, 2);
+		final NavMeshGridCell cell12 = new NavMeshGridCell(1, 2);
 		cell12.addNode(node9);
-		final NavGridCell cell13 = new NavGridCell(1, 3);
+		final NavMeshGridCell cell13 = new NavMeshGridCell(1, 3);
 		cell13.addNode(node7);
 		cell13.addNode(node8);
-		final NavGridCell cell14 = new NavGridCell(1, 4);
+		final NavMeshGridCell cell14 = new NavMeshGridCell(1, 4);
 		cell14.addNode(node7);
 		cell14.addNode(node8);
-		final NavGridCell cell15 = new NavGridCell(1, 5);
+		final NavMeshGridCell cell15 = new NavMeshGridCell(1, 5);
 		cell15.addNode(node6);
-		final NavGridCell cell16 = new NavGridCell(1, 6);
+		final NavMeshGridCell cell16 = new NavMeshGridCell(1, 6);
 		cell16.addNode(node5);
 		cell16.addNode(node6);
-		final NavGridCell cell17 = new NavGridCell(1, 7);
+		final NavMeshGridCell cell17 = new NavMeshGridCell(1, 7);
 		cell17.addNode(node5);
 		cell17.addNode(node6);
 
-		final NavGridCell cell20 = new NavGridCell(2, 0);
+		final NavMeshGridCell cell20 = new NavMeshGridCell(2, 0);
 		cell20.addNode(node9);
-		final NavGridCell cell21 = new NavGridCell(2, 1);
+		final NavMeshGridCell cell21 = new NavMeshGridCell(2, 1);
 		cell21.addNode(node0);
 		cell21.addNode(node9);
-		final NavGridCell cell22 = new NavGridCell(2, 2);
+		final NavMeshGridCell cell22 = new NavMeshGridCell(2, 2);
 		cell22.addNode(node0);
 		cell22.addNode(node9);
-		final NavGridCell cell23 = new NavGridCell(2, 3);
+		final NavMeshGridCell cell23 = new NavMeshGridCell(2, 3);
 		cell23.addNode(node7);
 		cell23.addNode(node8);
-		final NavGridCell cell24 = new NavGridCell(2, 4);
+		final NavMeshGridCell cell24 = new NavMeshGridCell(2, 4);
 		cell24.addNode(node7);
-		final NavGridCell cell25 = new NavGridCell(2, 5);
+		final NavMeshGridCell cell25 = new NavMeshGridCell(2, 5);
 		cell25.addNode(node5);
 		cell25.addNode(node6);
-		final NavGridCell cell26 = new NavGridCell(2, 6);
+		final NavMeshGridCell cell26 = new NavMeshGridCell(2, 6);
 		cell26.addNode(node5);
 		cell26.addNode(node6);
-		final NavGridCell cell27 = new NavGridCell(2, 7);
+		final NavMeshGridCell cell27 = new NavMeshGridCell(2, 7);
 		cell27.addNode(node5);
 
-		final NavGridCell cell30 = new NavGridCell(3, 0);
+		final NavMeshGridCell cell30 = new NavMeshGridCell(3, 0);
 		cell30.addNode(node0);
-		final NavGridCell cell31 = new NavGridCell(3, 1);
+		final NavMeshGridCell cell31 = new NavMeshGridCell(3, 1);
 		cell31.addNode(node0);
-		final NavGridCell cell32 = new NavGridCell(3, 2);
+		final NavMeshGridCell cell32 = new NavMeshGridCell(3, 2);
 		cell32.addNode(node0);
 		cell32.addNode(node9);
-		final NavGridCell cell33 = new NavGridCell(3, 3);
-		final NavGridCell cell34 = new NavGridCell(3, 4);
-		final NavGridCell cell35 = new NavGridCell(3, 5);
+		final NavMeshGridCell cell33 = new NavMeshGridCell(3, 3);
+		final NavMeshGridCell cell34 = new NavMeshGridCell(3, 4);
+		final NavMeshGridCell cell35 = new NavMeshGridCell(3, 5);
 		cell35.addNode(node5);
 		cell35.addNode(node6);
-		final NavGridCell cell36 = new NavGridCell(3, 6);
+		final NavMeshGridCell cell36 = new NavMeshGridCell(3, 6);
 		cell36.addNode(node5);
-		final NavGridCell cell37 = new NavGridCell(3, 7);
+		final NavMeshGridCell cell37 = new NavMeshGridCell(3, 7);
 		cell37.addNode(node5);
 
-		final NavGridCell cell40 = new NavGridCell(4, 0);
+		final NavMeshGridCell cell40 = new NavMeshGridCell(4, 0);
 		cell40.addNode(node0);
-		final NavGridCell cell41 = new NavGridCell(4, 1);
+		final NavMeshGridCell cell41 = new NavMeshGridCell(4, 1);
 		cell41.addNode(node0);
-		final NavGridCell cell42 = new NavGridCell(4, 2);
+		final NavMeshGridCell cell42 = new NavMeshGridCell(4, 2);
 		cell42.addNode(node0);
 		cell42.addNode(node1);
-		final NavGridCell cell43 = new NavGridCell(4, 3);
-		final NavGridCell cell44 = new NavGridCell(4, 4);
-		final NavGridCell cell45 = new NavGridCell(4, 5);
+		final NavMeshGridCell cell43 = new NavMeshGridCell(4, 3);
+		final NavMeshGridCell cell44 = new NavMeshGridCell(4, 4);
+		final NavMeshGridCell cell45 = new NavMeshGridCell(4, 5);
 		cell45.addNode(node4);
 		cell45.addNode(node5);
-		final NavGridCell cell46 = new NavGridCell(4, 6);
+		final NavMeshGridCell cell46 = new NavMeshGridCell(4, 6);
 		cell46.addNode(node5);
-		final NavGridCell cell47 = new NavGridCell(4, 7);
+		final NavMeshGridCell cell47 = new NavMeshGridCell(4, 7);
 		cell47.addNode(node5);
 
-		final NavGridCell cell50 = new NavGridCell(5, 0);
+		final NavMeshGridCell cell50 = new NavMeshGridCell(5, 0);
 		cell50.addNode(node0);
-		final NavGridCell cell51 = new NavGridCell(5, 1);
+		final NavMeshGridCell cell51 = new NavMeshGridCell(5, 1);
 		cell51.addNode(node0);
 		cell51.addNode(node1);
-		final NavGridCell cell52 = new NavGridCell(5, 2);
+		final NavMeshGridCell cell52 = new NavMeshGridCell(5, 2);
 		cell52.addNode(node0);
 		cell52.addNode(node1);
-		final NavGridCell cell53 = new NavGridCell(5, 3);
+		final NavMeshGridCell cell53 = new NavMeshGridCell(5, 3);
 		cell53.addNode(node2);
 		cell53.addNode(node3);
-		final NavGridCell cell54 = new NavGridCell(5, 4);
+		final NavMeshGridCell cell54 = new NavMeshGridCell(5, 4);
 		cell54.addNode(node3);
-		final NavGridCell cell55 = new NavGridCell(5, 5);
+		final NavMeshGridCell cell55 = new NavMeshGridCell(5, 5);
 		cell55.addNode(node4);
-		final NavGridCell cell56 = new NavGridCell(5, 6);
+		final NavMeshGridCell cell56 = new NavMeshGridCell(5, 6);
 		cell56.addNode(node4);
 		cell56.addNode(node5);
-		final NavGridCell cell57 = new NavGridCell(5, 7);
+		final NavMeshGridCell cell57 = new NavMeshGridCell(5, 7);
 		cell57.addNode(node5);
 
-		final NavGridCell cell60 = new NavGridCell(6, 0);
+		final NavMeshGridCell cell60 = new NavMeshGridCell(6, 0);
 		cell60.addNode(node0);
 		cell60.addNode(node1);
-		final NavGridCell cell61 = new NavGridCell(6, 1);
+		final NavMeshGridCell cell61 = new NavMeshGridCell(6, 1);
 		cell61.addNode(node0);
 		cell61.addNode(node1);
-		final NavGridCell cell62 = new NavGridCell(6, 2);
+		final NavMeshGridCell cell62 = new NavMeshGridCell(6, 2);
 		cell62.addNode(node1);
-		final NavGridCell cell63 = new NavGridCell(6, 3);
+		final NavMeshGridCell cell63 = new NavMeshGridCell(6, 3);
 		cell63.addNode(node2);
 		cell63.addNode(node3);
-		final NavGridCell cell64 = new NavGridCell(6, 4);
+		final NavMeshGridCell cell64 = new NavMeshGridCell(6, 4);
 		cell64.addNode(node2);
 		cell64.addNode(node3);
-		final NavGridCell cell65 = new NavGridCell(6, 5);
+		final NavMeshGridCell cell65 = new NavMeshGridCell(6, 5);
 		cell65.addNode(node4);
-		final NavGridCell cell66 = new NavGridCell(6, 6);
+		final NavMeshGridCell cell66 = new NavMeshGridCell(6, 6);
 		cell66.addNode(node4);
 		cell66.addNode(node5);
-		final NavGridCell cell67 = new NavGridCell(6, 7);
+		final NavMeshGridCell cell67 = new NavMeshGridCell(6, 7);
 		cell67.addNode(node4);
 		cell67.addNode(node5);
 
-		final NavGridCell cell70 = new NavGridCell(7, 0);
+		final NavMeshGridCell cell70 = new NavMeshGridCell(7, 0);
 		cell70.addNode(node0);
 		cell70.addNode(node1);
-		final NavGridCell cell71 = new NavGridCell(7, 1);
+		final NavMeshGridCell cell71 = new NavMeshGridCell(7, 1);
 		cell71.addNode(node1);
-		final NavGridCell cell72 = new NavGridCell(7, 2);
+		final NavMeshGridCell cell72 = new NavMeshGridCell(7, 2);
 		cell72.addNode(node1);
-		final NavGridCell cell73 = new NavGridCell(7, 3);
+		final NavMeshGridCell cell73 = new NavMeshGridCell(7, 3);
 		cell73.addNode(node2);
-		final NavGridCell cell74 = new NavGridCell(7, 4);
+		final NavMeshGridCell cell74 = new NavMeshGridCell(7, 4);
 		cell74.addNode(node2);
 		cell74.addNode(node3);
-		final NavGridCell cell75 = new NavGridCell(7, 5);
+		final NavMeshGridCell cell75 = new NavMeshGridCell(7, 5);
 		cell75.addNode(node4);
-		final NavGridCell cell76 = new NavGridCell(7, 6);
+		final NavMeshGridCell cell76 = new NavMeshGridCell(7, 6);
 		cell76.addNode(node4);
-		final NavGridCell cell77 = new NavGridCell(7, 7);
+		final NavMeshGridCell cell77 = new NavMeshGridCell(7, 7);
 		cell77.addNode(node4);
 		cell77.addNode(node5);
 
 		/* NAV GRID */
-		final NavGrid grid = new NavGrid();
+		final NavMeshGrid grid = new NavMeshGrid();
 
 		grid.setCell(0, 0, cell00);
 		grid.setCell(0, 1, cell01);
@@ -358,12 +358,12 @@ public class TestMapFactory {
 		unpathableTriangles.add(oobT2);
 
 		/* NAV MAP */
-		final NavGridPointResolver gridTree = new NavGridPointResolver(grid, 800, 800);
+		final NavMeshPointResolver gridTree = new NavMeshPointResolver(grid, 800, 800);
 		final IGraphSearch graphSearch = new BreadthFirst();
-		final ITransformer<List<IGraphNode>, List<NavNode>> nodeTransform = new NavNodeTransformer();
-		final IPathMaterializer<NavNode> pathMaterializer = new UnpathableAwareNavNodePathMaterializer(unpathableTriangles);
+		final ITransformer<List<IGraphNode>, List<NavMeshNode>> nodeTransform = new NavNodeTransformer();
+		final IPathMaterializer<NavMeshNode> pathMaterializer = new NavMeshPathMaterializer(unpathableTriangles);
 
-		final NavMap newNav = new NavMap(gridTree, graphSearch, nodeTransform, pathMaterializer);
+		final NavMeshNavigator newNav = new NavMeshNavigator(gridTree, graphSearch, nodeTransform, pathMaterializer);
 
 		return newNav;
 	}
@@ -376,7 +376,7 @@ public class TestMapFactory {
 		return new ValuePair<LineSegment, LineSegment>(a,b);
 	}
 
-	private static Set<NavEdge> emptySet() {
-		return new HashSet<NavEdge>();
+	private static Set<NavMeshEdge> emptySet() {
+		return new HashSet<NavMeshEdge>();
 	}
 }

@@ -1,15 +1,16 @@
-package logical.nav.grid;
+package logical.nav.mesh.resolver;
 
-import logical.nav.api.INavigationMap;
-import logical.nav.graph.NavNode;
+import logical.nav.api.resolver.IPointResolver;
+import logical.nav.mesh.graph.structures.NavMeshNode;
+import logical.nav.mesh.resolver.grid.NavMeshGrid;
 import util.geometry.Point;
 
-public class NavGridPointResolver implements INavigationMap<NavNode> {
-	private final NavGrid grid;
+public class NavMeshPointResolver implements IPointResolver<NavMeshNode> {
+	private final NavMeshGrid grid;
 	private final int realXSize;
 	private final int realYSize;
 
-	public NavGridPointResolver(final NavGrid grid, final int realXSize, final int realYSize) {
+	public NavMeshPointResolver(final NavMeshGrid grid, final int realXSize, final int realYSize) {
 		this.grid = grid;
 
 		if (realXSize % grid.getDimension() != 0 || realYSize % grid.getDimension() != 0)
@@ -20,19 +21,19 @@ public class NavGridPointResolver implements INavigationMap<NavNode> {
 	}
 
 	@Override
-	public NavNode resolvePoint(final Point p) {
+	public NavMeshNode resolvePoint(final Point p) {
 		// Don't confuse the true coordinate with the cell coordinate
 		final Point cellCoord = convertRealToCell(p);
-		final NavNode[] nodes = getNodes(cellCoord);
+		final NavMeshNode[] nodes = getNodes(cellCoord);
 
-		for (final NavNode node : nodes)
+		for (final NavMeshNode node : nodes)
 			if (node.getData().containsPoint(p))
 				return node;
 
 		return null;
 	}
 
-	private NavNode[] getNodes(final Point p) {
+	private NavMeshNode[] getNodes(final Point p) {
 		return grid.getCell(p.getX(), p.getY()).getNodes();
 	}
 

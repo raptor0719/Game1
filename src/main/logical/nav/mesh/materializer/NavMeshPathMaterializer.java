@@ -1,25 +1,25 @@
-package logical.nav.path;
+package logical.nav.mesh.materializer;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import logical.nav.graph.NavEdge;
-import logical.nav.graph.NavNode;
-import logical.nav.path.api.IPathMaterializer;
+import logical.nav.api.materializer.IPathMaterializer;
+import logical.nav.mesh.graph.structures.NavMeshEdge;
+import logical.nav.mesh.graph.structures.NavMeshNode;
 import util.geometry.LineSegment;
 import util.geometry.Point;
 import util.geometry.Triangle;
 import util.structures.ValuePair;
 
-public class UnpathableAwareNavNodePathMaterializer implements IPathMaterializer<NavNode> {
+public class NavMeshPathMaterializer implements IPathMaterializer<NavMeshNode> {
 	private final List<Triangle> unpathableTriangles;
 
-	public UnpathableAwareNavNodePathMaterializer(final List<Triangle> unpathableTriangles) {
+	public NavMeshPathMaterializer(final List<Triangle> unpathableTriangles) {
 		this.unpathableTriangles = unpathableTriangles;
 	}
 
 	@Override
-	public List<Point> materialize(final List<NavNode> nodePath, final Point start, final Point end) {
+	public List<Point> materialize(final List<NavMeshNode> nodePath, final Point start, final Point end) {
 		if (nodePath == null || nodePath.size() < 2)
 			throw new RuntimeException("Path materialization requires a path with at least 2 nodes.");
 
@@ -69,10 +69,10 @@ public class UnpathableAwareNavNodePathMaterializer implements IPathMaterializer
 		final List<Point> path = new ArrayList<Point>(nodePath.size()+2);
 		path.add(start);
 
-		NavNode previous = nodePath.remove(0);
-		NavNode current = nodePath.remove(0);
+		NavMeshNode previous = nodePath.remove(0);
+		NavMeshNode current = nodePath.remove(0);
 		while (!nodePath.isEmpty()) {
-			final NavNode next = nodePath.remove(0);
+			final NavMeshNode next = nodePath.remove(0);
 
 			{
 				final LineSegment lineToEnd = new LineSegment(path.get(path.size()-1), end);
@@ -123,7 +123,7 @@ public class UnpathableAwareNavNodePathMaterializer implements IPathMaterializer
 		return path;
 	}
 
-	private LineSegment getAdjLineSegment(final NavNode node1, final NavNode node2) {
+	private LineSegment getAdjLineSegment(final NavMeshNode node1, final NavMeshNode node2) {
 		final ValuePair<LineSegment, LineSegment> adjEdges = findAdjacentEdges(node1, node2);
 		final LineSegment adjLine = findSegment(adjEdges.getValue1(), adjEdges.getValue2());
 		return adjLine;
@@ -136,7 +136,7 @@ public class UnpathableAwareNavNodePathMaterializer implements IPathMaterializer
 		return false;
 	}
 
-	private List<Point> materializePathWith2Nodes(final NavNode startNode, final NavNode endNode, final Point start, final Point end) {
+	private List<Point> materializePathWith2Nodes(final NavMeshNode startNode, final NavMeshNode endNode, final Point start, final Point end) {
 		final List<Point> path = new ArrayList<Point>(3);
 
 		path.add(start);
@@ -201,8 +201,8 @@ public class UnpathableAwareNavNodePathMaterializer implements IPathMaterializer
 		return t.getArea() == area;
 	}
 
-	private ValuePair<LineSegment, LineSegment> findAdjacentEdges(final NavNode a, final NavNode b) {
-		for (final NavEdge e : a.getConnections())
+	private ValuePair<LineSegment, LineSegment> findAdjacentEdges(final NavMeshNode a, final NavMeshNode b) {
+		for (final NavMeshEdge e : a.getConnections())
 			if (e.getDestination().equals(b))
 				return e.getAdjacentEdges();
 		throw new RuntimeException("Consecutive nodes in path had no adjacent edge.");

@@ -1,27 +1,27 @@
-package logical.nav.grid;
+package logical.nav.mesh.resolver.grid;
 
-import logical.nav.graph.NavNode;
+import logical.nav.mesh.graph.structures.NavMeshNode;
 
-public class NavGrid {
+public class NavMeshGrid {
 	private static final int MINIMUM_DIMENSION = 2;
 	private static final int DEFAULT_DIMENSION = 8;
 
-	private final NavGridCell[][] arrayGrid;
+	private final NavMeshGridCell[][] arrayGrid;
 
-	public NavGrid() {
+	public NavMeshGrid() {
 		this(DEFAULT_DIMENSION);
 	}
 
-	public NavGrid(final int dimension) {
+	public NavMeshGrid(final int dimension) {
 		if (dimension < MINIMUM_DIMENSION)
 			throw new IllegalArgumentException(String.format("Specified dimension cannot be less than %d", MINIMUM_DIMENSION));
 		else if (!isPowerOfTwo(dimension))
 			throw new IllegalArgumentException("Specified dimension must be a power of two");
 
-		this.arrayGrid = new NavGridCell[dimension][dimension];
+		this.arrayGrid = new NavMeshGridCell[dimension][dimension];
 	}
 
-	public void setCell(final int xPos, final int yPos, final NavGridCell cell) {
+	public void setCell(final int xPos, final int yPos, final NavMeshGridCell cell) {
 		if (xPos >= arrayGrid.length)
 			throw new IllegalArgumentException("Specified xPos exceeds grid size");
 		else if (yPos >= arrayGrid[0].length)
@@ -32,16 +32,16 @@ public class NavGrid {
 		arrayGrid[xPos][yPos] = cell;
 	}
 
-	public void setCell(final int xPos, final int yPos, final int cellX, final int cellY, final NavNode... triangles) {
-		final NavGridCell cell = new NavGridCell(cellX, cellY);
+	public void setCell(final int xPos, final int yPos, final int cellX, final int cellY, final NavMeshNode... triangles) {
+		final NavMeshGridCell cell = new NavMeshGridCell(cellX, cellY);
 
-		for (final NavNode t : triangles)
+		for (final NavMeshNode t : triangles)
 			cell.addNode(t);
 
 		setCell(xPos, yPos, cell);
 	}
 
-	public NavGridCell getCell(final int x, final int y) {
+	public NavMeshGridCell getCell(final int x, final int y) {
 		if (x >= arrayGrid.length)
 			throw new IllegalArgumentException("Specified xPos exceeds grid size");
 		else if (y >= arrayGrid[0].length)

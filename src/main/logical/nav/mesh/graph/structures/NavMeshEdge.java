@@ -1,15 +1,15 @@
-package logical.nav.graph;
+package logical.nav.mesh.graph.structures;
 
-import logical.nav.graph.api.IGraphEdge;
+import logical.nav.api.graph.structures.IGraphEdge;
 import util.geometry.LineSegment;
 import util.structures.ValuePair;
 
-public class NavEdge implements IGraphEdge {
+public class NavMeshEdge implements IGraphEdge {
 	private final int cost;
-	private final NavNode destination;
+	private final NavMeshNode destination;
 	private final ValuePair<LineSegment, LineSegment> adjacentEdges;
 
-	public NavEdge(final int cost, final NavNode destination, final ValuePair<LineSegment, LineSegment> adjacentEdges) {
+	public NavMeshEdge(final int cost, final NavMeshNode destination, final ValuePair<LineSegment, LineSegment> adjacentEdges) {
 		this.cost = cost;
 		this.destination = destination;
 		this.adjacentEdges = adjacentEdges;
@@ -21,7 +21,7 @@ public class NavEdge implements IGraphEdge {
 	}
 
 	@Override
-	public NavNode getDestination() {
+	public NavMeshNode getDestination() {
 		return destination;
 	}
 

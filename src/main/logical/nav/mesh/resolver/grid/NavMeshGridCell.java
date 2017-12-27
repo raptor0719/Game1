@@ -1,30 +1,30 @@
-		package logical.nav.grid;
+		package logical.nav.mesh.resolver.grid;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import logical.nav.graph.NavNode;
+import logical.nav.mesh.graph.structures.NavMeshNode;
 
 // TODO: This object should be read only once created, create a builder for this
 // 		and remove the addNode method
-public class NavGridCell {
-	private final List<NavNode> nodes;
+public class NavMeshGridCell {
+	private final List<NavMeshNode> nodes;
 	private final int xPos;
 	private final int yPos;
 
-	public NavGridCell(final int xPos, final int yPos) {
-		nodes = new ArrayList<NavNode>(5);
+	public NavMeshGridCell(final int xPos, final int yPos) {
+		nodes = new ArrayList<NavMeshNode>(5);
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}
 
-	public void addNode(final NavNode node) {
+	public void addNode(final NavMeshNode node) {
 		if (node != null)
 			nodes.add(node);
 	}
 
-	public NavNode[] getNodes() {
-		return nodes.toArray(new NavNode[nodes.size()]);
+	public NavMeshNode[] getNodes() {
+		return nodes.toArray(new NavMeshNode[nodes.size()]);
 	}
 
 	public int getX() {
@@ -41,10 +41,10 @@ public class NavGridCell {
 			return false;
 		if (o == this)
 			return true;
-		if (!(o instanceof NavGridCell))
+		if (!(o instanceof NavMeshGridCell))
 			return false;
 
-		final NavGridCell o1 = (NavGridCell)o;
+		final NavMeshGridCell o1 = (NavMeshGridCell)o;
 
 		if (xPos != o1.getX())
 			return false;

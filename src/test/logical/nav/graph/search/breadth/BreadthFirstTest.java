@@ -7,8 +7,9 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import logical.nav.graph.api.IGraphEdge;
-import logical.nav.graph.api.IGraphNode;
+import logical.nav.api.graph.structures.IGraphEdge;
+import logical.nav.api.graph.structures.IGraphNode;
+import logical.nav.mesh.graph.search.BreadthFirst;
 import util.structures.ValuePair;
 
 public class BreadthFirstTest {

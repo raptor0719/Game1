@@ -1,4 +1,4 @@
-package logical.nav.graph.api;
+package logical.nav.api.graph.structures;
 
 import java.util.Set;
 

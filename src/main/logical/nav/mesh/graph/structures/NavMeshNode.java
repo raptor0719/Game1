@@ -1,16 +1,16 @@
-package logical.nav.graph;
+package logical.nav.mesh.graph.structures;
 
 import java.util.Set;
 
-import logical.nav.graph.api.IDataGraphNode;
+import logical.nav.api.graph.structures.IDataGraphNode;
 import util.geometry.Triangle;
 
-public class NavNode implements IDataGraphNode<Triangle> {
+public class NavMeshNode implements IDataGraphNode<Triangle> {
 	private final int id;
 	private final Triangle triangle;
-	private final Set<NavEdge> connections;
+	private final Set<NavMeshEdge> connections;
 
-	public NavNode(final int id, final Triangle triangle, final Set<NavEdge> connections) {
+	public NavMeshNode(final int id, final Triangle triangle, final Set<NavMeshEdge> connections) {
 		this.id = id;
 		this.triangle = triangle;
 		this.connections = connections;
@@ -26,7 +26,7 @@ public class NavNode implements IDataGraphNode<Triangle> {
 	}
 
 	@Override
-	public Set<NavEdge> getConnections() {
+	public Set<NavMeshEdge> getConnections() {
 		return connections;
 	}
 
@@ -34,10 +34,10 @@ public class NavNode implements IDataGraphNode<Triangle> {
 	public boolean equals(Object o) {
 		if (this == o)
 			return true;
-		if (!(o instanceof NavNode))
+		if (!(o instanceof NavMeshNode))
 			return false;
 
-		NavNode o2 = (NavNode)o;
+		NavMeshNode o2 = (NavMeshNode)o;
 
 		if (o2.getId() == getId())
 			return true;
@@ -50,14 +50,14 @@ public class NavNode implements IDataGraphNode<Triangle> {
 		return "NavNode:[id=" + id + "]";
 	}
 
-	public void addEdge(final NavEdge edge) {
+	public void addEdge(final NavMeshEdge edge) {
 		connections.add(edge);
 	}
 
 	public static class NavNodeBuilder {
 		private int id;
 		private Triangle triangle;
-		private Set<NavEdge> connections;
+		private Set<NavMeshEdge> connections;
 
 		public NavNodeBuilder id(final int id) {
 			this.id = id;
@@ -69,13 +69,13 @@ public class NavNode implements IDataGraphNode<Triangle> {
 			return this;
 		}
 
-		public NavNodeBuilder connections(final Set<NavEdge> connections) {
+		public NavNodeBuilder connections(final Set<NavMeshEdge> connections) {
 			this.connections = connections;
 			return this;
 		}
 
-		public NavNode build() {
-			return new NavNode(id, triangle, connections);
+		public NavMeshNode build() {
+			return new NavMeshNode(id, triangle, connections);
 		}
 	}
 }
