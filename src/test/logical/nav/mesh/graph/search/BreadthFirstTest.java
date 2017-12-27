@@ -1,4 +1,4 @@
-package logical.nav.graph.search.breadth;
+package logical.nav.mesh.graph.search;
 
 import java.util.ArrayList;
 import java.util.HashSet;
