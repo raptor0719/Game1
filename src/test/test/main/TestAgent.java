@@ -6,12 +6,11 @@ import java.util.Queue;
 
 import display.api.IDrawable;
 import display.api.IDrawer;
-import logical.nav.api.INavAgent;
 import util.geometry.DoubleVector;
 import util.geometry.Point;
 import util.geometry.Vector;
 
-public class TestAgent implements INavAgent, IDrawable {
+public class TestAgent implements IDrawable {
 	private int dx;
 	private int dy;
 	private int speed;
@@ -32,17 +31,17 @@ public class TestAgent implements INavAgent, IDrawable {
 	private double fracY;
 
 	public TestAgent(final int xPos, final int yPos, final int speed) {
-		this.dx = speed;
-		this.dy = speed;
+		dx = speed;
+		dy = speed;
 		this.speed = speed;
 
-		this.posX = xPos;
-		this.posY = yPos;
+		posX = xPos;
+		posY = yPos;
 
-		this.destX = 0;
-		this.destY = 0;
+		destX = 0;
+		destY = 0;
 
-		this.isMoving = false;
+		isMoving = false;
 
 		path = new LinkedList<Point>();
 
@@ -52,12 +51,10 @@ public class TestAgent implements INavAgent, IDrawable {
 		fracY = 0;
 	}
 
-	@Override
 	public Point getPosition() {
 		return new Point(posX, posY);
 	}
 
-	@Override
 	public boolean setPath(final List<Point> newPath) {
 		if (newPath == null || newPath.isEmpty())
 			return isMoving;
@@ -78,7 +75,6 @@ public class TestAgent implements INavAgent, IDrawable {
 		return path;
 	}
 
-	@Override
 	public void move() {
 		tempMove();
 	}

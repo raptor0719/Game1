@@ -14,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
-import logical.nav.api.INavAgent;
 import logical.nav.api.INavigator;
 import util.geometry.Point;
 
@@ -81,7 +80,7 @@ public class TestDisplay extends JFrame {
 	private static class LogicalTimer extends Timer {
 		private static final long serialVersionUID = 7336213152017273761L;
 
-		public LogicalTimer(final INavAgent p) {
+		public LogicalTimer(final TestAgent p) {
 			super(0, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -109,11 +108,11 @@ public class TestDisplay extends JFrame {
 	}
 
 	private static class MyMouseListener implements MouseInputListener {
-		private final INavAgent player;
+		private final TestAgent player;
 		private final INavigator nav;
 		public List<Point> previousPath = new LinkedList<Point>();
 
-		public MyMouseListener(final INavAgent p, final INavigator nav) {
+		public MyMouseListener(final TestAgent p, final INavigator nav) {
 			player = p;
 			this.nav = nav;
 		}
