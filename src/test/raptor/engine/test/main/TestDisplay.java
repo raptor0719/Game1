@@ -14,6 +14,14 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
+import raptor.engine.logical.entity.api.IOrderable;
+import raptor.engine.logical.entity.entities.Unit;
+import raptor.engine.logical.entity.order.handler.DefaultOrderPackage;
+import raptor.engine.logical.entity.order.orders.MoveOrder;
+import raptor.engine.logical.entity.order.orders.StopOrder;
+import raptor.engine.logical.entity.statblock.api.IStatBlock;
+import raptor.engine.logical.entity.statblock.statblocks.RawStatBlock;
+import raptor.engine.logical.nav.agent.DefaultNavAgent;
 import raptor.engine.logical.nav.api.INavigator;
 import raptor.engine.util.geometry.Point;
 
@@ -21,10 +29,14 @@ public class TestDisplay extends JFrame {
 	private static final long serialVersionUID = 3754897033232484338L;
 
 	private final MyPanel panel;
-	private final TestAgent player;
+	private final IOrderable player;
 
 	public TestDisplay() {
-		player = new TestAgent(100, 100, 80);
+		final Point sp = new Point(100, 100);
+
+		final DefaultOrderPackage orders = new DefaultOrderPackage();
+		player = new Unit(getTestStatBlock(), new DefaultNavAgent(sp, TestMapFactory.getMap1(), 80), orders, orders);
+
 		panel = new MyPanel(player);
 
 		this.setSize(800, 800);
@@ -38,12 +50,12 @@ public class TestDisplay extends JFrame {
 
 	private static class MyPanel extends JPanel {
 		private static final long serialVersionUID = 1703223292209679374L;
-		private final TestAgent player;
+		private final IOrderable player;
 		private final LogicalTimer timer;
 		private final GraphicsTimer gtimer;
 		private final MyMouseListener mml;
 
-		public MyPanel(final TestAgent p) {
+		public MyPanel(final IOrderable p) {
 			player = p;
 
 			timer = new LogicalTimer(p);
@@ -80,11 +92,11 @@ public class TestDisplay extends JFrame {
 	private static class LogicalTimer extends Timer {
 		private static final long serialVersionUID = 7336213152017273761L;
 
-		public LogicalTimer(final TestAgent p) {
+		public LogicalTimer(final IOrderable p) {
 			super(0, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					p.move();
+					p.act();
 				}
 			});
 
@@ -108,11 +120,11 @@ public class TestDisplay extends JFrame {
 	}
 
 	private static class MyMouseListener implements MouseInputListener {
-		private final TestAgent player;
+		private final IOrderable player;
 		private final INavigator nav;
 		public List<Point> previousPath = new LinkedList<Point>();
 
-		public MyMouseListener(final TestAgent p, final INavigator nav) {
+		public MyMouseListener(final IOrderable p, final INavigator nav) {
 			player = p;
 			this.nav = nav;
 		}
@@ -141,16 +153,22 @@ public class TestDisplay extends JFrame {
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			previousPath.clear();
+			if (arg0.getButton() == MouseEvent.BUTTON1) {
+				previousPath.clear();
 
-			final List<Point> path = nav.findPath(player.getPosition(), new Point(arg0.getX(), arg0.getY()));
-			if (path == null) {
-				return;
+				final Point dest = new Point(arg0.getX(), arg0.getY());
+
+				final List<Point> path = nav.findPath(player.getPosition(), dest);
+				if (path == null) {
+					return;
+				}
+				player.order(new MoveOrder(dest));
+
+				for (Point p : path)
+					previousPath.add(p);
+			} else if (arg0.getButton() == MouseEvent.BUTTON3) {
+				player.order(new StopOrder());
 			}
-			player.setPath(path);
-
-			for (Point p : path)
-				previousPath.add(p);
 		}
 
 		@Override
@@ -164,5 +182,9 @@ public class TestDisplay extends JFrame {
 			// TODO Auto-generated method stub
 
 		}
+	}
+
+	private IStatBlock getTestStatBlock() {
+		return new RawStatBlock(100, 0, 0, 10, 0, 10, 80, 0, 0, 0, 0);
 	}
 }
