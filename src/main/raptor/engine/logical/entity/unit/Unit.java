@@ -1,4 +1,4 @@
-package raptor.engine.logical.entity.entities;
+package raptor.engine.logical.entity.unit;
 
 import raptor.engine.display.api.IDrawer;
 import raptor.engine.logical.entity.api.IOrderable;

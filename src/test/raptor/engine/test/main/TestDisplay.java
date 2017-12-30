@@ -15,12 +15,12 @@ import javax.swing.Timer;
 import javax.swing.event.MouseInputListener;
 
 import raptor.engine.logical.entity.api.IOrderable;
-import raptor.engine.logical.entity.entities.Unit;
 import raptor.engine.logical.entity.order.handler.DefaultOrderPackage;
 import raptor.engine.logical.entity.order.orders.MoveOrder;
 import raptor.engine.logical.entity.order.orders.StopOrder;
 import raptor.engine.logical.entity.statblock.api.IStatBlock;
 import raptor.engine.logical.entity.statblock.statblocks.RawStatBlock;
+import raptor.engine.logical.entity.unit.Unit;
 import raptor.engine.logical.nav.agent.DefaultNavAgent;
 import raptor.engine.logical.nav.api.INavigator;
 import raptor.engine.util.geometry.Point;
