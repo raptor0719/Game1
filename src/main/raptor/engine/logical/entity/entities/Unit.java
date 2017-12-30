@@ -47,8 +47,8 @@ public class Unit implements IOrderable {
 	@Override
 	public void act() {
 		// Handle orders
-		if (orderQueue.hasOrder())
-			applyOrder(orderQueue.getOrder());
+		if (orderQueue.readyForOrder())
+			applyOrder(orderQueue.getNewOrder());
 
 		// Move
 		navAgent.move();

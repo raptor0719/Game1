@@ -22,15 +22,21 @@ public class DefaultOrderPackage implements IOrderQueue, IOrderHandler {
 	}
 
 	@Override
-	public boolean hasOrder() {
+	public boolean readyForOrder() {
 		return !orderQueue.isEmpty();
 	}
 
 	@Override
-	public IOrder getOrder() {
-		if (!hasOrder())
-			throw new RuntimeException("No order was found when attempting to retrieve order. Make sure to call hasOrder before querying.");
+	public IOrder getNewOrder() {
+		if (!readyForOrder())
+			throw new RuntimeException("No order was found when attempting to retrieve order. Make sure to call readyForOrder before querying.");
 		return orderQueue.poll();
+	}
+
+	@Override
+	public IOrder getCurrentOrder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
