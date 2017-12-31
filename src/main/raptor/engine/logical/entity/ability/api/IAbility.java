@@ -1,6 +1,6 @@
 package raptor.engine.logical.entity.ability.api;
 
-import raptor.engine.logical.entity.ability.misc.AbilityType;
+import raptor.engine.logical.entity.ability.data.AbilityType;
 
 public interface IAbility {
 	public int getId();

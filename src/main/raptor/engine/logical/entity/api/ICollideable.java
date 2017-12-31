@@ -1,7 +1,7 @@
 package raptor.engine.logical.entity.api;
 
-import raptor.engine.util.geometry.Point;
+import raptor.engine.logical.entity.hitbox.api.IHitbox;
 
 public interface ICollideable extends IAffectable {
-	public boolean colliding(final Point p);
+	public IHitbox getHitbox();
 }

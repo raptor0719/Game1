@@ -1,4 +1,4 @@
-package raptor.engine.logical.entity.ability.misc;
+package raptor.engine.logical.entity.ability.data;
 
 public enum TargetingType {
 	Use,
