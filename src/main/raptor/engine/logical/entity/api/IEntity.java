@@ -5,7 +5,7 @@ import raptor.engine.logical.event.api.IEvent;
 import raptor.engine.util.geometry.Point;
 
 public interface IEntity extends IDrawable {
-	public int getId();
+	public int getLocalId();
 	public Point getPosition();
 	public void act();
 	public IEvent onDeath();

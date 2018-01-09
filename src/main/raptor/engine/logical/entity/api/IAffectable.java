@@ -1,7 +1,7 @@
 package raptor.engine.logical.entity.api;
 
-import raptor.engine.logical.event.api.IEvent;
+import raptor.engine.logical.effect.api.IEffect;
 
 public interface IAffectable extends IEntity {
-	public void affect(final IEvent e);
+	public void affect(final IEffect e);
 }

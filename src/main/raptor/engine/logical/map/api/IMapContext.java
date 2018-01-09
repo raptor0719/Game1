@@ -10,4 +10,5 @@ public interface IMapContext {
 	public List<ICollideable> getLocalCollideables(final Point pos);
 	public void noticeOfDeath(final IEntity e);
 	public long getCurrentTime();
+	public long getTimeSinceLastTick();
 }

@@ -1,6 +1,7 @@
 package raptor.engine.logical.entity.unit;
 
 import raptor.engine.display.api.IDrawer;
+import raptor.engine.logical.effect.api.IEffect;
 import raptor.engine.logical.entity.api.IOrderable;
 import raptor.engine.logical.entity.hitbox.api.IHitbox;
 import raptor.engine.logical.entity.order.api.IOrder;
@@ -33,13 +34,13 @@ public class Unit implements IOrderable {
 	}
 
 	@Override
-	public int getId() {
+	public int getLocalId() {
 		// TODO: need a unit data object
 		return 0;
 	}
 
 	@Override
-	public void affect(final IEvent e) {
+	public void affect(final IEffect e) {
 	}
 
 	@Override
