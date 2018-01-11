@@ -44,11 +44,11 @@ public class Projectile implements IAffectable {
 
 	@Override
 	public void act() {
-		collision.collide(getPosition());
+		collision.collide(this);
 
-		movement.calculateNewPosition(getPosition());
+		movement.calculateNewPosition(this);
 
-		if (lifecycle.isExpired(collision.getCollisionCount()))
+		if (lifecycle.isExpired(this))
 			mapContext.noticeOfDeath(this);
 	}
 
