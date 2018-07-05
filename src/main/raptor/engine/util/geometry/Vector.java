@@ -31,6 +31,10 @@ public class Vector {
 	public int cross(final Vector b) {
 		return x*b.getY() - y*b.getX();
 	}
+	
+	public int dot(final Vector b) {
+		return (x*b.x) + (y*b.y);
+	}
 
 	public Vector minus(final Vector b) {
 		return new Vector(x - b.getX(), y - b.getY());
@@ -38,6 +42,10 @@ public class Vector {
 
 	public DoubleVector unitVector() {
 		return new DoubleVector(x, y).unitVector();
+	}
+	
+	public double getAngleBetween(final Vector v) {
+		return Math.acos(this.dot(v) / (this.magnitude*v.magnitude));
 	}
 
 	@Override

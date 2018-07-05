@@ -6,6 +6,7 @@ public class LineSegment {
 	private final Point a;
 	private final Point b;
 	private final float length;
+	private final float slope;
 
 	private final Vector aToB;
 
@@ -13,6 +14,7 @@ public class LineSegment {
 		this.a = a;
 		this.b = b;
 		this.length = calculateLength(a, b);
+		this.slope = Math.abs(calculateSlope(a, b));
 		this.aToB = calculateAToB(a, b);
 	}
 
@@ -91,6 +93,10 @@ public class LineSegment {
 	public boolean intersectsWith(final LineSegment ls) {
 		return getIntersectionPoint(ls) != null;
 	}
+	
+	public double getAngleBetween(final LineSegment ls) {
+		return aToB.getAngleBetween(ls.aToB);
+	}
 
 	@Override
 	public boolean equals(final Object o) {
@@ -159,5 +165,11 @@ public class LineSegment {
 			return points1.getValue2();
 
 		return null;
+	}
+	
+	private float calculateSlope(final Point a, final Point b) {
+		if (b.getX() - a.getX() == 0)
+			return 0;
+		return ((b.getY() - a.getY())/(b.getX() - a.getX()));
 	}
 }
