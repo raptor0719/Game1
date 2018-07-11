@@ -28,7 +28,7 @@ public class Main {
 			final long currentTime = System.currentTimeMillis();
 			final long timeSinceLastCompute = currentTime - lastCompute;
 
-			if (timeSinceLastCompute >= 10) {
+			if (timeSinceLastCompute >= 100) {
 				lastCompute = currentTime;
 				if (listener.up)
 					player.y -= player.moveRate;
@@ -42,7 +42,7 @@ public class Main {
 				if (mouseLocation != null) {
 					final LineSegment playerToMouse = new LineSegment(new Point(player.x, player.y), new Point(mouseLocation.x, mouseLocation.y));
 					player.faceDegrees = convertAngle(playerToMouse.getAngleBetween(player.horizontalLine)*180/Math.PI, mouseLocation.x < player.x);
-					System.out.println(player.faceDegrees);
+//					System.out.println(player.faceDegrees);
 				}
 			}
 			
@@ -93,15 +93,35 @@ public class Main {
 			
 			g2d.setColor(Color.BLUE);
 			g2d.drawOval(player.x-(int)(0.5*player.width), player.y-(int)(0.5*player.height), player.width, player.height);
-			g2d.drawLine(player.x, player.y-(int)(0.5*player.height), player.x, player.y+(int)(0.5*player.height));
+			final LineSegment faceLine = getRotatedLineSegment(player.horizontalLine, player.faceDegrees);
+			final LineSegment translatedFaceLine = translateLineSegment(faceLine, player.x, player.y);
+//			g2d.drawLine(player.x, player.y-(int)(0.5*player.height), player.x, player.y+(int)(0.5*player.height));
+			System.out.println("1: " + translatedFaceLine.getPoints().getValue1());
+			System.out.println("2: " + translatedFaceLine.getPoints().getValue2());
+			g2d.drawLine(translatedFaceLine.getPoints().getValue1().getX(), translatedFaceLine.getPoints().getValue1().getY(), 
+					translatedFaceLine.getPoints().getValue2().getX(), translatedFaceLine.getPoints().getValue2().getY());
 		}
 	}
 	
-	private static LineSegment getRotatedLineSegment(final Point middlePoint, final LineSegment ls) {
-		final Point p1Translated = new Point(ls.getPoints().getValue1().getX()-middlePoint.getX(), ls.getPoints().getValue1().getY()-middlePoint.getY());
-		final Point p2Translated = new Point(ls.getPoints().getValue2().getX()-middlePoint.getX(), ls.getPoints().getValue2().getY()-middlePoint.getY());
-		//TODO: FINISH THIS SHIT
-		final LineSegment translated = new LineSegment(p1Translated., )
+	private static LineSegment translateLineSegment(final LineSegment ls, final int x, final int y) {
+		final Point a = new Point(ls.getPoints().getValue1().getX()+x, ls.getPoints().getValue2().getY()+y);
+		final Point b = new Point(ls.getPoints().getValue2().getX()+x, ls.getPoints().getValue2().getY()+y);
+		return new LineSegment(a, b);
+	}
+	
+	private static LineSegment getRotatedLineSegment(final LineSegment ls, final int angle) {
+		final Point p1Rotated = rotatePointAboutOrigin(ls.getPoints().getValue1(), angle);
+		final Point p2Rotated = rotatePointAboutOrigin(ls.getPoints().getValue2(), angle);
+		
+		return new LineSegment(p1Rotated, p2Rotated);
+	}
+	
+	private static Point rotatePointAboutOrigin(final Point p, final int angle) {
+		final int newX = (int)(p.getX() * Math.cos(angle) - p.getY() * Math.sin(angle));
+		final int newY = (int)(p.getY() * Math.cos(angle) + p.getX() * Math.sin(angle));
+		final Point newPoint = new Point(newX, newY);
+//		System.out.println(newPoint);
+		return newPoint;
 	}
 	
 	private static class Player {
@@ -123,7 +143,7 @@ public class Main {
 			height = diameter;
 			faceDegrees = 0;
 			this.moveRate = moveRate;
-			horizontalLine = new LineSegment(new Point(0, 0), new Point(0, 1));
+			horizontalLine = new LineSegment(new Point(0, 0), new Point(10, 0));
 			lineStart = null;
 		}
 	}
