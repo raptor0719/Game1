@@ -18,8 +18,6 @@ import raptor.engine.logical.entity.api.IOrderable;
 import raptor.engine.logical.entity.order.handler.DefaultOrderPackage;
 import raptor.engine.logical.entity.order.orders.MoveOrder;
 import raptor.engine.logical.entity.order.orders.StopOrder;
-import raptor.engine.logical.entity.statblock.api.IStatBlock;
-import raptor.engine.logical.entity.statblock.statblocks.RawStatBlock;
 import raptor.engine.logical.entity.unit.Unit;
 import raptor.engine.logical.nav.agent.DefaultNavAgent;
 import raptor.engine.logical.nav.api.INavigator;
@@ -35,7 +33,7 @@ public class TestDisplay extends JFrame {
 		final Point sp = new Point(100, 100);
 
 		final DefaultOrderPackage orders = new DefaultOrderPackage();
-		player = new Unit(getTestStatBlock(), new DefaultNavAgent(sp, TestMapFactory.getMap1(), 80), orders, orders);
+		player = new Unit(new DefaultNavAgent(sp, TestMapFactory.getMap1(), 80), orders, orders);
 
 		panel = new MyPanel(player);
 
@@ -182,9 +180,5 @@ public class TestDisplay extends JFrame {
 			// TODO Auto-generated method stub
 
 		}
-	}
-
-	private IStatBlock getTestStatBlock() {
-		return new RawStatBlock(100, 0, 0, 10, 0, 10, 80, 0, 0, 0, 0);
 	}
 }
