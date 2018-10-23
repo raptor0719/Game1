@@ -1,8 +1,8 @@
 package raptor.engine.util.geometry;
 
 public class Point {
-	private final int x;
-	private final int y;
+	private int x;
+	private int y;
 
 	public Point(final Vector v) {
 		this(v.getX(), v.getY());
@@ -19,6 +19,14 @@ public class Point {
 
 	public int getY() {
 		return y;
+	}
+
+	public void setX(final int newX) {
+		x = newX;
+	}
+
+	public void setY(final int newY) {
+		y = newY;
 	}
 
 	public float distanceTo(final Point b) {
@@ -49,7 +57,7 @@ public class Point {
 
 		final Point p = (Point)o;
 
-		if (p.getX() == this.x && p.getY() == this.y)
+		if (p.getX() == x && p.getY() == y)
 			return true;
 
 		return false;

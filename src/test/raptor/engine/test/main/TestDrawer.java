@@ -15,4 +15,9 @@ public class TestDrawer implements IDrawer {
 	public void drawOval(int x, int y, int sizeX, int sizeY) {
 		g.fillOval(x, y, sizeX, sizeY);
 	}
+
+	@Override
+	public void drawSquare(int x, int y, int width, int height) {
+		g.fillRect(x, y, width, height);
+	}
 }

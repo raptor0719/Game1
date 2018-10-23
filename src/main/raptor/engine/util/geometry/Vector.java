@@ -1,10 +1,8 @@
 package raptor.engine.util.geometry;
 
 public class Vector {
-	private final int x;
-	private final int y;
-
-	private final double magnitude;
+	private int x;
+	private int y;
 
 	public Vector (final Point p) {
 		this(p.getX(), p.getY());
@@ -13,7 +11,6 @@ public class Vector {
 	public Vector(final int x, final int y) {
 		this.x = x;
 		this.y = y;
-		this.magnitude = calculateMagnitude(x, y);
 	}
 
 	public int getX() {
@@ -24,14 +21,22 @@ public class Vector {
 		return y;
 	}
 
+	public void setX(final int newX) {
+		x = newX;
+	}
+
+	public void setY(final int newY) {
+		y = newY;
+	}
+
 	public double getMagnitude() {
-		return magnitude;
+		return calculateMagnitude(x, y);
 	}
 
 	public int cross(final Vector b) {
 		return x*b.getY() - y*b.getX();
 	}
-	
+
 	public int dot(final Vector b) {
 		return (x*b.x) + (y*b.y);
 	}
@@ -43,9 +48,10 @@ public class Vector {
 	public DoubleVector unitVector() {
 		return new DoubleVector(x, y).unitVector();
 	}
-	
+
 	public double getAngleBetween(final Vector v) {
-		return Math.acos(this.dot(v) / (this.magnitude*v.magnitude));
+		final double magnitude = calculateMagnitude(x, y);
+		return Math.acos(dot(v) / (magnitude*v.getMagnitude()));
 	}
 
 	@Override
