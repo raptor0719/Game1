@@ -14,6 +14,6 @@ public class Level implements IDrawable {
 
 	@Override
 	public void draw(final IDrawer drawer) {
-		drawer.drawSquare(0, 0, width, height);
+		drawer.drawRect(0, 0, width, height);
 	}
 }

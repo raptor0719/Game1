@@ -8,5 +8,5 @@ import java.awt.Graphics2D;
  */
 public interface IDrawer {
 	public void drawOval(final int x, final int y, final int sizeX, final int sizeY);
-	public void drawSquare(final int x, final int y, final int width, final int height);
+	public void drawRect(final int x, final int y, final int width, final int height);
 }

@@ -17,7 +17,7 @@ public class TestDrawer implements IDrawer {
 	}
 
 	@Override
-	public void drawSquare(int x, int y, int width, int height) {
+	public void drawRect(int x, int y, int width, int height) {
 		g.fillRect(x, y, width, height);
 	}
 }
