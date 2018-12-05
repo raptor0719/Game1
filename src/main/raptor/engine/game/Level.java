@@ -1,7 +1,7 @@
 package raptor.engine.game;
 
 import raptor.engine.display.api.IDrawable;
-import raptor.engine.display.api.IDrawer;
+import raptor.engine.util.geometry.Point;
 
 public class Level implements IDrawable {
 	public int width;
@@ -13,7 +13,12 @@ public class Level implements IDrawable {
 	}
 
 	@Override
-	public void draw(final IDrawer drawer) {
-		drawer.drawRect(0, 0, width, height);
+	public Point getPosition() {
+		return new Point(0, 0);
+	}
+
+	@Override
+	public Point getDimensions() {
+		return new Point(width, height);
 	}
 }

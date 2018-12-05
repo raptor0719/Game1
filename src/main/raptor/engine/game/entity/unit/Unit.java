@@ -1,7 +1,6 @@
 package raptor.engine.game.entity.unit;
 
 import raptor.engine.display.api.IDrawable;
-import raptor.engine.display.api.IDrawer;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Vector;
 
@@ -20,7 +19,12 @@ public class Unit implements IDrawable {
 	}
 
 	@Override
-	public void draw(final IDrawer drawer) {
-		drawer.drawOval(position.getX(), position.getY(), 10, 10);
+	public Point getPosition() {
+		return position;
+	}
+
+	@Override
+	public Point getDimensions() {
+		return new Point(10, 10);
 	}
 }

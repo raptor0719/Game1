@@ -13,11 +13,16 @@ public class TestDrawer implements IDrawer {
 
 	@Override
 	public void drawOval(int x, int y, int sizeX, int sizeY) {
-		g.fillOval(x, y, sizeX, sizeY);
+		g.drawOval(x, y, sizeX, sizeY);
 	}
 
 	@Override
 	public void drawRect(int x, int y, int width, int height) {
-		g.fillRect(x, y, width, height);
+		g.drawRect(x, y, width, height);
+	}
+
+	@Override
+	public void clear(int x, int y, int width, int height) {
+		g.clearRect(x, y, width, height);
 	}
 }
