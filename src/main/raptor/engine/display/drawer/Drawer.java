@@ -22,7 +22,6 @@ public class Drawer implements IDrawer {
 
 		buffer = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR_PRE);
 		this.g = buffer.createGraphics();
-		g.setColor(Color.BLUE);
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		actualG.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -48,6 +47,9 @@ public class Drawer implements IDrawer {
 	public void clear(int x, int y, int width, int height) {
 		final Point vp = transformLocation(new Point(x, y));
 		g.clearRect(vp.getX(), vp.getY(), width, height);
+		g.setColor(Color.white);
+		g.fillRect(vp.getX(), vp.getY(), width, height);
+		g.setColor(Color.black);
 	}
 
 	public void draw() {

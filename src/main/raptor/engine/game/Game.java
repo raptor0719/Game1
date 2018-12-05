@@ -23,7 +23,7 @@ public class Game {
 		this.inputs = inputs;
 
 		units = new ArrayList<Unit>();
-		units.add(new Unit(0, 0, 1, 1));
+		units.add(new Unit(250, 250, 1, 1));
 		vuf = new ViewportUnitFollower(viewport, units.get(0));
 	}
 

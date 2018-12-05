@@ -17,7 +17,7 @@ public class Main {
 	public static void main(final String[] args) {
 		final BinaryInputMap<KeyboardInput> kbi = new BinaryInputMap<KeyboardInput>(Arrays.asList(KeyboardInput.values()));
 		final TestFrame frame = new TestFrame(800, 600, "Raptor Engine", kbi);
-		final Level initLevel = new Level(1000, 1000);
+		final Level initLevel = new Level(500, 500);
 		final Viewport vp = new Viewport(800, 600, 0, 0);
 		final Game game = new Game(initLevel, kbi, vp);
 		final Drawer g = new Drawer(800, 600, frame.getGraphics(), new LocationToViewportTransformer(vp));
