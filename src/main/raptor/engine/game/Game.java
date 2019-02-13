@@ -8,7 +8,6 @@ import raptor.engine.game.entity.unit.Unit;
 import raptor.engine.game.ui.input.BinaryInputMap;
 import raptor.engine.game.ui.input.KeyboardInput;
 import raptor.engine.game.viewport.ViewportUnitFollower;
-import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Vector;
 
 public class Game {
@@ -25,6 +24,8 @@ public class Game {
 		units = new ArrayList<Unit>();
 		units.add(new Unit(250, 250, 1, 1));
 		vuf = new ViewportUnitFollower(viewport, units.get(0));
+
+		units.get(0).model.setAnimation(0);
 	}
 
 	public void advanceFrame(final long timePassed) {
@@ -42,8 +43,13 @@ public class Game {
 		else
 			player.velocity = new Vector(0, 0);
 
+		int modelFramesRemaining = player.model.advanceFrame();
+		if (modelFramesRemaining == 1)
+			player.model.setAnimation(0);
+
 		// Update
-		player.position = new Point(player.position.getX() + player.velocity.getX(), player.position.getY() + player.velocity.getY());
+		player.position.setX(player.position.getX() + player.velocity.getX());
+		player.position.setY(player.position.getY() + player.velocity.getY());
 		vuf.follow();
 	}
 
@@ -52,8 +58,12 @@ public class Game {
 
 		d.add(level);
 
-		for (final Unit u : units)
+		for (final Unit u : units) {
 			d.add(u);
+
+			for (final IDrawable drawable : u.getDrawables())
+				d.add(drawable);
+		}
 
 		return d;
 	}
