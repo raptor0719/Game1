@@ -11,7 +11,7 @@ import raptor.engine.game.Viewport;
 import raptor.engine.game.ui.input.BinaryInputMap;
 import raptor.engine.game.ui.input.KeyboardInput;
 import raptor.engine.test.main.TestFrame;
-import raptor.engine.util.geometry.Point;
+import raptor.modelLibrary.model.point.IPointReader;
 
 public class Main {
 	public static void main(final String[] args) {
@@ -20,7 +20,7 @@ public class Main {
 		final Level initLevel = new Level(500, 500);
 		final Viewport vp = new Viewport(800, 600, 0, 0);
 		final Game game = new Game(initLevel, kbi, vp);
-		final Drawer g = new Drawer(800, 600, frame.getGraphics(), new LocationToViewportTransformer(vp));
+		final Drawer g = new Drawer(800, 600, frame.getGraphics(), new LocationToViewportTransformer(vp, 100));
 
 		long previousTime = System.currentTimeMillis();
 		while (true) {
@@ -34,8 +34,8 @@ public class Main {
 
 			g.clear(vp.getXpos(), vp.getYpos(), vp.getWidth(), vp.getHeight());
 			for (final IDrawable d : game.getDrawables()) {
-				final Point pos = d.getPosition();
-				final Point dim = d.getDimensions();
+				final IPointReader pos = d.getPosition();
+				final IPointReader dim = d.getDimensions();
 				g.drawRect(pos.getX(), pos.getY(), dim.getX(), dim.getY());
 			}
 			g.draw();

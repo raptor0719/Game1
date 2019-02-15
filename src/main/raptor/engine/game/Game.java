@@ -7,28 +7,39 @@ import raptor.engine.display.api.IDrawable;
 import raptor.engine.game.entity.unit.Unit;
 import raptor.engine.game.ui.input.BinaryInputMap;
 import raptor.engine.game.ui.input.KeyboardInput;
-import raptor.engine.game.viewport.ViewportUnitFollower;
+import raptor.engine.game.viewport.ViewportPointFollower;
 import raptor.engine.util.geometry.Vector;
+import raptor.modelLibrary.model.Model;
 
 public class Game {
 	public Level level;
 	public List<Unit> units;
 
 	private final BinaryInputMap<KeyboardInput> inputs;
-	private final ViewportUnitFollower vuf;
+	private final ViewportPointFollower vuf;
 
 	public Game(final Level initLevel, final BinaryInputMap<KeyboardInput> inputs, final Viewport viewport) {
 		level = initLevel;
 		this.inputs = inputs;
 
 		units = new ArrayList<Unit>();
-		units.add(new Unit(250, 250, 1, 1));
-		vuf = new ViewportUnitFollower(viewport, units.get(0));
+		units.add(new Unit(250, 250, 1, 100));
+		vuf = new ViewportPointFollower(viewport, units.get(0).getModel().getHardpointPosition(8), 100);
 
 		units.get(0).model.setAnimation(0);
 	}
 
 	public void advanceFrame(final long timePassed) {
+		/*
+		* Each frame we do the following, in order:
+		* 1. Process user input
+		* 2. Run AI
+		* 3. Process events
+		* 4. Move entities
+		* 5. Process collisions
+		* 6. Advance models to next frame
+		*/
+
 		// Perform Logic
 		final Unit player = units.get(0);
 
@@ -43,6 +54,7 @@ public class Game {
 		else
 			player.velocity = new Vector(0, 0);
 
+		// FIXME: This is working around an out of index exception happening in the Model
 		int modelFramesRemaining = player.model.advanceFrame();
 		if (modelFramesRemaining == 1)
 			player.model.setAnimation(0);
@@ -59,10 +71,8 @@ public class Game {
 		d.add(level);
 
 		for (final Unit u : units) {
-			d.add(u);
-
-			for (final IDrawable drawable : u.getDrawables())
-				d.add(drawable);
+			final Model m = u.getModel();
+			d.addAll(m.getCurrentSprites());
 		}
 
 		return d;

@@ -45,7 +45,8 @@ public class Drawer implements IDrawer {
 
 	@Override
 	public void clear(int x, int y, int width, int height) {
-		final Point vp = transformLocation(new Point(x, y));
+		//final Point vp = transformLocation(new Point(x, y));
+		final Point vp = new Point(0, 0);
 		g.clearRect(vp.getX(), vp.getY(), width, height);
 		g.setColor(Color.white);
 		g.fillRect(vp.getX(), vp.getY(), width, height);

@@ -1,19 +1,22 @@
 package raptor.modelLibrary.model;
 
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import raptor.engine.display.api.IDrawable;
 import raptor.modelLibrary.model.point.IPointReader;
 
 public class Model {
+	private final ModelData base;
+
 	private final Map<Integer, Animation> animations;
 	private final List<Hardpoint> hardpoints;
+	private final List<Sprite> attachedSprites;
 
-	private Image currentSprite;
+	private IDrawable currentSprite;
 	private IPointReader position;
 	private int direction;
 
@@ -27,22 +30,60 @@ public class Model {
 	private int currentFrameIndex = 0;
 
 	public Model(final ModelData base, final IPointReader position, final int initialDirection) {
+		this.base = base;
+
 		animations = base.getAnimations();
 		hardpoints = new ArrayList<>(base.getHardpointCount());
+		attachedSprites = new ArrayList<>(hardpoints.size());
 		this.position = position;
 
-		for (int i = 0; i < base.getHardpointCount(); i++)
+		for (int i = 0; i < base.getHardpointCount(); i++) {
 			hardpoints.add(new Hardpoint(0, 0, 0, this.position));
+		}
 
 		setHardpointPositions(base.getDefaultFrame(), hardpoints);
 		currentSprite = base.getDefaultFrame().getImage();
+
+		for (int i = 0; i < base.getHardpointCount(); i++) {
+			final Sprite current = base.getDefaultSprites().get(i);
+			current.setPosition(hardpoints.get(i));
+			attachedSprites.add(current);
+		}
+
 		direction = initialDirection;
 
 		animationTimingMap = buildTimingMap(animations);
 	}
 
-	public Image getCurrentSprite() {
-		return currentSprite;
+	public List<IDrawable> getCurrentSprites() {
+		final List<IDrawable> drawables = new ArrayList<>(attachedSprites.size() + 1);
+
+		if (currentSprite != null)
+			drawables.add(currentSprite);
+
+		for (int i = 0; i < attachedSprites.size(); i++) {
+			final Sprite s = attachedSprites.get(i);
+			if (s != null)
+				drawables.add(s);
+		}
+
+		return drawables;
+	}
+
+	public void setSpriteAtHardpoint(final int hardpointIndex, final Sprite sprite) {
+		if (hardpointIndex >= attachedSprites.size() || hardpointIndex < 0)
+			return;
+
+		sprite.setPosition(position);
+
+		attachedSprites.set(hardpointIndex, sprite);
+	}
+
+	public void removeSpriteAtHardpoint(final int hardpointIndex) {
+		if (hardpointIndex >= attachedSprites.size() || hardpointIndex < 0)
+			return;
+
+		attachedSprites.set(hardpointIndex, base.getDefaultSprites().get(hardpointIndex));
 	}
 
 	public IPointReader getPosition() {

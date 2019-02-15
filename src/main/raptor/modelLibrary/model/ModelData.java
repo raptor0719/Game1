@@ -1,22 +1,28 @@
 package raptor.modelLibrary.model;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class ModelData {
 	private final Map<Integer, Animation> animations;
+	private final List<Sprite> defaultSprites;
 	private final Frame defaultFrame;
 	private final int hardpointCount;
 
-	public ModelData(final Map<Integer, Animation> animations, final Frame defaultFrame) {
+	public ModelData(final Map<Integer, Animation> animations, final List<Sprite> defaultSprites, final Frame defaultFrame) {
 		this.animations = Collections.unmodifiableMap(animations);
+		this.defaultSprites = Collections.unmodifiableList(defaultSprites);
 		this.defaultFrame = defaultFrame;
-		// FIXME: this looks really bad
-		this.hardpointCount = animations.entrySet().iterator().next().getValue().getFrames().get(0).get(0).getHardpointPositions().size();
+		this.hardpointCount = defaultSprites.size();
 	}
 
 	public Map<Integer, Animation> getAnimations() {
 		return animations;
+	}
+
+	public List<Sprite> getDefaultSprites() {
+		return defaultSprites;
 	}
 
 	public Frame getDefaultFrame() {

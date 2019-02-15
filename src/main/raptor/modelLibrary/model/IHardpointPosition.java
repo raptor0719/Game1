@@ -1,7 +1,7 @@
 package raptor.modelLibrary.model;
 
-public interface IHardpointPosition {
-	int getX();
-	int getY();
+import raptor.modelLibrary.model.point.IPointReader;
+
+public interface IHardpointPosition extends IPointReader {
 	int getRotation();
 }

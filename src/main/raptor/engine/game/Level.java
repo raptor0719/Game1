@@ -1,7 +1,5 @@
 package raptor.engine.game;
 
-import java.util.List;
-
 import raptor.engine.display.api.IDrawable;
 import raptor.engine.util.geometry.Point;
 
@@ -22,11 +20,5 @@ public class Level implements IDrawable {
 	@Override
 	public Point getDimensions() {
 		return new Point(width, height);
-	}
-
-	@Override
-	public List<IDrawable> getDrawables() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
