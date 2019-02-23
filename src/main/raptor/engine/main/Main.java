@@ -2,7 +2,6 @@ package raptor.engine.main;
 
 import java.util.Arrays;
 
-import raptor.engine.display.api.IDrawable;
 import raptor.engine.display.drawer.Drawer;
 import raptor.engine.display.drawer.LocationToViewportTransformer;
 import raptor.engine.game.Game;
@@ -11,7 +10,6 @@ import raptor.engine.game.Viewport;
 import raptor.engine.game.ui.input.BinaryInputMap;
 import raptor.engine.game.ui.input.KeyboardInput;
 import raptor.engine.test.main.TestFrame;
-import raptor.modelLibrary.model.point.IPointReader;
 
 public class Main {
 	public static void main(final String[] args) {
@@ -32,13 +30,7 @@ public class Main {
 				game.advanceFrame(timePassed);
 			}
 
-			g.clear(vp.getXpos(), vp.getYpos(), vp.getWidth(), vp.getHeight());
-			for (final IDrawable d : game.getDrawables()) {
-				final IPointReader pos = d.getPosition();
-				final IPointReader dim = d.getDimensions();
-				g.drawRect(pos.getX(), pos.getY(), dim.getX(), dim.getY());
-			}
-			g.draw();
+			g.draw(game.getDrawables());
 		}
 	}
 }

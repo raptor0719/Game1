@@ -1,8 +1,8 @@
 package raptor.engine.util.geometry;
 
-import raptor.modelLibrary.model.point.IPointReader;
+import raptor.modelLibrary.model.util.point.IPoint;
 
-public class Point implements IPointReader {
+public class Point implements IPoint {
 	private int x;
 	private int y;
 

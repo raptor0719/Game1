@@ -1,10 +1,8 @@
 package raptor.engine.display.drawer;
 
 import raptor.engine.game.Viewport;
-import raptor.engine.util.geometry.Point;
-import raptor.engine.util.transformer.ITransformer;
 
-public class LocationToViewportTransformer implements ITransformer<Point, Point> {
+public class LocationToViewportTransformer {
 	private final Viewport vp;
 	private final int scale;
 
@@ -13,8 +11,11 @@ public class LocationToViewportTransformer implements ITransformer<Point, Point>
 		this.scale = scale;
 	}
 
-	@Override
-	public Point transform(final Point in) {
-		return new Point((in.getX() / scale) - vp.getXpos(), (in.getY() / scale) - vp.getYpos());
+	public Integer transformX(final Integer in) {
+		return (in / scale) - vp.getXpos();
+	}
+
+	public Integer transformY(final Integer in) {
+		return (in / scale) - vp.getYpos();
 	}
 }

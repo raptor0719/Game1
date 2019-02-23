@@ -1,11 +1,16 @@
 package raptor.engine.display.api;
 
-import raptor.modelLibrary.model.point.IPointReader;
+import java.awt.Image;
+
+import raptor.modelLibrary.model.util.point.IRotatedPoint;
 
 /**
  * Any object that specifies how to draw itself, using the given IDrawer.
  */
 public interface IDrawable {
-	IPointReader getPosition();
-	IPointReader getDimensions();
+	boolean doDraw();
+	Image getImage();
+	IRotatedPoint getPosition();
+	int getWidth();
+	int getHeight();
 }
