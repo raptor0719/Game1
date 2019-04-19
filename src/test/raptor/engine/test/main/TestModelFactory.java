@@ -44,11 +44,11 @@ public class TestModelFactory {
 		final Point pos42 = new Point(0, 0, 0);
 		final Point pos43 = new Point(0, 0, 0);
 
-		final WiredFrame frame00 = new WiredFrame(emptySprite(), new IRotatedPoint[]{pos00, pos01, pos02, pos03});
-		final WiredFrame frame01 = new WiredFrame(emptySprite(), new IRotatedPoint[]{pos10, pos11, pos12, pos13});
-		final WiredFrame frame02 = new WiredFrame(emptySprite(), new IRotatedPoint[]{pos20, pos21, pos22, pos23});
-		final WiredFrame frame03 = new WiredFrame(emptySprite(), new IRotatedPoint[]{pos30, pos31, pos32, pos33});
-		final WiredFrame frame04 = new WiredFrame(emptySprite(), new IRotatedPoint[]{pos40, pos41, pos42, pos43});
+		final WiredFrame frame00 = new WiredFrame(getRectangle(20, 20), new IRotatedPoint[]{pos00, pos01, pos02, pos03});
+		final WiredFrame frame01 = new WiredFrame(getRectangle(20, 20), new IRotatedPoint[]{pos10, pos11, pos12, pos13});
+		final WiredFrame frame02 = new WiredFrame(getRectangle(20, 20), new IRotatedPoint[]{pos20, pos21, pos22, pos23});
+		final WiredFrame frame03 = new WiredFrame(getRectangle(20, 20), new IRotatedPoint[]{pos30, pos31, pos32, pos33});
+		final WiredFrame frame04 = new WiredFrame(getRectangle(20, 20), new IRotatedPoint[]{pos40, pos41, pos42, pos43});
 
 		final FrameTiming frame00Timing = new FrameTiming(2, 0);
 		final FrameTiming frame01Timing = new FrameTiming(1, 1);
@@ -78,7 +78,7 @@ public class TestModelFactory {
 		final AbstractList<Animation<WiredFrame>> animations = new ArrayList<>(1);
 		animations.add(anim0);
 
-		final WiredModelData data = new WiredModelData(animations, 0, 1, 1000, 1000, 4);
+		final WiredModelData data = new WiredModelData(animations, 0, 1, 2000, 2000, 4);
 
 		final AttachableWiredModel model = new AttachableWiredModel(data, position);
 		model.attachSprite(0, getRectangle(10, 10));
@@ -203,10 +203,11 @@ public class TestModelFactory {
 		return new Sprite();
 	}
 
-	private static Sprite getRectangle(final int width, final int height) {
-		final Image newImage;
+	public static Sprite getRectangle(final int width, final int height) {
+		Image newImage;
 		try {
 			newImage = ImageIO.read(new File("box.png"));
+			newImage = newImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}

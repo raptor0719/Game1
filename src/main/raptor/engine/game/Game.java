@@ -10,6 +10,7 @@ import raptor.engine.game.ui.input.BinaryInputMap;
 import raptor.engine.game.ui.input.GameplayInputManager;
 import raptor.engine.game.ui.input.KeyboardInput;
 import raptor.engine.game.viewport.ViewportPointFollower;
+import raptor.engine.test.main.TestModelFactory;
 
 public class Game {
 	public Level level;
@@ -62,6 +63,8 @@ public class Game {
 			for (int i = 0; i < u.getModel().getHardpointCount(); i++) {
 				d.add(new SpriteWrapper(u.model.getSprite(i).getImage(), u.model.getHardpointPosition(i)));
 			}
+
+			d.add(new SpriteWrapper(TestModelFactory.getRectangle(10, 10).getImage(), u.getPosition()));
 		}
 
 		return d;
