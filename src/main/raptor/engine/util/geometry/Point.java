@@ -1,8 +1,6 @@
 package raptor.engine.util.geometry;
 
-import raptor.modelLibrary.model.util.point.IPoint;
-
-public class Point implements IPoint {
+public class Point {
 	private int x;
 	private int y;
 
@@ -15,12 +13,10 @@ public class Point implements IPoint {
 		this.y = y;
 	}
 
-	@Override
 	public int getX() {
 		return x;
 	}
 
-	@Override
 	public int getY() {
 		return y;
 	}

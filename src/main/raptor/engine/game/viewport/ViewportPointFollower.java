@@ -1,21 +1,21 @@
 package raptor.engine.game.viewport;
 
 import raptor.engine.game.Viewport;
-import raptor.modelLibrary.model.util.point.IPoint;
+import raptor.engine.util.geometry.Point;
 
 public class ViewportPointFollower {
 	private final Viewport viewport;
 	private final int scale;
 
-	private IPoint point;
+	private Point point;
 
-	public ViewportPointFollower(final Viewport viewport, final IPoint point, final int scale) {
+	public ViewportPointFollower(final Viewport viewport, final Point point, final int scale) {
 		this.viewport = viewport;
 		this.point = point;
 		this.scale = scale;
 	}
 
-	public void setPoint(final IPoint newPoint) {
+	public void setPoint(final Point newPoint) {
 		this.point = newPoint;
 	}
 
