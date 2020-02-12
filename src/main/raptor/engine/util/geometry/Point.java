@@ -42,6 +42,33 @@ public class Point {
 		return distance;
 	}
 
+	public double distanceTo(final double bX, final double bY) {
+		// length = sqrt((xb-xa)^2+(yb-ya)^2)
+		final double xDiff = bX - x;
+		final double yDiff = bY - y;
+
+		final double xDiffSquared = xDiff * xDiff;
+		final double yDiffSquared = yDiff * yDiff;
+
+		final double distance = Math.sqrt(xDiffSquared + yDiffSquared);
+
+		return distance;
+	}
+
+	public double distanceTo(final LineSegment ls) {
+		final float lsLength = ls.getLength();
+
+		if (lsLength <= 0)
+			return distanceTo(ls.getPoints().getValue1());
+
+		final Point lsStart = ls.getPoints().getValue1();
+		final Point lsEnd = ls.getPoints().getValue2();
+		final float t = ((x - lsStart.getX())*(lsEnd.getX() - lsStart.getX()) + (y - lsStart.getY())*(lsEnd.getY() - lsStart.getY())) / lsLength;
+		final float tConstrained = Math.max(0 , Math.min(1, t));
+
+		return Math.sqrt(distanceTo(lsStart.getX() + tConstrained*(lsEnd.getX() - lsStart.getX()), lsStart.getY() + tConstrained*(lsEnd.getY() - lsStart.getY())));
+	}
+
 	public boolean isOnLineSegment(final LineSegment ls) {
 		return pointIsOnLineSegment(this, ls);
 	}
