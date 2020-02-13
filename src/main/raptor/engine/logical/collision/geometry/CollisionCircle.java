@@ -2,6 +2,7 @@ package raptor.engine.logical.collision.geometry;
 
 import raptor.engine.logical.collision.api.ICollideable;
 import raptor.engine.util.geometry.Circle;
+import raptor.engine.util.geometry.LineSegment;
 import raptor.engine.util.geometry.api.ICircle;
 import raptor.engine.util.geometry.api.IPoint;
 
@@ -18,6 +19,13 @@ public class CollisionCircle implements ICollideable {
 			if (Circle.containsPoint(collisionCircle, p))
 				return true;
 		return false;
+	}
+
+	@Override
+	public boolean collidesWithCircle(final CollisionCircle c) {
+		final double distance = LineSegment.length(collisionCircle.getOrigin().getX(), collisionCircle.getOrigin().getY(),
+				c.getCollision().getOrigin().getX(), c.getCollision().getOrigin().getY());
+		return distance < (c.getCollision().getRadius() + collisionCircle.getRadius());
 	}
 
 	public void setCollision(final Circle collisionCircle) {
