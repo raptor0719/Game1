@@ -1,5 +1,7 @@
 package raptor.engine.util.geometry;
 
+import raptor.engine.util.geometry.api.IPoint;
+
 public class Triangle {
 	private final Point[] points;
 	private final LineSegment[] lines;
@@ -62,6 +64,12 @@ public class Triangle {
 		final double area2 = Triangle.calculateArea(t2x, t2y, t3x, t3y, px, py);
 		final double area3 = Triangle.calculateArea(t3x, t3y, t1x, t1y, px, py);
 		return Triangle.calculateArea(t1x, t1y, t2x, t2y, t3x, t3y) == (area1 + area2 + area3);
+	}
+
+	public static boolean containsPoint(final Triangle t, final IPoint p) {
+		final IPoint[] points = t.getPoints();
+		return Triangle.containsPoint(points[0].getX(), points[0].getY(), points[1].getX(), points[1].getY(),
+				points[2].getX(), points[2].getY(), p.getX(), p.getY());
 	}
 
 	public static double calculateArea(final Point a, final Point b, final Point c) {
