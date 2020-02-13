@@ -50,4 +50,8 @@ public class Circle implements ICircle {
 	public static boolean containsPoint(final int originX, final int originY, final int radius, final int px, final int py) {
 		return LineSegment.length(originX, originY, px, py) < radius;
 	}
+
+	public static boolean containsPoint(final ICircle circle, final IPoint point) {
+		return containsPoint(circle.getOrigin().getX(), circle.getOrigin().getY(), circle.getRadius(), point.getX(), point.getY());
+	}
 }
