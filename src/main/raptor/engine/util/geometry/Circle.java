@@ -1,8 +1,9 @@
 package raptor.engine.util.geometry;
 
+import raptor.engine.util.geometry.api.ICircle;
 import raptor.engine.util.geometry.api.IPoint;
 
-public class Circle {
+public class Circle implements ICircle {
 	private final Point origin;
 	private int radius;
 
@@ -30,8 +31,14 @@ public class Circle {
 		this.radius = radius;
 	}
 
+	@Override
 	public IPoint getOrigin() {
 		return origin;
+	}
+
+	@Override
+	public int getRadius() {
+		return radius;
 	}
 
 	/* STATIC */
