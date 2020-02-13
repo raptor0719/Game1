@@ -93,7 +93,7 @@ public class LineSegment {
 	public boolean intersectsWith(final LineSegment ls) {
 		return getIntersectionPoint(ls) != null;
 	}
-	
+
 	public double getAngleBetween(final LineSegment ls) {
 		return aToB.getAngleBetween(ls.aToB);
 	}
@@ -131,6 +131,36 @@ public class LineSegment {
 		return "LineSegment:[a=" + a + ",b=" + b + "]";
 	}
 
+	/* STATIC */
+
+	public static float length(final int ax, final int ay, final int bx, final int by) {
+		// length = sqrt((xb-xa)^2+(yb-ya)^2)
+
+		final int xDiff = bx - ax;
+		final int yDiff = by - ay;
+
+		final int xDiffSquared = xDiff * xDiff;
+		final int yDiffSquared = yDiff * yDiff;
+
+		final float distance = (float)Math.sqrt(xDiffSquared + yDiffSquared);
+
+		return distance;
+	}
+
+	public static double length(final double ax, final double ay, final double bx, final double by) {
+		// length = sqrt((xb-xa)^2+(yb-ya)^2)
+
+		final double xDiff = bx - ax;
+		final double yDiff = by - ay;
+
+		final double xDiffSquared = xDiff * xDiff;
+		final double yDiffSquared = yDiff * yDiff;
+
+		final double distance = Math.sqrt(xDiffSquared + yDiffSquared);
+
+		return distance;
+	}
+
 	/* INTERNALS */
 
 	private float calculateLength(final Point a, final Point b) {
@@ -166,7 +196,7 @@ public class LineSegment {
 
 		return null;
 	}
-	
+
 	private float calculateSlope(final Point a, final Point b) {
 		if (b.getX() - a.getX() == 0)
 			return 0;

@@ -95,6 +95,20 @@ public class Point {
 		return "Point:[x=" + x + ",y=" + y + "]";
 	}
 
+	/* STATIC */
+
+	public static double distanceTo(final int px, final int py, final int l1x, final int l1y, final int l2x, final int l2y) {
+		final float lsLength = LineSegment.length(l1x, l1y, l2x, l2y);
+
+		if (lsLength <= 0)
+			return LineSegment.length(l1x, l1y, px, py);
+
+		final float t = ((px - l1x)*(l2x - l1x) + (py - l1y)*(l2y - l1y)) / lsLength;
+		final float tConstrained = Math.max(0 , Math.min(1, t));
+
+		return Math.sqrt(LineSegment.length(l1x + tConstrained*(l2x - l1x), l1y + tConstrained*(l2y - l1y), px, py));
+	}
+
 	/* INTERNALS */
 
 	private boolean pointIsOnLineSegment(final Point c, final LineSegment l) {
