@@ -1,29 +1,67 @@
 package raptor.engine.util.geometry;
 
+import raptor.engine.util.geometry.api.ILineSegment;
+import raptor.engine.util.geometry.api.IPoint;
 import raptor.engine.util.structures.ValuePair;
 
-public class LineSegment {
+public class LineSegment implements ILineSegment {
 	private final Point a;
 	private final Point b;
-	private final float length;
-	private final float slope;
+	private float length;
+	private float slope;
 
-	private final Vector aToB;
+	private Vector aToB;
 
 	public LineSegment(final Point a, final Point b) {
 		this.a = a;
 		this.b = b;
-		this.length = calculateLength(a, b);
-		this.slope = Math.abs(calculateSlope(a, b));
-		this.aToB = calculateAToB(a, b);
+		calculateInternalMeasurements();
 	}
 
 	public ValuePair<Point, Point> getPoints() {
 		return new ValuePair<Point, Point>(a, b);
 	}
 
+	@Override
+	public IPoint getStart() {
+		return a;
+	}
+
+	public void setStart(final int x, final int y) {
+		a.setX(x);
+		a.setY(y);
+		calculateInternalMeasurements();
+	}
+
+	@Override
+	public IPoint getEnd() {
+		return b;
+	}
+
+	public void setEnd(final int x, final int y) {
+		b.setX(x);
+		b.setY(y);
+		calculateInternalMeasurements();
+	}
+
+	public void setPoints(final int ax, final int ay, final int bx, final int by) {
+		a.setX(ax);
+		a.setY(ay);
+		b.setX(bx);
+		b.setY(by);
+		calculateInternalMeasurements();
+	}
+
+	public void setPoints(final Point a, final Point b) {
+		setPoints(a.getX(), a.getY(), b.getX(), b.getY());
+	}
+
 	public float getLength() {
 		return length;
+	}
+
+	public float getSlope() {
+		return slope;
 	}
 
 	/**
@@ -162,6 +200,12 @@ public class LineSegment {
 	}
 
 	/* INTERNALS */
+
+	private void calculateInternalMeasurements() {
+		length = calculateLength(a, b);
+		slope = Math.abs(calculateSlope(a, b));
+		aToB = calculateAToB(a, b);
+	}
 
 	private float calculateLength(final Point a, final Point b) {
 		// length = sqrt((xb-xa)^2+(yb-ya)^2)
