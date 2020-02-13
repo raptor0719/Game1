@@ -72,7 +72,7 @@ public class Triangle {
 				points[2].getX(), points[2].getY(), p.getX(), p.getY());
 	}
 
-	public static double calculateArea(final Point a, final Point b, final Point c) {
+	public static double calculateArea(final IPoint a, final IPoint b, final IPoint c) {
 		final int term1 = a.getX() * (b.getY() - c.getY());
 		final int term2 = b.getX() * (c.getY() - a.getY());
 		final int term3 = c.getX() * (a.getY() - b.getY());
