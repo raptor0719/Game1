@@ -5,7 +5,7 @@ import raptor.engine.test.main.TestModelFactory;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Vector;
 
-public class Unit implements IOrderable {
+public class Unit {
 	public Point position;
 	public Vector velocity;
 
@@ -27,7 +27,6 @@ public class Unit implements IOrderable {
 		return model;
 	}
 
-	@Override
 	public void move(int xScale, int yScale) {
 		velocity.setX(moveSpeed * xScale);
 		velocity.setY(moveSpeed * yScale);
