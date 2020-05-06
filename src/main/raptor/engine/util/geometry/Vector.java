@@ -34,15 +34,15 @@ public class Vector {
 	}
 
 	public int cross(final Vector b) {
-		return x*b.getY() - y*b.getX();
+		return crossProduct(this, b);
 	}
 
 	public int dot(final Vector b) {
-		return (x*b.x) + (y*b.y);
+		return dotProduct(this, b);
 	}
 
 	public Vector minus(final Vector b) {
-		return new Vector(x - b.getX(), y - b.getY());
+		return minus(this, b);
 	}
 
 	public DoubleVector unitVector() {
@@ -79,6 +79,18 @@ public class Vector {
 
 	public static Vector toVector(final Point p) {
 		return new Vector(p);
+	}
+
+	public static int crossProduct(final Vector a, final Vector b) {
+		return a.getX()*b.getY() - a.getY()*b.getX();
+	}
+
+	public static int dotProduct(final Vector a, final Vector b) {
+		return (a.getX()*b.getX()) + (a.getY()*b.getY());
+	}
+
+	public static Vector minus(final Vector a, final Vector b) {
+		return new Vector(a.getX() - b.getX(), a.getY() - b.getY());
 	}
 
 	/* INTERNALS */
