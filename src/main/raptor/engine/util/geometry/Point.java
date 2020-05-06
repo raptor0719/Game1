@@ -1,5 +1,6 @@
 package raptor.engine.util.geometry;
 
+import raptor.engine.util.geometry.api.ILineSegment;
 import raptor.engine.util.geometry.api.IPoint;
 
 public class Point implements IPoint {
@@ -73,7 +74,8 @@ public class Point implements IPoint {
 		return Math.sqrt(distanceTo(lsStart.getX() + tConstrained*(lsEnd.getX() - lsStart.getX()), lsStart.getY() + tConstrained*(lsEnd.getY() - lsStart.getY())));
 	}
 
-	public boolean isOnLineSegment(final LineSegment ls) {
+	@Override
+	public boolean isOnLineSegment(final ILineSegment ls) {
 		return pointIsOnLineSegment(this, ls);
 	}
 
@@ -115,9 +117,9 @@ public class Point implements IPoint {
 
 	/* INTERNALS */
 
-	private boolean pointIsOnLineSegment(final Point c, final LineSegment l) {
-		final Point a = l.getPoints().getValue1();
-		final Point b = l.getPoints().getValue2();
+	private boolean pointIsOnLineSegment(final Point c, final ILineSegment l) {
+		final IPoint a = l.getStart();
+		final IPoint b = l.getEnd();
 
 		if (a.equals(c) || b.equals(c))
 			return true;
@@ -130,11 +132,11 @@ public class Point implements IPoint {
 		return (cross == 0 && dot > 0 && dot < lLengthSquared);
 	}
 
-	private int crossProduct(final Point a, final Point b, final Point c) {
+	private int crossProduct(final IPoint a, final IPoint b, final IPoint c) {
 		return ((c.getY() - a.getY()) * (b.getX() - a.getX())) - ((c.getX() - a.getX()) * (b.getY() - a.getY()));
 	}
 
-	private int dotProduct(final Point a, final Point b, final Point c) {
+	private int dotProduct(final IPoint a, final IPoint b, final IPoint c) {
 		return ((c.getX() - a.getX()) * (b.getX() - a.getX())) + ((c.getY() - a.getY()) * (b.getY() - a.getY()));
 	}
 }

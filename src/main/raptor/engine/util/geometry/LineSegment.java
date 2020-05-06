@@ -12,9 +12,9 @@ public class LineSegment implements ILineSegment {
 
 	private Vector aToB;
 
-	public LineSegment(final Point a, final Point b) {
-		this.a = a;
-		this.b = b;
+	public LineSegment(final IPoint a, final IPoint b) {
+		this.a = new Point(a.getX(), a.getY());
+		this.b = new Point(b.getX(), b.getY());
 		calculateInternalMeasurements();
 	}
 
@@ -56,6 +56,7 @@ public class LineSegment implements ILineSegment {
 		setPoints(a.getX(), a.getY(), b.getX(), b.getY());
 	}
 
+	@Override
 	public float getLength() {
 		return length;
 	}
@@ -119,6 +120,14 @@ public class LineSegment implements ILineSegment {
 
 		// Non-collinear, non-parallel, and does not intersect
 		return null;
+	}
+
+	public boolean sharesEndpoint(final LineSegment compare) {
+		return getCommonEndpoint(this, compare) != null;
+	}
+
+	public boolean overlaps(final LineSegment compare) {
+		return this.a.isOnLineSegment(compare) || this.b.isOnLineSegment(compare);
 	}
 
 	/**
