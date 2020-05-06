@@ -77,6 +77,7 @@ public class LineSegment implements ILineSegment {
 
 		{// Finish fast if the two segments have a common endpoint
 		// NOTE: this also covers the case that the lines are collinear and overlap only at ONE point
+		// FIXME: I THINK this is wrong because they could share an endpoint, NOT be equal, but STILL overlap
 			final Point commonEndpoint = getCommonEndpoint(this, ls);
 			if (commonEndpoint != null)
 				return commonEndpoint;
@@ -128,6 +129,26 @@ public class LineSegment implements ILineSegment {
 
 	public boolean overlaps(final LineSegment compare) {
 		return this.a.isOnLineSegment(compare) || this.b.isOnLineSegment(compare);
+	}
+
+	/**
+	 * @param ls - the line segment to compare
+	 * @return Returns if this line segment and the given parameter are connected ONLY
+	 * at end-points and share no other common points.
+	 */
+	public boolean isConnected(final LineSegment compare) {
+		final Point commonEndpoint = getCommonEndpoint(this, compare);
+
+		if (commonEndpoint == null)
+			return false;
+
+		final boolean thisStartCommonEndpoint = this.getStart().equals(commonEndpoint);
+		final boolean compareStartCommonEndpoint = compare.getStart().equals(commonEndpoint);
+
+		final IPoint thisCheckPoint = (thisStartCommonEndpoint) ? this.getEnd() : this.getStart();
+		final IPoint compareCheckPoint = (compareStartCommonEndpoint) ? compare.getEnd() : compare.getStart();
+
+		return !thisCheckPoint.isOnLineSegment(compare) && !compareCheckPoint.isOnLineSegment(this);
 	}
 
 	/**
