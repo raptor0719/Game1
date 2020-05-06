@@ -85,10 +85,10 @@ public class Point implements IPoint {
 			return true;
 		if (o == null)
 			return false;
-		if (!(o instanceof Point))
+		if (!(o instanceof IPoint))
 			return false;
 
-		final Point p = (Point)o;
+		final IPoint p = (IPoint)o;
 
 		if (p.getX() == x && p.getY() == y)
 			return true;
