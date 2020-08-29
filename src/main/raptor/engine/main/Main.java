@@ -2,8 +2,8 @@ package raptor.engine.main;
 
 import java.util.Arrays;
 
-import raptor.engine.display.render.Renderer;
 import raptor.engine.display.render.LocationToViewportTransformer;
+import raptor.engine.display.render.Renderer;
 import raptor.engine.game.Game;
 import raptor.engine.game.Level;
 import raptor.engine.game.Viewport;
@@ -18,7 +18,7 @@ public class Main {
 		final Level initLevel = new Level(500, 500);
 		final Viewport vp = new Viewport(800, 600, 0, 0);
 		final Game game = new Game(initLevel, kbi, vp);
-		final Renderer g = new Renderer(800, 600, frame.getGraphics(), new LocationToViewportTransformer(vp, 100));
+		final Renderer g = new Renderer(800, 600, frame.getGraphics(), new LocationToViewportTransformer(vp, 1));
 
 		long previousTime = System.currentTimeMillis();
 		while (true) {

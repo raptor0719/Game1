@@ -17,10 +17,10 @@ public class Game {
 	public Game(final Level initLevel, final BinaryInputMap<KeyboardInput> inputs, final Viewport viewport) {
 		level = initLevel;
 
-		player = new Unit(250, 250, 1, 100);
+		player = new Unit(250, 250, 1, 1);
 		inputManager = new GameplayInputManager(inputs, player);
 
-		vuf = new ViewportPointFollower(viewport, new Point(player.position.getX(), player.position.getY()), 100);
+		vuf = new ViewportPointFollower(viewport, new Point(player.position.getX(), player.position.getY()), 1);
 
 		player.getModel().setAnimation(0, 300);
 	}

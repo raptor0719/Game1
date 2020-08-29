@@ -19,27 +19,27 @@ import raptor.engine.model.WireModelFrame;
 public class TestModelFactory {
 	public static Model getModel() {
 		final HardpointPosition pos00 = point(0, 0);
-		final HardpointPosition pos01 = point(0, 2000);
-		final HardpointPosition pos02 = point(2000, 0);
-		final HardpointPosition pos03 = point(2000, 2000);
+		final HardpointPosition pos01 = point(0, 20);
+		final HardpointPosition pos02 = point(20, 0);
+		final HardpointPosition pos03 = point(20, 20);
 		final WireModelFrame frame0 = new WireModelFrame(new HardpointPosition[] {pos00, pos01, pos02, pos03});
 
 		final HardpointPosition pos10 = point(0, 0);
-		final HardpointPosition pos11 = point(0, 1500);
-		final HardpointPosition pos12 = point(1500, 0);
-		final HardpointPosition pos13 = point(1500, 1500);
+		final HardpointPosition pos11 = point(0, 15);
+		final HardpointPosition pos12 = point(15, 0);
+		final HardpointPosition pos13 = point(15, 15);
 		final WireModelFrame frame1 = new WireModelFrame(new HardpointPosition[] {pos10, pos11, pos12, pos13});
 
 		final HardpointPosition pos20 = point(0, 0);
-		final HardpointPosition pos21 = point(0, 1000);
-		final HardpointPosition pos22 = point(1000, 0);
-		final HardpointPosition pos23 = point(1000, 1000);
+		final HardpointPosition pos21 = point(0, 10);
+		final HardpointPosition pos22 = point(10, 0);
+		final HardpointPosition pos23 = point(10, 10);
 		final WireModelFrame frame2 = new WireModelFrame(new HardpointPosition[] {pos20, pos21, pos22, pos23});
 
 		final HardpointPosition pos30 = point(0, 0);
-		final HardpointPosition pos31 = point(0, 500);
-		final HardpointPosition pos32 = point(500, 0);
-		final HardpointPosition pos33 = point(500, 500);
+		final HardpointPosition pos31 = point(0, 5);
+		final HardpointPosition pos32 = point(5, 0);
+		final HardpointPosition pos33 = point(5, 5);
 		final WireModelFrame frame3 = new WireModelFrame(new HardpointPosition[] {pos30, pos31, pos32, pos33});
 
 		final HardpointPosition pos40 = point(0, 0);
