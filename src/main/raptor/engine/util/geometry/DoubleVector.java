@@ -6,8 +6,8 @@ public class DoubleVector {
 	// require a LOT of testing on how it is being used currently.
 	// Lets stick with this for now.
 
-	private final double x;
-	private final double y;
+	private double x;
+	private double y;
 
 	public DoubleVector(final double x, final double y) {
 		this.x = x;
@@ -20,6 +20,14 @@ public class DoubleVector {
 
 	public double getY() {
 		return y;
+	}
+
+	public void setX(final double newX) {
+		this.x = newX;
+	}
+
+	public void setY(final double newY) {
+		this.y = newY;
 	}
 
 	public DoubleVector unitVector() {
