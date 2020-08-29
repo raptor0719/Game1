@@ -1,4 +1,4 @@
-package raptor.engine.display.drawer;
+package raptor.engine.display.render;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -10,8 +10,7 @@ import raptor.engine.game.Level;
 import raptor.engine.game.entity.unit.Unit;
 import raptor.engine.model.ModelComponent;
 
-public class Drawer {
-
+public class Renderer {
 	private final LocationToViewportTransformer locToVp;
 	private final Graphics2D actualG;
 
@@ -23,7 +22,7 @@ public class Drawer {
 
 	private final Level temp;
 
-	public Drawer(final int width, final int height, final Graphics2D g, final LocationToViewportTransformer locToVp) {
+	public Renderer(final int width, final int height, final Graphics2D g, final LocationToViewportTransformer locToVp) {
 		this.locToVp = locToVp;
 		actualG = g;
 

@@ -1,4 +1,4 @@
-package raptor.engine.display.drawer;
+package raptor.engine.display.render;
 
 import raptor.engine.game.Viewport;
 
