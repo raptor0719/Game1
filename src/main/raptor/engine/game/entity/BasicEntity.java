@@ -1,12 +1,24 @@
 package raptor.engine.game.entity;
 
+import raptor.engine.event.IEventSource;
 import raptor.engine.util.geometry.Point;
 
 public abstract class BasicEntity implements IEntity {
+	private final int id;
+	private final IEventSource eventSource;
+
 	private final Point position;
 
-	public BasicEntity() {
+	public BasicEntity(final int id, final IEventSource eventSource) {
+		this.id = id;
+		this.eventSource = eventSource;
+
 		this.position = new Point(0, 0);
+	}
+
+	@Override
+	public int getId() {
+		return id;
 	}
 
 	@Override
@@ -17,6 +29,10 @@ public abstract class BasicEntity implements IEntity {
 	@Override
 	public int getY() {
 		return position.getY();
+	}
+
+	protected IEventSource getEventSource() {
+		return eventSource;
 	}
 
 	protected void setX(final int x) {
