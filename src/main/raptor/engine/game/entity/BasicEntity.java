@@ -3,7 +3,7 @@ package raptor.engine.game.entity;
 import raptor.engine.util.geometry.Point;
 
 public abstract class BasicEntity implements IEntity {
-	protected final Point position;
+	private final Point position;
 
 	public BasicEntity() {
 		this.position = new Point(0, 0);
@@ -17,5 +17,13 @@ public abstract class BasicEntity implements IEntity {
 	@Override
 	public int getY() {
 		return position.getY();
+	}
+
+	protected void setX(final int x) {
+		position.setX(x);
+	}
+
+	protected void setY(final int y) {
+		position.setY(y);
 	}
 }
