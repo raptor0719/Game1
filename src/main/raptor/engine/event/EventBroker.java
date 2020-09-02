@@ -1,5 +1,6 @@
 package raptor.engine.event;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,12 +27,9 @@ public class EventBroker implements IEventBroker {
 	public void distribute() {
 		while(!eventQueue.isEmpty()) {
 			final IEvent event = eventQueue.poll();
-
 			final List<Integer> registrees = eventRegistration.get(event.getName());
-
 			if (registrees == null)
 				continue;
-
 			for (final Integer id : registrees)
 				entityRegistration.get(id).send(event);
 		}
@@ -46,20 +44,46 @@ public class EventBroker implements IEventBroker {
 
 	@Override
 	public void register(final int entityId, final String eventName) {
-		// TODO Auto-generated method stub
-
+		if (!isRegistered(entityId))
+			register(entityId);
+		if (!brokersEvent(eventName))
+			eventRegistration.put(eventName, new ArrayList<Integer>());
+		final List<Integer> registrees = eventRegistration.get(eventName);
+		if (!registrees.contains(entityId))
+			registrees.add(entityId);
 	}
 
 	@Override
 	public void unregister(final int entityId) {
-		// TODO Auto-generated method stub
-
+		for (final List<Integer> registrees : eventRegistration.values())
+			registrees.remove(entityId);
+		entityRegistration.remove(entityId);
 	}
 
 	@Override
 	public void unregister(final int entityId, final String eventName) {
-		// TODO Auto-generated method stub
+		if (!brokersEvent(eventName))
+			return;
+		final List<Integer> registrees = eventRegistration.get(eventName);
+		registrees.remove(entityId);
+	}
 
+	@Override
+	public boolean isRegistered(final int entityId) {
+		return entityRegistration.containsKey(entityId);
+	}
+
+	@Override
+	public boolean isRegistered(final int entityId, final String eventName) {
+		if (!isRegistered(entityId) || !brokersEvent(eventName))
+			return false;
+		final List<Integer> registrees = eventRegistration.get(eventName);
+		return registrees.contains(entityId);
+	}
+
+	@Override
+	public boolean brokersEvent(final String eventName) {
+		return eventRegistration.containsKey(eventName);
 	}
 
 }
