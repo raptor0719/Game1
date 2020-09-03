@@ -1,6 +1,7 @@
 package raptor.engine.game.entity;
 
 import raptor.engine.display.render.IGraphics;
+import raptor.engine.logical.collision.api.ICollideable;
 
 public interface IEntity {
 	int getId();
@@ -8,4 +9,5 @@ public interface IEntity {
 	void draw(IGraphics graphics);
 	int getX();
 	int getY();
+	ICollideable getCollision();
 }
