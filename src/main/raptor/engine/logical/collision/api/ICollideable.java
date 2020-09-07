@@ -1,9 +1,7 @@
 package raptor.engine.logical.collision.api;
 
-import raptor.engine.logical.collision.geometry.CollisionCircle;
-import raptor.engine.logical.collision.geometry.CollisionTriangle;
+import raptor.engine.game.entity.IEntity;
 
 public interface ICollideable {
-	boolean collidesWithTriangle(CollisionTriangle t);
-	boolean collidesWithCircle(CollisionCircle c);
+	void onCollision(IEntity collidingEntity);
 }

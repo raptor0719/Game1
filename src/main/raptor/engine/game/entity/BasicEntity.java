@@ -1,17 +1,17 @@
 package raptor.engine.game.entity;
 
 import raptor.engine.event.IEventSource;
-import raptor.engine.logical.collision.api.ICollideable;
+import raptor.engine.logical.collision.api.ICollisionShape;
 import raptor.engine.util.geometry.Point;
 
 public abstract class BasicEntity implements IEntity {
 	private final int id;
 	private final IEventSource eventSource;
-	private final ICollideable collision;
+	private final ICollisionShape collision;
 
 	private final Point position;
 
-	public BasicEntity(final int id, final IEventSource eventSource, final ICollideable collision) {
+	public BasicEntity(final int id, final IEventSource eventSource, final ICollisionShape collision) {
 		this.id = id;
 		this.eventSource = eventSource;
 		this.collision = collision;
@@ -35,7 +35,7 @@ public abstract class BasicEntity implements IEntity {
 	}
 
 	@Override
-	public ICollideable getCollision() {
+	public ICollisionShape getCollision() {
 		return collision;
 	}
 

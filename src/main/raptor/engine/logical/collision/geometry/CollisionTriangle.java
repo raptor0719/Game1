@@ -1,12 +1,12 @@
 package raptor.engine.logical.collision.geometry;
 
-import raptor.engine.logical.collision.api.ICollideable;
+import raptor.engine.logical.collision.api.ICollisionShape;
 import raptor.engine.util.geometry.Circle;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Triangle;
 import raptor.engine.util.geometry.api.IPoint;
 
-public class CollisionTriangle implements ICollideable {
+public class CollisionTriangle implements ICollisionShape {
 	private Triangle collisionTriangle;
 
 	public CollisionTriangle(final Triangle collisionTriangle) {
