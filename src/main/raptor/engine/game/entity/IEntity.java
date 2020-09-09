@@ -5,7 +5,7 @@ import raptor.engine.logical.collision.api.ICollideable;
 import raptor.engine.logical.collision.api.ICollisionShape;
 
 public interface IEntity extends ICollideable, IDrawable {
-	int getId();
+	long getId();
 	void update();
 	int getX();
 	int getY();
