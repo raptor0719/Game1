@@ -4,14 +4,14 @@ import raptor.engine.event.IEventSource;
 import raptor.engine.logical.collision.api.ICollisionShape;
 import raptor.engine.util.geometry.Point;
 
-public abstract class BasicEntity implements IEntity {
+public abstract class Entity implements IEntity {
 	private final long id;
 	private final IEventSource eventSource;
 	private final ICollisionShape collision;
 
 	private final Point position;
 
-	public BasicEntity(final long id, final IEventSource eventSource, final ICollisionShape collision) {
+	public Entity(final long id, final IEventSource eventSource, final ICollisionShape collision) {
 		this.id = id;
 		this.eventSource = eventSource;
 		this.collision = collision;

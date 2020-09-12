@@ -1,4 +1,4 @@
-package raptor.engine.game;
+package raptor.engine.util;
 
 public interface IIdProvider {
 	long get();

@@ -1,4 +1,4 @@
-package raptor.engine.game;
+package raptor.engine.util;
 
 import java.util.LinkedList;
 import java.util.Queue;
