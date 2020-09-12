@@ -18,7 +18,9 @@ public class EventExchange implements IEventSource, IEventDestination {
 
 	@Override
 	public Iterator<IEvent> getEvents() {
-		return eventQueue.iterator();
+		final Iterator<IEvent> events = new LinkedList<>(eventQueue).iterator();
+		eventQueue.clear();
+		return events;
 	}
 
 }
