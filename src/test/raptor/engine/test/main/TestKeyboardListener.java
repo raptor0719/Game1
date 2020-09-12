@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import raptor.engine.game.ui.input.BinaryInputMap;
+import raptor.engine.game.ui.input.JavaAwtKeyTranslator;
 import raptor.engine.game.ui.input.KeyboardInput;
 
 public class TestKeyboardListener implements KeyListener {
