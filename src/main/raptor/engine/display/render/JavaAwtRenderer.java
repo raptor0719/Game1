@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import raptor.engine.game.Viewport;
 
-public class AwtRenderer implements IRenderer {
+public class JavaAwtRenderer implements IRenderer {
 	private final Graphics2D awtGraphics;
 
 	private final BufferedImage buffer;
@@ -18,7 +18,7 @@ public class AwtRenderer implements IRenderer {
 
 	private final IGraphics graphics;
 
-	public AwtRenderer(final Graphics2D g, final Viewport viewport) {
+	public JavaAwtRenderer(final Graphics2D g, final Viewport viewport) {
 		awtGraphics = g;
 
 		buffer = new BufferedImage(viewport.getWidth(), viewport.getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
