@@ -1,8 +1,5 @@
 package raptor.engine.main;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import raptor.engine.display.render.IRenderer;
 import raptor.engine.game.level.Level;
 import raptor.engine.game.ui.input.IMainLoopInputHandler;
@@ -10,12 +7,10 @@ import raptor.engine.game.ui.input.IMainLoopInputHandler;
 public class Game {
 	private static long timeSinceLastFrame;
 	private static Level currentLevel;
-	private static Map<String, Object> globalProperties;
 
 	static {
 		timeSinceLastFrame = 0;
 		currentLevel = null;
-		globalProperties = new HashMap<String, Object>();
 	}
 
 	private final IRenderer renderer;
@@ -59,18 +54,6 @@ public class Game {
 			throw new IllegalArgumentException("Attempted to load null level.");
 		level.init();
 		currentLevel = level;
-	}
-
-	public static boolean hasGlobalProperty(final String propertyName) {
-		return globalProperties.containsKey(propertyName);
-	}
-
-	public static void setGlobalProperty(final String propertyName, final Object propertyValue) {
-		globalProperties.put(propertyName, propertyValue);
-	}
-
-	public static Object getGlobalProperty(final String propertyName) {
-		return globalProperties.get(propertyName);
 	}
 
 	/* INTERNALS */
