@@ -54,9 +54,10 @@ public class Game {
 		return currentLevel;
 	}
 
-	public static void setCurrentLevel(final Level level) {
+	public static void loadLevel(final Level level) {
 		if (level == null)
 			throw new IllegalArgumentException("Attempted to load null level.");
+		level.init();
 		currentLevel = level;
 	}
 
