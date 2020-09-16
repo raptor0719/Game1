@@ -50,6 +50,8 @@ public class Game {
 	}
 
 	public static void setCurrentLevel(final Level level) {
+		if (level == null)
+			throw new IllegalArgumentException("Attempted to load null level.");
 		currentLevel = level;
 	}
 
