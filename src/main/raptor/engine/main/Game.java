@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import raptor.engine.display.render.IRenderer;
-import raptor.engine.game.Viewport;
 import raptor.engine.game.level.Level;
 
 public class Game {
@@ -20,7 +19,7 @@ public class Game {
 
 	private final IRenderer renderer;
 
-	protected Game(final Level initLevel, final Viewport viewport, final IRenderer renderer) {
+	protected Game(final Level initLevel, final IRenderer renderer) {
 		if (currentLevel != null)
 			throw new IllegalStateException("Only 1 instance of the Game is allowed.");
 		currentLevel = initLevel;
@@ -48,6 +47,10 @@ public class Game {
 
 	public static Level getCurrentLevel() {
 		return currentLevel;
+	}
+
+	public static void setCurrentLevel(final Level level) {
+		currentLevel = level;
 	}
 
 	public static boolean hasGlobalProperty(final String propertyName) {
