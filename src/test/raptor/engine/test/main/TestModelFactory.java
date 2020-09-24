@@ -9,9 +9,6 @@ import javax.imageio.ImageIO;
 
 import raptor.engine.model.HardpointPosition;
 import raptor.engine.model.Model;
-import raptor.engine.model.Sprite;
-import raptor.engine.model.SpriteModel;
-import raptor.engine.model.SpriteModelDescriptor;
 import raptor.engine.model.WireModel;
 import raptor.engine.model.WireModelAnimationDescriptor;
 import raptor.engine.model.WireModelFrame;
@@ -60,18 +57,10 @@ public class TestModelFactory {
 
 		final WireModel wireModel = new WireModel(frameList, directionMapping, animations, frame0);
 
-		final List<Sprite> sprites = Arrays.asList(new Sprite[] {getRectangle(10, 10)});
-		final SpriteModel spriteModel = new SpriteModel(sprites);
-		final SpriteModelDescriptor point0_visual = new SpriteModelDescriptor(0, spriteModel);
-		final SpriteModelDescriptor point1_visual = new SpriteModelDescriptor(1, spriteModel);
-		final SpriteModelDescriptor point2_visual = new SpriteModelDescriptor(2, spriteModel);
-		final SpriteModelDescriptor point3_visual = new SpriteModelDescriptor(3, spriteModel);
-		final List<SpriteModelDescriptor> initialVisuals = Arrays.asList(new SpriteModelDescriptor[] {point0_visual, point1_visual, point2_visual, point3_visual});
-
-		return new Model(wireModel, initialVisuals);
+		return new Model(wireModel);
 	}
 
-	public static Sprite getRectangle(final int width, final int height) {
+	public static Image getRectangle(final int width, final int height) {
 		Image newImage;
 		try {
 			newImage = ImageIO.read(new File("box.png"));
@@ -79,7 +68,7 @@ public class TestModelFactory {
 		} catch (Throwable t) {
 			throw new RuntimeException(t);
 		}
-		return new Sprite(newImage, width/2, height/2);
+		return newImage;
 	}
 
 	private static HardpointPosition point(int x, int y) {
