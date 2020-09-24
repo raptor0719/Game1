@@ -27,10 +27,10 @@ public class Game {
 	public void start() {
 		long previousTime = System.currentTimeMillis();
 		while (true) {
+			inputHandler.handleInputs();
+
 			long currentTime = System.currentTimeMillis();
 			timeSinceLastFrame = currentTime - previousTime;
-
-			inputHandler.handleInputs();
 
 			if (timeSinceLastFrame >= 17) {
 				previousTime = currentTime;
