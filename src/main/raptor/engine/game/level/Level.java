@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import raptor.engine.collision.geometry.CollisionCircle;
+import raptor.engine.collision.geometry.CollisionTriangle;
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.event.EventBroker;
 import raptor.engine.event.IEventBroker;
 import raptor.engine.game.entity.IEntity;
-import raptor.engine.logical.collision.geometry.CollisionCircle;
-import raptor.engine.logical.collision.geometry.CollisionTriangle;
-import raptor.engine.logical.nav.api.INavigator;
+import raptor.engine.nav.api.INavigator;
 import raptor.engine.util.IIdProvider;
 import raptor.engine.util.IdProvider;
 

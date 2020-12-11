@@ -1,8 +1,8 @@
 package raptor.engine.game.entity;
 
+import raptor.engine.collision.api.ICollideable;
+import raptor.engine.collision.api.ICollisionShape;
 import raptor.engine.display.render.IDrawable;
-import raptor.engine.logical.collision.api.ICollideable;
-import raptor.engine.logical.collision.api.ICollisionShape;
 
 public interface IEntity extends ICollideable, IDrawable {
 	long getId();

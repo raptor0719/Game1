@@ -1,7 +1,7 @@
 package raptor.engine.game.entity;
 
+import raptor.engine.collision.api.ICollisionShape;
 import raptor.engine.event.IEventSource;
-import raptor.engine.logical.collision.api.ICollisionShape;
 import raptor.engine.util.geometry.Point;
 
 public abstract class Entity implements IEntity {
