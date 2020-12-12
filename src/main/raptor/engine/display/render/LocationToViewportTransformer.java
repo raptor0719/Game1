@@ -1,7 +1,5 @@
 package raptor.engine.display.render;
 
-import raptor.engine.game.Viewport;
-
 public class LocationToViewportTransformer {
 	private final Viewport vp;
 	private final int scale;

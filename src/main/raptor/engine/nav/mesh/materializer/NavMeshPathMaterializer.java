@@ -6,10 +6,10 @@ import java.util.List;
 import raptor.engine.nav.api.materializer.IPathMaterializer;
 import raptor.engine.nav.mesh.graph.structures.NavMeshEdge;
 import raptor.engine.nav.mesh.graph.structures.NavMeshNode;
+import raptor.engine.util.ValuePair;
 import raptor.engine.util.geometry.LineSegment;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Triangle;
-import raptor.engine.util.structures.ValuePair;
 
 public class NavMeshPathMaterializer implements IPathMaterializer<NavMeshNode> {
 	private final List<Triangle> unpathableTriangles;

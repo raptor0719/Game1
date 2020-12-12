@@ -1,4 +1,4 @@
-package raptor.engine.util.structures;
+package raptor.engine.util;
 
 public class BinaryTree<T> {
 	private Node<T> root;

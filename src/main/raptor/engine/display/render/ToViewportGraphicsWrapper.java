@@ -2,8 +2,6 @@ package raptor.engine.display.render;
 
 import java.awt.Image;
 
-import raptor.engine.game.Viewport;
-
 public class ToViewportGraphicsWrapper implements IGraphics {
 	private final IGraphics graphics;
 	private final LocationToViewportTransformer toViewport;

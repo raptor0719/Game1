@@ -1,4 +1,4 @@
-package raptor.engine.game;
+package raptor.engine.display.render;
 
 public class Viewport {
 	private final int width;

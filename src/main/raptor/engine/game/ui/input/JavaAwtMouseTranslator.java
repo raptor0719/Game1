@@ -3,7 +3,7 @@ package raptor.engine.game.ui.input;
 import java.util.HashMap;
 import java.util.Map;
 
-import raptor.engine.util.transformer.ITransformer;
+import raptor.engine.util.ITransformer;
 
 public class JavaAwtMouseTranslator implements ITransformer<Integer, MouseInput> {
 	private final Map<Integer, MouseInput> map;

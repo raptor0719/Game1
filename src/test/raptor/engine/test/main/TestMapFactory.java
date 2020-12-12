@@ -18,11 +18,11 @@ import raptor.engine.nav.mesh.materializer.NavMeshPathMaterializer;
 import raptor.engine.nav.mesh.resolver.NavMeshPointResolver;
 import raptor.engine.nav.mesh.resolver.grid.NavMeshGrid;
 import raptor.engine.nav.mesh.resolver.grid.NavMeshGridCell;
+import raptor.engine.util.ITransformer;
+import raptor.engine.util.ValuePair;
 import raptor.engine.util.geometry.LineSegment;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Triangle;
-import raptor.engine.util.structures.ValuePair;
-import raptor.engine.util.transformer.ITransformer;
 
 public class TestMapFactory {
 	public static INavigator getMap1() {

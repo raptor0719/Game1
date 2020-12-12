@@ -6,8 +6,6 @@ import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
-import raptor.engine.game.Viewport;
-
 public class JavaAwtRenderer implements IRenderer {
 	private final Graphics2D awtGraphics;
 

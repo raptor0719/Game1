@@ -1,8 +1,8 @@
 package raptor.engine.util.geometry;
 
+import raptor.engine.util.ValuePair;
 import raptor.engine.util.geometry.api.ILineSegment;
 import raptor.engine.util.geometry.api.IPoint;
-import raptor.engine.util.structures.ValuePair;
 
 public class LineSegment implements ILineSegment {
 	private final Point a;

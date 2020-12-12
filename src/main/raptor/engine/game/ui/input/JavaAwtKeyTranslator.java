@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashMap;
 import java.util.Map;
 
-import raptor.engine.util.transformer.ITransformer;
+import raptor.engine.util.ITransformer;
 
 public class JavaAwtKeyTranslator implements ITransformer<Integer, KeyboardInput> {
 	private final Map<Integer, KeyboardInput> keyMap;

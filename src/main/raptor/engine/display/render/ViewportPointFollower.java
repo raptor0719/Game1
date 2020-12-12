@@ -1,6 +1,5 @@
-package raptor.engine.game.viewport;
+package raptor.engine.display.render;
 
-import raptor.engine.game.Viewport;
 import raptor.engine.util.geometry.Point;
 
 public class ViewportPointFollower {

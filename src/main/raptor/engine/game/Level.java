@@ -1,4 +1,4 @@
-package raptor.engine.game.level;
+package raptor.engine.game;
 
 import java.util.ArrayList;
 import java.util.Iterator;

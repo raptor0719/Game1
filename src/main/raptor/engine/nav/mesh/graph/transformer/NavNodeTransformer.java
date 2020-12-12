@@ -9,7 +9,7 @@ import raptor.engine.nav.api.graph.structures.IGraphEdge;
 import raptor.engine.nav.api.graph.structures.IGraphNode;
 import raptor.engine.nav.mesh.graph.structures.NavMeshEdge;
 import raptor.engine.nav.mesh.graph.structures.NavMeshNode;
-import raptor.engine.util.transformer.ITransformer;
+import raptor.engine.util.ITransformer;
 
 public class NavNodeTransformer implements ITransformer<List<IGraphNode>, List<NavMeshNode>> {
 	@Override

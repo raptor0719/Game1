@@ -1,8 +1,8 @@
 package raptor.engine.nav.mesh.graph.structures;
 
 import raptor.engine.nav.api.graph.structures.IGraphEdge;
+import raptor.engine.util.ValuePair;
 import raptor.engine.util.geometry.LineSegment;
-import raptor.engine.util.structures.ValuePair;
 
 public class NavMeshEdge implements IGraphEdge {
 	private final int cost;

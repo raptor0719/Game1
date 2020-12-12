@@ -1,4 +1,4 @@
-package raptor.engine.util.structures;
+package raptor.engine.util;
 
 public class ValuePair<T1, T2> {
 	private final T1 value1;

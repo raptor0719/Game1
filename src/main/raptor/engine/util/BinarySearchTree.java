@@ -1,4 +1,4 @@
-package raptor.engine.util.structures;
+package raptor.engine.util;
 
 import java.util.Comparator;
 
