@@ -38,6 +38,10 @@ public class DoubleVector {
 		return new DoubleVector(x * scale, y * scale);
 	}
 
+	public double getMagnitude() {
+		return calculateMagnitude(this);
+	}
+
 	@Override
 	public String toString() {
 		return "DoubleVector:[x=" + x + ", y=" + y + "]";
