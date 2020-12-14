@@ -17,7 +17,6 @@ public class DefaultNavAgent implements INavAgent {
 	private int currentWaypointX;
 	private int currentWaypointY;
 
-	private boolean isMoving;
 	private Queue<Point> path;
 
 	public DefaultNavAgent(final INavigator navigator) {
@@ -28,15 +27,17 @@ public class DefaultNavAgent implements INavAgent {
 		currentWaypointX = 0;
 		currentWaypointY = 0;
 
-		isMoving = false;
-
 		path = new LinkedList<Point>();
 	}
 
 	@Override
 	public void setPosition(int x, int y) {
-		// TODO Auto-generated method stub
+		positionX = x;
+		positionY = y;
+		currentWaypointX = x;
+		currentWaypointY = y;
 
+		path.clear();
 	}
 
 	@Override
@@ -51,14 +52,40 @@ public class DefaultNavAgent implements INavAgent {
 
 	@Override
 	public void move(final int unitsToMove) {
-		if (!isMoving || unitsToMove < 1)
+		if ((path.isEmpty() && atWaypoint()) || unitsToMove < 1)
 			return;
 
 		DoubleVector totalMovementVector = DoubleVector.unitVectorTowardPoint(
 				new Point(positionX, positionY), new Point(currentWaypointX, currentWaypointY)).scale(unitsToMove);
 		DoubleVector movementToWaypointVector = new DoubleVector(currentWaypointX - positionX, currentWaypointY - positionY);
 
-		// TODO: Finish this
+		while (totalMovementVector.getMagnitude() > movementToWaypointVector.getMagnitude()) {
+			final double movementToGo = totalMovementVector.getMagnitude() - movementToWaypointVector.getMagnitude();
+
+			positionX = currentWaypointX;
+			positionY = currentWaypointY;
+
+			// If we have more total movement than we have distance to go
+			if (path.isEmpty())
+				return;
+
+			final Point nextWaypoint = path.poll();
+			currentWaypointX = nextWaypoint.getX();
+			currentWaypointY = nextWaypoint.getY();
+
+			totalMovementVector = DoubleVector.unitVectorTowardPoint(
+					new Point(positionX, positionY), new Point(currentWaypointX, currentWaypointY)).scale(movementToGo);
+			movementToWaypointVector = new DoubleVector(currentWaypointX - positionX, currentWaypointY - positionY);
+		}
+
+		positionX = positionX + round(totalMovementVector.getX());
+		positionY = positionY + round(totalMovementVector.getY());
+
+		if (atWaypoint() && !path.isEmpty()) {
+			final Point nextWaypoint = path.poll();
+			currentWaypointX = nextWaypoint.getX();
+			currentWaypointY = nextWaypoint.getY();
+		}
 	}
 
 	/* INTERNAL */
@@ -73,75 +100,14 @@ public class DefaultNavAgent implements INavAgent {
 		final Point start = path.poll();
 		currentWaypointX = start.getX();
 		currentWaypointY = start.getY();
-
-		isMoving = true;
 	}
 
-// FIXME: Here as a reference
-//	private void calculate() {
-//		final long currentTime = System.currentTimeMillis();
-//		final double F = (currentTime - millisSinceLastTick)/(float)1000;
-//		millisSinceLastTick = currentTime;
-//
-//		if (!isMoving)
-//			return;
-//
-//		if (posX == destX && posY == destY) {
-//			if (path.isEmpty()) {
-//				isMoving = false;
-//				return;
-//			}
-//			final Point nextPoint = path.poll();
-//			destX = nextPoint.getX();
-//			destY = nextPoint.getY();
-//		}
-//
-//		final double MS = speed * F;
-//		DoubleVector V = DoubleVector.unitVectorTowardPoint(getPosition(), new Point(destX, destY)).scale(MS);
-//		DoubleVector VplusFrac = new DoubleVector(V.getX() + fracX, V.getY() + fracY);
-//
-//		fracX = VplusFrac.getX() % 1;
-//		fracY = VplusFrac.getY() % 1;
-//
-//		Vector MOVE = new Vector((int)VplusFrac.getX(), (int)VplusFrac.getY());
-//		Vector toDest = new Vector(destX - posX, destY - posY);
-//
-//		while (MOVE.getMagnitude() > toDest.getMagnitude()) {
-//			posX = destX;
-//			posY = destY;
-//
-//			if (path.isEmpty()) {
-//				isMoving = false;
-//				return;
-//			}
-//
-//			final Point nextPoint = path.poll();
-//			destX = nextPoint.getX();
-//			destY = nextPoint.getY();
-//
-//			final double Leftover = MOVE.getMagnitude() - toDest.getMagnitude();
-//			V = DoubleVector.unitVectorTowardPoint(getPosition(), new Point(destX, destY)).scale(Leftover);
-//			VplusFrac = new DoubleVector(V.getX() + fracX, V.getY() + fracY);
-//
-//			fracX = VplusFrac.getX() % 1;
-//			fracY = VplusFrac.getY() % 1;
-//
-//			MOVE = new Vector((int)VplusFrac.getX(), (int)VplusFrac.getY());
-//			toDest = new Vector(destX - posX, destY - posY);
-//		}
-//
-//		posX = MOVE.getX() + posX;
-//		posY = MOVE.getY() + posY;
-//
-//		if (posX == destX && posY == destY) {
-//			if (path.isEmpty()) {
-//				isMoving = false;
-//				return;
-//			}
-//
-//			final Point nextPoint = path.poll();
-//			destX = nextPoint.getX();
-//			destY = nextPoint.getY();
-//		}
-//	}
+	private boolean atWaypoint() {
+		return positionX == currentWaypointX && positionY == currentWaypointY;
+	}
+
+	// FIXME: Seems a bit weird to lose precision here. But this is probably because we don't have a float vector.
+	private int round(final double val) {
+		return (int) Math.round(val);
+	}
 }
