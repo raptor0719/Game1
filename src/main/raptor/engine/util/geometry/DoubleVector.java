@@ -70,9 +70,9 @@ public class DoubleVector {
 	 * @param end - the direction the vector is to face
 	 * @return a unit vector pointing toward end from start
 	 */
-	public static DoubleVector unitVectorTowardPoint(final Point start, final Point end) {
-		final int x = end.getX() - start.getX();
-		final int y = end.getY() - start.getY();
+	public static DoubleVector unitVectorTowardPoint(final int startX, final int startY, final int endX, final int endY) {
+		final int x = endX - startX;
+		final int y = endY - startY;
 
 		return getUnitVector(new DoubleVector(x, y));
 	}
