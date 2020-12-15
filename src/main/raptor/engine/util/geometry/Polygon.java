@@ -19,6 +19,14 @@ public class Polygon {
 		this.lines = buildLineSegments(this.points.iterator());
 	}
 
+	public List<Point> getPoints() {
+		return points;
+	}
+
+	public List<LineSegment> getLines() {
+		return lines;
+	}
+
 	public boolean containsPoint(final int x, final int y) {
 		/*
 		* We detect if the point is in the segment if it:
