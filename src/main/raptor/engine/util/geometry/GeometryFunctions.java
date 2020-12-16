@@ -78,7 +78,27 @@ public class GeometryFunctions {
 		return segments;
 	}
 
+	public static List<Triangle> fillPolygonWithTriangles(final Polygon parent, final List<Polygon> holes) {
+		// TODO: Add some checks here
+
+		// Connect the holes to the parent to form a single circular list of line segments
+		final List<LineSegment> allLines = parent.getLines();
+
+		for (final Polygon hole : holes) {
+
+		}
+
+	}
+
 	// INTERNAL
+
+	/**
+	 * Find any line segment that connects the parent polygon to its hole and return the first one.
+	 * It's assumed the hole is fully contained in the parent.
+	 */
+	private static LineSegment findFirstNonIntersectingSegment(final Polygon parent, final Polygon hole) {
+		return null;
+	}
 
 	private static void removeMultiple(final List<?> l, final int... indices) {
 		for (int i = l.size() - 1; i > -1; i--)
