@@ -151,6 +151,10 @@ public class LineSegment implements ILineSegment {
 		return !thisCheckPoint.isOnLineSegment(compare) && !compareCheckPoint.isOnLineSegment(this);
 	}
 
+	public boolean intersectsWithExcludingEndpoints(final LineSegment compare) {
+		return this.intersectsWith(compare) && !this.sharesEndpoint(compare);
+	}
+
 	/**
 	 * This is the same as calling {@link #getIntersectionPoint(LineSegment)} != null
 	 *
