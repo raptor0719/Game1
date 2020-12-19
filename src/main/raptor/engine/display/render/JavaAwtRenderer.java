@@ -16,18 +16,18 @@ public class JavaAwtRenderer implements IRenderer {
 
 	private final IGraphics graphics;
 
-	public JavaAwtRenderer(final Graphics2D g, final Viewport viewport) {
-		awtGraphics = g;
+	public JavaAwtRenderer(final Graphics2D awtGraphics, final Viewport viewport) {
+		this.awtGraphics = awtGraphics;
 
 		buffer = new BufferedImage(viewport.getWidth(), viewport.getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
 		this.toBuffer = buffer.createGraphics();
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		toBuffer.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		awtGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		this.viewport = viewport;
 
-		graphics = new ToViewportGraphicsWrapper(new JavaAwtGraphics(g), viewport);
+		graphics = new ToViewportGraphicsWrapper(new JavaAwtGraphics(toBuffer), viewport);
 	}
 
 	@Override
