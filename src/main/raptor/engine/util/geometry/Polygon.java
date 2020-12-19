@@ -54,12 +54,17 @@ public class Polygon {
 	private List<LineSegment> buildLineSegments(final Iterator<Point> points) {
 		final List<LineSegment> lineSegments = new ArrayList<LineSegment>();
 
-		Point current = points.next();
+		final Point first = points.next();
+		Point last = null;
+		Point current = first;
 		while (points.hasNext()) {
 			final Point next = points.next();
 			lineSegments.add(new LineSegment(current, next));
 			current = next;
+			if (!points.hasNext())
+				last = current;
 		}
+		lineSegments.add(new LineSegment(last, first));
 
 		return Collections.unmodifiableList(lineSegments);
 	}
