@@ -57,6 +57,36 @@ public class Triangle {
 		return "Triangle:[p0=" + points[0] + ",p1=" + points[1] + ",p2=" + points[2] + "]";
 	}
 
+	@Override
+	public boolean equals(final Object o) {
+		if (this == o)
+			return true;
+		if (o == null)
+			return false;
+		if (!(o instanceof Triangle))
+			return false;
+
+		final Triangle t = (Triangle)o;
+
+		final Point[] thisPoints = this.getPoints();
+		final Point[] tPoints = t.getPoints();
+
+		for (int i = 0; i < 3; i++) {
+			final Point thisPoint = thisPoints[i];
+			boolean hasPoint = false;
+			for (int j = 0; j < 3; j++) {
+				if (thisPoint.equals(tPoints[j])) {
+					hasPoint = true;
+					break;
+				}
+			}
+			if (!hasPoint)
+				return false;
+		}
+
+		return true;
+	}
+
 	/* STATIC */
 
 	public static boolean containsPoint(final int t1x, final int t1y, final int t2x, final int t2y, final int t3x, final int t3y, final int px, final int py) {
