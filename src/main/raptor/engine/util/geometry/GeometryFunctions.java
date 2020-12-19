@@ -95,19 +95,14 @@ public class GeometryFunctions {
 				for (final Point holePoint : hole.getPoints()) {
 					final LineSegment possibleConnectingSegment = new LineSegment(parentPoint, holePoint);
 
-					boolean intersects = false;
-					for (final LineSegment existingSegment : allSegments) {
-						if (possibleConnectingSegment.intersectsWithExcludingEndpoints(existingSegment)) {
-							intersects = true;
-							break;
-						}
-					}
+					boolean isValid = isValidConnection(possibleConnectingSegment, allSegments);
 
 					// A suitable segment was found, so set the points, and add it to the list.
-					if (!intersects) {
+					if (isValid) {
 						suitableParentPoint = parentPoint;
 						suitableHolePoint = holePoint;
 						allSegments.add(possibleConnectingSegment);
+						break;
 					}
 				}
 
@@ -146,8 +141,9 @@ public class GeometryFunctions {
 		boolean filled = false;
 
 		while (!filled) {
-			int index = -1;
+			int index = 0;
 			boolean hasFoundTriangle = false;
+			int foundTriangleIndex = 0;
 
 			while (true) {
 				// Get 3 points along the list
@@ -159,41 +155,40 @@ public class GeometryFunctions {
 				final LineSegment potentialSegment = new LineSegment(start, end);
 
 				// Check if this new segments intersects any others
-				boolean intersects = false;
-				for (final LineSegment segment : allSegments) {
-					if (potentialSegment.intersectsWithExcludingEndpoints(segment)) {
-						intersects = true;
-						break;
-					}
-				}
+				boolean isValid = isValidConnection(potentialSegment, allSegments);
 
 				// If it doesn't, than a new triangle was found! Set the hasFoundTriangle flag
 				// to keep looking on this permutation, create the new triangle, add the new
 				// triangle to the list of triangles, add the new segment to the list of segments,
 				// and remove the middle point from the list (and the tracker).
 				// If it does intersect, than this isn't valid and keep looking.
-				if (!intersects) {
-					hasFoundTriangle = true;
+				if (isValid) {
 					triangles.add(new Triangle(start, middle, end));
 					allSegments.add(potentialSegment);
-					currentWorkingPermutation.remove((index + 1) % currentWorkingPermutation.size());
 					tracker.remove((index + 1) % currentWorkingPermutation.size());
+					currentWorkingPermutation.remove((index + 1) % currentWorkingPermutation.size());
+					hasFoundTriangle = true;
+					foundTriangleIndex = index % currentWorkingPermutation.size();
 				}
 
-				// We just added a triangle and now we only have 2 points left,
-				// that means we're done! (Because, weird how this works, triangles
-				// need 3 points to work)
-				if (currentWorkingPermutation.size() < 3) {
+				// We just added a triangle and now we only have 3 points left,
+				// that means we just gotta add the last one and we're done!
+				if (currentWorkingPermutation.size() <= 3) {
+					triangles.add(new Triangle(currentWorkingPermutation.get(0), currentWorkingPermutation.get(1), currentWorkingPermutation.get(2)));
 					filled = true;
 					break;
 				}
 
+				index += 1;
+
 				// If we've done a full rotation and we haven't found a triangle, than
 				// it's time to try another permutation.
-				if (index % currentWorkingPermutation.size() == 0 && !hasFoundTriangle)
-					break;
-
-				index += 1;
+				if (index % currentWorkingPermutation.size() == foundTriangleIndex) {
+					if (hasFoundTriangle)
+						hasFoundTriangle = false;
+					else
+						break;
+				}
 			}
 
 			// We haven't filled the triangle yet and we've exhausted the current
@@ -217,6 +212,11 @@ public class GeometryFunctions {
 	// reverse sections of the ordering to look for triangles in a
 	// different order. Ordering can only be reversed between repeat
 	// points, as these indicate a loop.
+	// The reason re-ordering works is because sometimes traversal goes
+	// at awkward directions through the shape where a triangle could
+	// not be formed due to the way we construct the loops. Long story
+	// short this could be solved IF this scenario could be detected and
+	// traversing the loops went in a more logical way.
 	// EX: Points 0, 1, 2, 3, 0, 4, 5, 6 could be reordered to 0, 3, 2, 1, 0, 4, 5, 6
 	private static class PermutationTrackingPointList {
 		private List<Point> current;
@@ -233,7 +233,7 @@ public class GeometryFunctions {
 		// I know, this would only be the case if we were in an invalid
 		// state (which should be caught by pre-checks).
 		public List<Point> getNextPermutation() {
-			return (potentialPermutations.isEmpty()) ? null : potentialPermutations.remove(0);
+			return (potentialPermutations.isEmpty()) ? null : new ArrayList<>(potentialPermutations.remove(0));
 		}
 
 		// Caller needs to remove elements from the current here as it
@@ -243,10 +243,81 @@ public class GeometryFunctions {
 			potentialPermutations = calculatePermutations(current);
 		}
 
-		// TODO: Implement this
+		// Permutations are done by finding repeated points in the list. This is
+		// a loop, which means we can traverse the loop in reverse order, so we
+		// reorder those points in reverse.
 		private List<List<Point>> calculatePermutations(final List<Point> list) {
-			return null;
+			// Find all repeated points
+			final List<Point> repeats = new ArrayList<>();
+
+			for (int i = 0; i < list.size(); i++) {
+				final Point pointLookingFor = list.get(i);
+				for (int j = 0; j < list.size(); j++) {
+					if (i == j)
+						continue;
+					final Point compare = list.get(j);
+					if (compare.equals(pointLookingFor) && !repeats.contains(pointLookingFor))
+						repeats.add(pointLookingFor);
+				}
+			}
+
+			// Reverse both sections between the repeated points.
+			// This is essentially reversing the order in which we
+			// travel through the loops relative to the connections
+			// between them.
+			final List<List<Point>> permutations = new ArrayList<>();
+
+			for (final Point repeat : repeats) {
+				final int index1 = list.indexOf(repeat);
+				final int index2 = list.lastIndexOf(repeat);
+
+				// Grab the pieces between indices.
+				final List<Point> between = new ArrayList<>(list.subList(index1 + 1, index2));
+				final List<Point> edges = new ArrayList<>(list.subList(index2 + 1, list.size()));
+				edges.addAll(list.subList(0, index1));
+
+				// Create reversed versions
+				final List<Point> betweenReversed = reverseList(between);
+				final List<Point> edgesReversed = reverseList(edges);
+
+				// Now put together the 2 lists.
+				final List<Point> permutation1 = new ArrayList<>();
+				permutation1.add(repeat);
+				permutation1.addAll(between);
+				permutation1.add(repeat);
+				permutation1.addAll(edgesReversed);
+
+				final List<Point> permutation2 = new ArrayList<>();
+				permutation2.add(repeat);
+				permutation2.addAll(betweenReversed);
+				permutation2.add(repeat);
+				permutation2.addAll(edges);
+
+				permutations.add(permutation1);
+				permutations.add(permutation2);
+			}
+
+			return permutations;
 		}
+
+		private List<Point> reverseList(final List<Point> list) {
+			final List<Point> reversed = new ArrayList<>();
+
+			for (int i = 0; i < list.size(); i++)
+				reversed.add(0, list.get(i));
+
+			return reversed;
+		}
+	}
+
+	private static boolean isValidConnection(final LineSegment check, final List<LineSegment> geometry) {
+		for (final LineSegment segment : geometry) {
+			if (check.intersectsWithExcludingEndpoints(segment))
+				return false;
+			if (check.equals(segment))
+				return false;
+		}
+		return true;
 	}
 
 	private static List<LineSegment> compileLineSegments(final Polygon parent, final List<Polygon> holes) {
