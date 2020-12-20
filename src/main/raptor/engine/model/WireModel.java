@@ -12,9 +12,9 @@ public class WireModel {
 	protected final WireModelFrame defaultFrame;
 	protected final int[][] mappings;
 	protected final Map<Integer, WireModelAnimationDescriptor> animations;
-	private final int directionCount;
-	private final int size;
-	private final int hardpointCount;
+	protected final int directionCount;
+	protected final int size;
+	protected final int hardpointCount;
 
 	public WireModel(final List<WireModelFrame> frameList, int[][] directionMappings, List<WireModelAnimationDescriptor> animations, final WireModelFrame defaultFrame) {
 		if (frameList == null || directionMappings == null)
