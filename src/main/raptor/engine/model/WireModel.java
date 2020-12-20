@@ -108,8 +108,14 @@ public class WireModel {
 
 	private Map<Integer, WireModelAnimationDescriptor> buildAnimationMap(final List<WireModelAnimationDescriptor> animations) {
 		final Map<Integer, WireModelAnimationDescriptor> map = new HashMap<>();
-		for (final WireModelAnimationDescriptor a : animations)
+		for (final WireModelAnimationDescriptor a : animations) {
+			if (map.containsKey(a.getId())) {
+				System.out.println("Warning: animation with id already in list. Skipping... id=" + a.getId());
+				continue;
+			}
+
 			map.put(a.getId(), a);
+		}
 		return map;
 	}
 }
