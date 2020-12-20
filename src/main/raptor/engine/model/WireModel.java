@@ -8,10 +8,10 @@ import java.util.Map;
 public class WireModel {
 	private static final FrameCountCalculator frameCountCalculator = new FrameCountCalculator();
 
-	private final List<WireModelFrame> frameList;
-	private final WireModelFrame defaultFrame;
-	private final int[][] mappings;
-	private final Map<Integer, WireModelAnimationDescriptor> animations;
+	protected final List<WireModelFrame> frameList;
+	protected final WireModelFrame defaultFrame;
+	protected final int[][] mappings;
+	protected final Map<Integer, WireModelAnimationDescriptor> animations;
 	private final int directionCount;
 	private final int size;
 	private final int hardpointCount;
