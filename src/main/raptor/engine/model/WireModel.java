@@ -13,7 +13,7 @@ public class WireModel {
 	protected final int[][] mappings;
 	protected final Map<Integer, WireModelAnimationDescriptor> animations;
 	protected final int directionCount;
-	protected final int size;
+	protected final int logicalFrameCount;
 	protected final int hardpointCount;
 
 	public WireModel(final List<WireModelFrame> frameList, int[][] directionMappings, List<WireModelAnimationDescriptor> animations, final WireModelFrame defaultFrame) {
@@ -33,7 +33,7 @@ public class WireModel {
 		this.mappings = directionMappings;
 		this.animations = buildAnimationMap(animations);
 		this.directionCount = directionMappings.length;
-		this.size = directionMappings[0].length;
+		this.logicalFrameCount = directionMappings[0].length;
 		this.hardpointCount = frameList.get(0).getHardpointPositions().length;
 	}
 
@@ -48,7 +48,7 @@ public class WireModel {
 	}
 
 	public WireModelFrame getFrame(final int index, final int direction) {
-		if (index >= size)
+		if (index >= logicalFrameCount)
 			throw new IndexOutOfBoundsException("Given frame by index does not exist. Index given: " + index);
 		if (direction >= directionCount || direction < 0)
 			throw new IndexOutOfBoundsException("Given direction does not exist. Direction given: " + direction);
