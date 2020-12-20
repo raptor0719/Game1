@@ -76,13 +76,13 @@ public class TestModelFactory {
 	}
 
 	private static class ConcreteHardpointPosition implements HardpointPosition {
-		int x, y, z, rot;
+		int x, y, rot, depth;
 
 		public ConcreteHardpointPosition(int x, int y) {
 			this.x = x;
 			this.y = y;
-			this.z = 0;
 			this.rot = 0;
+			this.depth = 0;
 		}
 
 		@Override
@@ -100,5 +100,9 @@ public class TestModelFactory {
 			return rot;
 		}
 
+		@Override
+		public int getDepth() {
+			return depth;
+		}
 	}
 }
