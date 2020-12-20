@@ -1,6 +1,7 @@
 package raptor.engine.game;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -9,12 +10,16 @@ import raptor.engine.collision.geometry.CollisionTriangle;
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.event.EventBroker;
 import raptor.engine.event.IEventBroker;
+import raptor.engine.game.entity.DrawDepthEntityComparator;
 import raptor.engine.game.entity.IEntity;
 import raptor.engine.nav.api.INavigator;
 import raptor.engine.util.IIdProvider;
 import raptor.engine.util.IdProvider;
+import raptor.engine.util.ListSortingIterator;
 
 public abstract class Level implements IDrawable {
+	private static final Comparator<IEntity> DRAW_DEPTH_COMPARE = new DrawDepthEntityComparator();
+
 	private final IEventBroker eventBroker;
 	private final List<IEntity> entities;
 	private final IIdProvider idProvider;
@@ -78,7 +83,7 @@ public abstract class Level implements IDrawable {
 	}
 
 	public Iterator<IDrawable> getDrawables() {
-		return new InsertingDrawableIteratorWrapper(this, entities.iterator());
+		return new InsertingDrawableIteratorWrapper(this, new ListSortingIterator<>(entities, DRAW_DEPTH_COMPARE));
 	}
 
 	public IEventBroker getEventBroker() {
