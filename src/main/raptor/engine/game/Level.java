@@ -2,8 +2,10 @@ package raptor.engine.game;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import raptor.engine.collision.geometry.CollisionCircle;
 import raptor.engine.collision.geometry.CollisionTriangle;
@@ -21,13 +23,13 @@ public abstract class Level implements IDrawable {
 	private static final Comparator<IEntity> DRAW_DEPTH_COMPARE = new DrawDepthEntityComparator();
 
 	private final IEventBroker eventBroker;
-	private final List<IEntity> entities;
+	private final Map<Long, IEntity> entities;
 	private final IIdProvider idProvider;
 	private INavigator navigator;
 
 	public Level() {
 		this.eventBroker = new EventBroker();
-		this.entities = new ArrayList<IEntity>();
+		this.entities = new HashMap<Long, IEntity>();
 		this.idProvider = new IdProvider();
 		this.navigator = null;
 	}
@@ -41,7 +43,7 @@ public abstract class Level implements IDrawable {
 
 		checkCollisions();
 
-		for (final IEntity e : entities)
+		for (final IEntity e : entities.values())
 			e.update();
 	}
 
@@ -56,14 +58,16 @@ public abstract class Level implements IDrawable {
 	* grid-squares.
 	*/
 	private void checkCollisions() {
-		for (int i = 0; i < entities.size(); i++) {
-			final IEntity source = entities.get(i);
+		final List<IEntity> rawEntities = new ArrayList<>(entities.values());
 
-			if (i+1 >= entities.size())
+		for (int i = 0; i < rawEntities.size(); i++) {
+			final IEntity source = rawEntities.get(i);
+
+			if (i+1 >= rawEntities.size())
 				break;
 
-			for (int j = i+1; j < entities.size(); j++) {
-				final IEntity target = entities.get(j);
+			for (int j = i+1; j < rawEntities.size(); j++) {
+				final IEntity target = rawEntities.get(j);
 
 				if (target.getCollision() instanceof CollisionTriangle) {
 					final CollisionTriangle triangle = (CollisionTriangle) target.getCollision();
@@ -83,7 +87,7 @@ public abstract class Level implements IDrawable {
 	}
 
 	public Iterator<IDrawable> getDrawables() {
-		return new InsertingDrawableIteratorWrapper(this, new ListSortingIterator<>(entities, DRAW_DEPTH_COMPARE));
+		return new InsertingDrawableIteratorWrapper(this, new ListSortingIterator<>(entities.values(), DRAW_DEPTH_COMPARE));
 	}
 
 	public IEventBroker getEventBroker() {
@@ -100,6 +104,25 @@ public abstract class Level implements IDrawable {
 
 	public INavigator getNavigator() {
 		return navigator;
+	}
+
+	public void addEntity(final IEntity entity) throws IllegalArgumentException {
+		if (entities.containsKey(entity.getId()))
+			throw new IllegalArgumentException("Cannot add an entity if another has the same id. id=" + entity.getId());
+
+		entities.put(entity.getId(), entity);
+	}
+
+	public void removeEntity(final long id) {
+		entities.remove(id);
+	}
+
+	public IEntity getEntity(final long id) {
+		return entities.get(id);
+	}
+
+	public List<IEntity> getAllEntities() {
+		return new ArrayList<IEntity>(entities.values());
 	}
 
 	private static class InsertingDrawableIteratorWrapper implements Iterator<IDrawable> {
