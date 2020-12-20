@@ -96,11 +96,6 @@ public class TestModelFactory {
 		}
 
 		@Override
-		public int getZ() {
-			return z;
-		}
-
-		@Override
 		public int getRotation() {
 			return rot;
 		}
