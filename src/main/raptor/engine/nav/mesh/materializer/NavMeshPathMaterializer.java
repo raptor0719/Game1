@@ -9,13 +9,14 @@ import raptor.engine.nav.mesh.graph.structures.NavMeshNode;
 import raptor.engine.util.ValuePair;
 import raptor.engine.util.geometry.LineSegment;
 import raptor.engine.util.geometry.Point;
+import raptor.engine.util.geometry.Polygon;
 import raptor.engine.util.geometry.Triangle;
 
 public class NavMeshPathMaterializer implements IPathMaterializer<NavMeshNode> {
-	private final List<Triangle> unpathableTriangles;
+	private final List<Polygon> areaBounds;
 
-	public NavMeshPathMaterializer(final List<Triangle> unpathableTriangles) {
-		this.unpathableTriangles = unpathableTriangles;
+	public NavMeshPathMaterializer(final List<Polygon> areaBounds) {
+		this.areaBounds = areaBounds;
 	}
 
 	@Override
@@ -55,9 +56,16 @@ public class NavMeshPathMaterializer implements IPathMaterializer<NavMeshNode> {
 		//  and we can finish fast here
 		final LineSegment s = new LineSegment(start, end);
 		boolean intersectsOOB = false;
-		for (final Triangle t : unpathableTriangles)
-			if (t.isIntersectedByLine(s))
-				intersectsOOB = true;
+		for (final Polygon p : areaBounds) {
+			for (final LineSegment pSeg : p.getLines()) {
+				if (pSeg.intersectsWith(s)) {
+					intersectsOOB = true;
+					break;
+				}
+			}
+			if (intersectsOOB)
+				break;
+		}
 
 		if (!intersectsOOB) {
 			final List<Point> path = new ArrayList<Point>(2);
@@ -130,10 +138,14 @@ public class NavMeshPathMaterializer implements IPathMaterializer<NavMeshNode> {
 	}
 
 	private boolean lineGoesOutOfBounds(final LineSegment ls) {
-		for (final Triangle t : unpathableTriangles)
-			if (t.isIntersectedByLine(ls))
-				return true;
-		return false;
+		int intersectionCount = 0;
+
+		for (final Polygon p : areaBounds)
+			for (final LineSegment pSeg : p.getLines())
+				if (pSeg.intersectsWith(ls))
+					intersectionCount++;
+
+		return intersectionCount % 2 != 0;
 	}
 
 	private List<Point> materializePathWith2Nodes(final NavMeshNode startNode, final NavMeshNode endNode, final Point start, final Point end) {
@@ -146,10 +158,12 @@ public class NavMeshPathMaterializer implements IPathMaterializer<NavMeshNode> {
 		final ValuePair<LineSegment, LineSegment> adjEdges = findAdjacentEdges(startNode, endNode);
 		final LineSegment adjLine = findSegment(adjEdges.getValue1(), adjEdges.getValue2());
 
-		for (final Triangle t : unpathableTriangles) {
-			if (t.isIntersectedByLine(s)) {
-				path.add(1, getPointOnLineThatMinimizesDistance(adjLine, start, end));
-				return path;
+		for (final Polygon p : areaBounds) {
+			for (final LineSegment pSeg : p.getLines()) {
+				if (pSeg.intersectsWith(s)) {
+					path.add(1, getPointOnLineThatMinimizesDistance(adjLine, start, end));
+					return path;
+				}
 			}
 		}
 
