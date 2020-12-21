@@ -1,6 +1,6 @@
 package raptor.engine.nav.mesh;
 
-import raptor.engine.nav.api.resolver.IPointResolver;
+import raptor.engine.nav.api.IPointResolver;
 import raptor.engine.nav.mesh.graph.NavMeshNode;
 import raptor.engine.util.geometry.Point;
 

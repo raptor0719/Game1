@@ -3,7 +3,7 @@ package raptor.engine.nav.mesh;
 import java.util.ArrayList;
 import java.util.List;
 
-import raptor.engine.nav.api.materializer.IPathMaterializer;
+import raptor.engine.nav.api.IPathMaterializer;
 import raptor.engine.nav.mesh.graph.NavMeshEdge;
 import raptor.engine.nav.mesh.graph.NavMeshNode;
 import raptor.engine.util.ValuePair;

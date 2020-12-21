@@ -1,4 +1,4 @@
-package raptor.engine.nav.api.graph.structures;
+package raptor.engine.nav.api.graph;
 
 import java.util.Set;
 

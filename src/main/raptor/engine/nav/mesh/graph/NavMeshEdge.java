@@ -1,6 +1,6 @@
 package raptor.engine.nav.mesh.graph;
 
-import raptor.engine.nav.api.graph.structures.IGraphEdge;
+import raptor.engine.nav.api.graph.IGraphEdge;
 import raptor.engine.util.ValuePair;
 import raptor.engine.util.geometry.LineSegment;
 

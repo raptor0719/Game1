@@ -1,6 +1,6 @@
-package raptor.engine.nav.api.resolver;
+package raptor.engine.nav.api;
 
-import raptor.engine.nav.api.graph.structures.IGraphNode;
+import raptor.engine.nav.api.graph.IGraphNode;
 import raptor.engine.util.geometry.Point;
 
 public interface IPointResolver<D extends IGraphNode> {

@@ -1,8 +1,8 @@
-package raptor.engine.nav.api.materializer;
+package raptor.engine.nav.api;
 
 import java.util.List;
 
-import raptor.engine.nav.api.graph.structures.IGraphNode;
+import raptor.engine.nav.api.graph.IGraphNode;
 import raptor.engine.util.geometry.Point;
 
 public interface IPathMaterializer<D extends IGraphNode> {

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import raptor.engine.nav.api.INavigator;
+import raptor.engine.nav.api.IPathMaterializer;
+import raptor.engine.nav.api.IPointResolver;
+import raptor.engine.nav.api.graph.IGraphNode;
 import raptor.engine.nav.api.graph.IGraphSearch;
-import raptor.engine.nav.api.graph.structures.IGraphNode;
-import raptor.engine.nav.api.materializer.IPathMaterializer;
-import raptor.engine.nav.api.resolver.IPointResolver;
 import raptor.engine.nav.mesh.graph.NavMeshNode;
 import raptor.engine.util.ITransformer;
 import raptor.engine.util.geometry.Point;

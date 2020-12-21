@@ -2,7 +2,7 @@ package raptor.engine.nav.mesh.graph;
 
 import java.util.Set;
 
-import raptor.engine.nav.api.graph.structures.IDataGraphNode;
+import raptor.engine.nav.api.graph.IDataGraphNode;
 import raptor.engine.util.geometry.Triangle;
 
 public class NavMeshNode implements IDataGraphNode<Triangle> {

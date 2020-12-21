@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
+import raptor.engine.nav.api.graph.IGraphEdge;
+import raptor.engine.nav.api.graph.IGraphNode;
 import raptor.engine.nav.api.graph.IGraphSearch;
-import raptor.engine.nav.api.graph.structures.IGraphEdge;
-import raptor.engine.nav.api.graph.structures.IGraphNode;
 
 public class BreadthFirst implements IGraphSearch {
 
