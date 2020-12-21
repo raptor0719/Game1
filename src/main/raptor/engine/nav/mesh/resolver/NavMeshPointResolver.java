@@ -13,7 +13,7 @@ public class NavMeshPointResolver implements IPointResolver<NavMeshNode> {
 	public NavMeshPointResolver(final NavMeshGrid grid, final int realXSize, final int realYSize) {
 		this.grid = grid;
 
-		if (realXSize % grid.getDimension() != 0 || realYSize % grid.getDimension() != 0)
+		if (realXSize % grid.getXCellCount() != 0 || realYSize % grid.getYCellCount() != 0)
 			throw new RuntimeException("Size of actual space must be divisible by the grid dimensions.");
 
 		this.realXSize = realXSize;
@@ -39,11 +39,11 @@ public class NavMeshPointResolver implements IPointResolver<NavMeshNode> {
 
 	// Translates the true coordinates given to a cell coordinate
 	private Point convertRealToCell(final Point p) {
-		final int xPartitionSize = realXSize / grid.getDimension();
-		final int YPartitionSize = realYSize / grid.getDimension();
+		final int xPartitionSize = realXSize / grid.getXCellCount();
+		final int YPartitionSize = realYSize / grid.getYCellCount();
 
-		final int x = findPartition(p.getX(), xPartitionSize, grid.getDimension());
-		final int y = findPartition(p.getY(), YPartitionSize, grid.getDimension());
+		final int x = findPartition(p.getX(), xPartitionSize, grid.getXCellCount());
+		final int y = findPartition(p.getY(), YPartitionSize, grid.getYCellCount());
 
 		return new Point(x,y);
 	}
