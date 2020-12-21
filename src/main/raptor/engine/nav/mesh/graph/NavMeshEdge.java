@@ -5,19 +5,17 @@ import raptor.engine.util.ValuePair;
 import raptor.engine.util.geometry.LineSegment;
 
 public class NavMeshEdge implements IGraphEdge {
-	private final int cost;
 	private final NavMeshNode destination;
 	private final ValuePair<LineSegment, LineSegment> adjacentEdges;
 
-	public NavMeshEdge(final int cost, final NavMeshNode destination, final ValuePair<LineSegment, LineSegment> adjacentEdges) {
-		this.cost = cost;
+	public NavMeshEdge(final NavMeshNode destination, final ValuePair<LineSegment, LineSegment> adjacentEdges) {
 		this.destination = destination;
 		this.adjacentEdges = adjacentEdges;
 	}
 
 	@Override
 	public int getCost() {
-		return cost;
+		return 1;
 	}
 
 	@Override
