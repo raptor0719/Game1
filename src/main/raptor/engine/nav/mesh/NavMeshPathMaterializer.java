@@ -1,11 +1,11 @@
-package raptor.engine.nav.mesh.materializer;
+package raptor.engine.nav.mesh;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import raptor.engine.nav.api.materializer.IPathMaterializer;
-import raptor.engine.nav.mesh.graph.structures.NavMeshEdge;
-import raptor.engine.nav.mesh.graph.structures.NavMeshNode;
+import raptor.engine.nav.mesh.graph.NavMeshEdge;
+import raptor.engine.nav.mesh.graph.NavMeshNode;
 import raptor.engine.util.ValuePair;
 import raptor.engine.util.geometry.LineSegment;
 import raptor.engine.util.geometry.Point;

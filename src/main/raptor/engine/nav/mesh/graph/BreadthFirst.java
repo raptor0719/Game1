@@ -1,4 +1,4 @@
-package raptor.engine.nav.mesh.graph.search;
+package raptor.engine.nav.mesh.graph;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -1,8 +1,7 @@
-package raptor.engine.nav.mesh.resolver;
+package raptor.engine.nav.mesh;
 
 import raptor.engine.nav.api.resolver.IPointResolver;
-import raptor.engine.nav.mesh.graph.structures.NavMeshNode;
-import raptor.engine.nav.mesh.resolver.grid.NavMeshGrid;
+import raptor.engine.nav.mesh.graph.NavMeshNode;
 import raptor.engine.util.geometry.Point;
 
 public class NavMeshPointResolver implements IPointResolver<NavMeshNode> {

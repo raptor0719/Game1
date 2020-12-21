@@ -1,9 +1,9 @@
-		package raptor.engine.nav.mesh.resolver.grid;
+		package raptor.engine.nav.mesh;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import raptor.engine.nav.mesh.graph.structures.NavMeshNode;
+import raptor.engine.nav.mesh.graph.NavMeshNode;
 
 // TODO: This object should be read only once created, create a builder for this
 // 		and remove the addNode method

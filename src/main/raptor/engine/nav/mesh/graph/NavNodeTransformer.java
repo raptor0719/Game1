@@ -1,4 +1,4 @@
-package raptor.engine.nav.mesh.graph.transformer;
+package raptor.engine.nav.mesh.graph;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,8 +7,6 @@ import java.util.Set;
 
 import raptor.engine.nav.api.graph.structures.IGraphEdge;
 import raptor.engine.nav.api.graph.structures.IGraphNode;
-import raptor.engine.nav.mesh.graph.structures.NavMeshEdge;
-import raptor.engine.nav.mesh.graph.structures.NavMeshNode;
 import raptor.engine.util.ITransformer;
 
 public class NavNodeTransformer implements ITransformer<List<IGraphNode>, List<NavMeshNode>> {

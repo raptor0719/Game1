@@ -1,4 +1,4 @@
-package raptor.engine.nav.mesh.resolver.grid;
+package raptor.engine.nav.mesh;
 
 public class NavMeshGrid {
 	private static final int MINIMUM_DIMENSION = 1;

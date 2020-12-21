@@ -8,7 +8,7 @@ import raptor.engine.nav.api.graph.IGraphSearch;
 import raptor.engine.nav.api.graph.structures.IGraphNode;
 import raptor.engine.nav.api.materializer.IPathMaterializer;
 import raptor.engine.nav.api.resolver.IPointResolver;
-import raptor.engine.nav.mesh.graph.structures.NavMeshNode;
+import raptor.engine.nav.mesh.graph.NavMeshNode;
 import raptor.engine.util.ITransformer;
 import raptor.engine.util.geometry.Point;
 
