@@ -1,5 +1,6 @@
 package raptor.engine.nav.mesh.graph;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import raptor.engine.nav.api.graph.IDataGraphNode;
@@ -14,6 +15,12 @@ public class NavMeshNode implements IDataGraphNode<Triangle> {
 		this.id = id;
 		this.triangle = triangle;
 		this.connections = connections;
+	}
+
+	public NavMeshNode(final int id, final Triangle triangle) {
+		this.id = id;
+		this.triangle = triangle;
+		this.connections = new HashSet<>();
 	}
 
 	public int getId() {
@@ -52,30 +59,5 @@ public class NavMeshNode implements IDataGraphNode<Triangle> {
 
 	public void addEdge(final NavMeshEdge edge) {
 		connections.add(edge);
-	}
-
-	public static class NavNodeBuilder {
-		private int id;
-		private Triangle triangle;
-		private Set<NavMeshEdge> connections;
-
-		public NavNodeBuilder id(final int id) {
-			this.id = id;
-			return this;
-		}
-
-		public NavNodeBuilder triangle(final Triangle triangle) {
-			this.triangle = triangle;
-			return this;
-		}
-
-		public NavNodeBuilder connections(final Set<NavMeshEdge> connections) {
-			this.connections = connections;
-			return this;
-		}
-
-		public NavMeshNode build() {
-			return new NavMeshNode(id, triangle, connections);
-		}
 	}
 }
