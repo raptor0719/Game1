@@ -10,6 +10,10 @@ public class NavMeshGrid {
 			throw new IllegalArgumentException(String.format("Specified dimension cannot be less than %d", MINIMUM_DIMENSION));
 
 		this.arrayGrid = new NavMeshGridCell[xCells][yCells];
+
+		for (int i = 0; i < xCells; i++)
+			for (int j = 0; j < yCells; j++)
+				arrayGrid[i][j] = new NavMeshGridCell(i, j);
 	}
 
 	public void setCell(final int xPos, final int yPos, final NavMeshGridCell cell) {
