@@ -112,12 +112,12 @@ public class NavMeshNavigator implements INavigator {
 			nodes.add(new NavMeshNode(idCounter++, t));
 
 		for (int i = 0; i < nodes.size(); i++) {
-			if (i + 1 >= nodes.size())
-				break;
-
 			final NavMeshNode outer = nodes.get(i);
-			for (int j = i + 1; j < nodes.size(); j++) {
+			for (int j = 0; j < nodes.size(); j++) {
 				final NavMeshNode inner = nodes.get(j);
+
+				if (outer.getId() == inner.getId())
+					continue;
 
 				buildConnections(outer, inner);
 			}
@@ -165,6 +165,11 @@ public class NavMeshNavigator implements INavigator {
 		// If the cell contains a point of the triangle we know for sure it's in there
 		for (final Point p : nodeTriangle.getPoints())
 			if (cellPoly.containsPoint(p.getX(), p.getY()))
+				return true;
+
+		// If the triangle contains any point of the cell, we also know for sure
+		for (final Point p : cellPoly.getPoints())
+			if (nodeTriangle.containsPoint(p))
 				return true;
 
 		// If the triangle intersects the cell poly than we know it's inside
