@@ -2,6 +2,7 @@ package raptor.engine.collision.geometry;
 
 import raptor.engine.collision.api.ICollisionShape;
 import raptor.engine.util.geometry.Circle;
+import raptor.engine.util.geometry.LineSegment;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Triangle;
 import raptor.engine.util.geometry.api.IPoint;
@@ -20,6 +21,9 @@ public class CollisionTriangle implements ICollisionShape {
 				return true;
 		for (final Point p : collisionTriangle.getPoints())
 			if (t.getCollision().containsPoint(p))
+				return true;
+		for (final LineSegment ls : collisionTriangle.getLines())
+			if (t.getCollision().isIntersectedByLine(ls))
 				return true;
 		return false;
 	}
