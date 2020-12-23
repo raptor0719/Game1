@@ -138,14 +138,12 @@ public class NavMeshPathMaterializer implements IPathMaterializer<NavMeshNode> {
 	}
 
 	private boolean lineGoesOutOfBounds(final LineSegment ls) {
-		int intersectionCount = 0;
-
 		for (final Polygon p : areaBounds)
 			for (final LineSegment pSeg : p.getLines())
-				if (pSeg.intersectsWith(ls))
-					intersectionCount++;
+				if (pSeg.intersectsWithExcludingEndpoints(ls))
+					return true;
 
-		return intersectionCount % 2 != 0;
+		return false;
 	}
 
 	private List<Point> materializePathWith2Nodes(final NavMeshNode startNode, final NavMeshNode endNode, final Point start, final Point end) {
