@@ -42,6 +42,10 @@ public class DoubleVector {
 		return calculateMagnitude(this);
 	}
 
+	public double dot(final DoubleVector vector) {
+		return this.x * vector.getX() + this.y * vector.getY();
+	}
+
 	@Override
 	public String toString() {
 		return "DoubleVector:[x=" + x + ", y=" + y + "]";
