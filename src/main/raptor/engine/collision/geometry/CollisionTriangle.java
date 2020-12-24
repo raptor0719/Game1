@@ -36,6 +36,23 @@ public class CollisionTriangle implements ICollisionShape {
 		return false;
 	}
 
+	@Override
+	public boolean collidesWithRectangle(final CollisionRectangle r) {
+		for (final IPoint inputPoint : r.getCollision().getPoints())
+			if (collisionTriangle.containsPoint(inputPoint))
+				return true;
+
+		for (final Point thisPoint : collisionTriangle.getPoints())
+			if (r.getCollision().containsPoint(thisPoint))
+				return true;
+
+		for (final LineSegment inputSegment : r.getCollision().getLineSegments())
+			if (collisionTriangle.isIntersectedByLine(inputSegment))
+				return true;
+
+		return false;
+	}
+
 	public void setCollision(final Triangle collisionTriangle) {
 		this.collisionTriangle = collisionTriangle;
 	}
