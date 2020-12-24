@@ -44,7 +44,7 @@ public class Triangle {
 		return false;
 	}
 
-	public boolean containsPoint(final Point p) {
+	public boolean containsPoint(final IPoint p) {
 		final double area1 = Triangle.calculateArea(getPoints()[0], getPoints()[1], p);
 		final double area2 = Triangle.calculateArea(getPoints()[1], getPoints()[2], p);
 		final double area3 = Triangle.calculateArea(getPoints()[2], getPoints()[0], p);
