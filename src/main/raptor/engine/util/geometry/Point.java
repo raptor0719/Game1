@@ -61,17 +61,17 @@ public class Point implements IPoint {
 	}
 
 	public double distanceTo(final LineSegment ls) {
-		final float lsLength = ls.getLength();
+		final DoubleVector lineVector = new DoubleVector(ls.getEnd().getX() - ls.getStart().getX(), ls.getEnd().getY() - ls.getStart().getY());
+		final DoubleVector vectorToPoint = new DoubleVector(this.getX() - ls.getStart().getX(), this.getY() - ls.getStart().getY());
 
-		if (lsLength <= 0)
-			return distanceTo(ls.getPoints().getValue1());
+		double dotProduct = lineVector.unitVector().dot(vectorToPoint.scale(1.0/lineVector.getMagnitude()));
+		if (dotProduct < 0.0)
+			dotProduct = 0.0;
+		else if (dotProduct > 1.0)
+			dotProduct = 1.0;
 
-		final Point lsStart = ls.getPoints().getValue1();
-		final Point lsEnd = ls.getPoints().getValue2();
-		final float t = ((x - lsStart.getX())*(lsEnd.getX() - lsStart.getX()) + (y - lsStart.getY())*(lsEnd.getY() - lsStart.getY())) / lsLength;
-		final float tConstrained = Math.max(0 , Math.min(1, t));
-
-		return Math.sqrt(distanceTo(lsStart.getX() + tConstrained*(lsEnd.getX() - lsStart.getX()), lsStart.getY() + tConstrained*(lsEnd.getY() - lsStart.getY())));
+		final DoubleVector nearest = lineVector.scale(dotProduct);
+		return Point.distanceTo(nearest.getX(), nearest.getY(), vectorToPoint.getX(), vectorToPoint.getY());
 	}
 
 	@Override
@@ -103,16 +103,21 @@ public class Point implements IPoint {
 
 	/* STATIC */
 
+	public static double distanceTo(final double px1, final double py1, final double px2, final double py2) {
+		// length = sqrt((xb-xa)^2+(yb-ya)^2)
+		final double xDiff = px2 - px1;
+		final double yDiff = py2 - py1;
+
+		final double xDiffSquared = xDiff * xDiff;
+		final double yDiffSquared = yDiff * yDiff;
+
+		final double distance = Math.sqrt(xDiffSquared + yDiffSquared);
+
+		return distance;
+	}
+
 	public static double distanceTo(final int px, final int py, final int l1x, final int l1y, final int l2x, final int l2y) {
-		final float lsLength = LineSegment.length(l1x, l1y, l2x, l2y);
-
-		if (lsLength <= 0)
-			return LineSegment.length(l1x, l1y, px, py);
-
-		final float t = ((px - l1x)*(l2x - l1x) + (py - l1y)*(l2y - l1y)) / lsLength;
-		final float tConstrained = Math.max(0 , Math.min(1, t));
-
-		return Math.sqrt(LineSegment.length(l1x + tConstrained*(l2x - l1x), l1y + tConstrained*(l2y - l1y), px, py));
+		return (new Point(px, py)).distanceTo(new LineSegment(new Point(l1x, l1y), new Point(l2x, l2y)));
 	}
 
 	/* INTERNALS */
