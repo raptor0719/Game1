@@ -43,11 +43,11 @@ public abstract class Level implements IDrawable {
 	public void advanceFrame() {
 		eventBroker.distribute();
 
-		checkCollisions();
-		resolvePhysicsCollisions();
-
 		for (final IEntity e : entities.values())
 			e.update();
+
+		checkCollisions();
+		resolvePhysicsCollisions();
 	}
 
 	/* FIXME
