@@ -3,18 +3,29 @@ package raptor.engine.game.entity;
 import raptor.engine.collision.api.ICollisionShape;
 import raptor.engine.event.IEventSource;
 import raptor.engine.util.geometry.Point;
+import raptor.engine.util.geometry.api.ICircle;
 
 public abstract class Entity implements IEntity {
 	private final long id;
 	private final IEventSource eventSource;
 	private final ICollisionShape collision;
 
+	private final ICircle physicsCollision;
+	private final int weight;
+
 	private final Point position;
 
 	public Entity(final long id, final IEventSource eventSource, final ICollisionShape collision) {
+		this(id, eventSource, collision, null, -1);
+	}
+
+	public Entity(final long id, final IEventSource eventSource, final ICollisionShape collision, final ICircle physicsCollision, final int weight) {
 		this.id = id;
 		this.eventSource = eventSource;
 		this.collision = collision;
+
+		this.physicsCollision = physicsCollision;
+		this.weight = weight;
 
 		this.position = new Point(0, 0);
 	}
@@ -35,19 +46,36 @@ public abstract class Entity implements IEntity {
 	}
 
 	@Override
+	public void setX(final int x) {
+		position.setX(x);
+	}
+
+	@Override
+	public void setY(final int y) {
+		position.setY(y);
+	}
+
+	@Override
 	public ICollisionShape getCollision() {
 		return collision;
 	}
 
+	@Override
+	public boolean isPhysicsEnabled() {
+		return physicsCollision != null;
+	}
+
+	@Override
+	public ICircle  getPhysicsCollision() {
+		return physicsCollision;
+	}
+
+	@Override
+	public int getWeight() {
+		return weight;
+	}
+
 	protected IEventSource getEventSource() {
 		return eventSource;
-	}
-
-	protected void setX(final int x) {
-		position.setX(x);
-	}
-
-	protected void setY(final int y) {
-		position.setY(y);
 	}
 }
