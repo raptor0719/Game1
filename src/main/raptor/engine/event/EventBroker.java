@@ -28,7 +28,7 @@ public class EventBroker implements IEventBroker {
 		while(!eventQueue.isEmpty()) {
 			final IEvent event = eventQueue.poll();
 			final List<Integer> registrees = eventRegistration.get(event.getName());
-			if (registrees == null)
+			if (registrees == null || registrees.size() <= 0)
 				continue;
 			for (final Integer id : registrees)
 				entityRegistration.get(id).send(event);
