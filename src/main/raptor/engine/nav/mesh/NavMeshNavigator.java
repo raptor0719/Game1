@@ -66,6 +66,11 @@ public class NavMeshNavigator implements INavigator {
 	}
 
 	@Override
+	public boolean containsPoint(final int x, final int y) {
+		return navMap.resolvePoint(new Point(x, y)) != null;
+	}
+
+	@Override
 	public Collection<ILineSegment> getMapBounds() {
 		return areaBounds;
 	}
