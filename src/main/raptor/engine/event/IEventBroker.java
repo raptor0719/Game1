@@ -2,13 +2,13 @@ package raptor.engine.event;
 
 public interface IEventBroker {
 	void emit(IEvent event);
-	void trigger(int entityId, IEvent event);
+	void trigger(long entityId, IEvent event);
 	void distribute();
-	IEventSource register(int entityId);
-	void register(int entityId, String eventName);
-	void unregister(int entityId);
-	void unregister(int entityId, String eventName);
-	boolean isRegistered(int entityId);
-	boolean isRegistered(int entityId, String eventName);
+	IEventSource register(long entityId);
+	void register(long entityId, String eventName);
+	void unregister(long entityId);
+	void unregister(long entityId, String eventName);
+	boolean isRegistered(long entityId);
+	boolean isRegistered(long entityId, String eventName);
 	boolean brokersEvent(String eventName);
 }
