@@ -13,6 +13,7 @@ import raptor.engine.display.render.IDrawable;
 import raptor.engine.event.EventBroker;
 import raptor.engine.event.IEventBroker;
 import raptor.engine.event.events.EntityCollisionEvent;
+import raptor.engine.event.events.TerrainCollisionEvent;
 import raptor.engine.game.entity.DrawDepthEntityComparator;
 import raptor.engine.game.entity.IEntity;
 import raptor.engine.nav.api.INavigator;
@@ -27,12 +28,14 @@ public abstract class Level implements IDrawable {
 	private final Map<Long, IEntity> entities;
 	private final IIdProvider idProvider;
 	private final Map<Integer, INavigator> navigators;
+	private final Map<Integer, Terrain> terrains;
 
 	public Level() {
 		this.eventBroker = new EventBroker();
 		this.entities = new HashMap<Long, IEntity>();
 		this.idProvider = new IdProvider();
 		this.navigators = new HashMap<Integer, INavigator>();
+		this.terrains = new HashMap<Integer, Terrain>();
 	}
 
 	public void init() {
@@ -63,6 +66,18 @@ public abstract class Level implements IDrawable {
 
 		for (int i = 0; i < rawEntities.size(); i++) {
 			final IEntity source = rawEntities.get(i);
+
+			for (final Terrain terrain : terrains.values()) {
+				if (source.getCollision() instanceof CollisionTriangle) {
+					final CollisionTriangle sourceTriangle = (CollisionTriangle) source.getCollision();
+					if (terrain.collidesWithTriangle(sourceTriangle))
+						eventBroker.trigger(source.getId(), new TerrainCollisionEvent(terrain));
+				} else if (source.getCollision() instanceof CollisionCircle) {
+					final CollisionCircle sourceCircle = (CollisionCircle) source.getCollision();
+					if (terrain.collidesWithCircle(sourceCircle))
+						eventBroker.trigger(source.getId(), new TerrainCollisionEvent(terrain));
+				}
+			}
 
 			if (i+1 >= rawEntities.size())
 				break;
@@ -116,6 +131,18 @@ public abstract class Level implements IDrawable {
 			if (n.containsPoint(x, y))
 				return n;
 		return null;
+	}
+
+	public void addTerrain(final Terrain terrain) {
+		terrains.put(terrain.getId(), terrain);
+	}
+
+	public void removeTerrain(final int id) {
+		terrains.remove(id);
+	}
+
+	public Terrain getTerrain(final int id) {
+		return terrains.get(id);
 	}
 
 	public void addEntity(final IEntity entity) throws IllegalArgumentException {

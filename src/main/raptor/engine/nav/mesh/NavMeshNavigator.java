@@ -2,7 +2,6 @@ package raptor.engine.nav.mesh;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import raptor.engine.nav.api.INavigator;
@@ -21,24 +20,18 @@ import raptor.engine.util.geometry.LineSegment;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Polygon;
 import raptor.engine.util.geometry.Triangle;
-import raptor.engine.util.geometry.api.ILineSegment;
 
 public class NavMeshNavigator implements INavigator {
 	private final IPointResolver<NavMeshNode> navMap;
 	private final IGraphSearch graphSearch;
 	private final ITransformer<List<IGraphNode>, List<NavMeshNode>> typeTransformer;
 	private final IPathMaterializer<NavMeshNode> pathMaterializer;
-	private final Collection<ILineSegment> areaBounds;
 
-	public NavMeshNavigator(final IPointResolver<NavMeshNode> navMap, final IGraphSearch graphSearch, final ITransformer<List<IGraphNode>, List<NavMeshNode>> typeTransformer, final IPathMaterializer<NavMeshNode> pathMaterializer, final Collection<Polygon> bounds) {
+	public NavMeshNavigator(final IPointResolver<NavMeshNode> navMap, final IGraphSearch graphSearch, final ITransformer<List<IGraphNode>, List<NavMeshNode>> typeTransformer, final IPathMaterializer<NavMeshNode> pathMaterializer) {
 		this.navMap = navMap;
 		this.graphSearch = graphSearch;
 		this.typeTransformer = typeTransformer;
 		this.pathMaterializer = pathMaterializer;
-
-		this.areaBounds = new ArrayList<>();;
-		for (final Polygon poly : bounds)
-			areaBounds.addAll(poly.getLines());
 	}
 
 	@Override
@@ -70,11 +63,6 @@ public class NavMeshNavigator implements INavigator {
 		return navMap.resolvePoint(new Point(x, y)) != null;
 	}
 
-	@Override
-	public Collection<ILineSegment> getMapBounds() {
-		return areaBounds;
-	}
-
 	public static NavMeshNavigator buildNavigator(final Polygon parent, final List<Polygon> holes) {
 		return buildNavigator(parent, holes, GeometryFunctions.fillPolygonWithTriangles(parent, holes));
 	}
@@ -103,7 +91,7 @@ public class NavMeshNavigator implements INavigator {
 		areaBounds.add(parent);
 		final IPathMaterializer<NavMeshNode> pathMaterializer = new NavMeshPathMaterializer(areaBounds);
 
-		return new NavMeshNavigator(navMap, graphSearch, typeTransformer, pathMaterializer, areaBounds);
+		return new NavMeshNavigator(navMap, graphSearch, typeTransformer, pathMaterializer);
 	}
 
 	private static Point getXYMaximums(final Polygon parent) {
