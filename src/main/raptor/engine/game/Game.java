@@ -1,7 +1,7 @@
 package raptor.engine.game;
 
 import raptor.engine.display.render.IRenderer;
-import raptor.engine.game.ui.input.IMainLoopInputHandler;
+import raptor.engine.ui.input.IMainLoopInputHandler;
 
 public class Game {
 	private static long timeSinceLastFrame;

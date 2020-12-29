@@ -1,4 +1,4 @@
-package raptor.engine.game.ui.input;
+package raptor.engine.ui.input;
 
 public enum KeyboardInput {
 	Q_KEY,

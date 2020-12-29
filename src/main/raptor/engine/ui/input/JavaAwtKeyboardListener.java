@@ -1,4 +1,4 @@
-package raptor.engine.game.ui.input;
+package raptor.engine.ui.input;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

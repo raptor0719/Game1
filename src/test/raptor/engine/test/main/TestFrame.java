@@ -5,8 +5,8 @@ import java.awt.Graphics2D;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import raptor.engine.game.ui.input.BinaryInputMap;
-import raptor.engine.game.ui.input.KeyboardInput;
+import raptor.engine.ui.input.BinaryInputMap;
+import raptor.engine.ui.input.KeyboardInput;
 
 public class TestFrame {
 	private final JFrame frame;

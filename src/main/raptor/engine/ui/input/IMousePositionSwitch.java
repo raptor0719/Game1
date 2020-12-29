@@ -1,4 +1,4 @@
-package raptor.engine.game.ui.input;
+package raptor.engine.ui.input;
 
 public interface IMousePositionSwitch {
 	void setMouseX(int x);

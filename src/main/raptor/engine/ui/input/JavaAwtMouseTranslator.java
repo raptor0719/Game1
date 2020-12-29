@@ -1,4 +1,4 @@
-package raptor.engine.game.ui.input;
+package raptor.engine.ui.input;
 
 import java.util.HashMap;
 import java.util.Map;

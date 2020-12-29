@@ -3,9 +3,9 @@ package raptor.engine.test.main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import raptor.engine.game.ui.input.BinaryInputMap;
-import raptor.engine.game.ui.input.JavaAwtKeyTranslator;
-import raptor.engine.game.ui.input.KeyboardInput;
+import raptor.engine.ui.input.BinaryInputMap;
+import raptor.engine.ui.input.JavaAwtKeyTranslator;
+import raptor.engine.ui.input.KeyboardInput;
 
 public class TestKeyboardListener implements KeyListener {
 	private final BinaryInputMap<KeyboardInput> inputs;
