@@ -12,15 +12,30 @@ public class EventBroker implements IEventBroker {
 	private final Map<Integer, IEventDestination> entityRegistration;
 	private final Map<String, List<Integer>> eventRegistration;
 
+	private final Queue<Integer> triggerEntityIds;
+	private final Queue<IEvent> triggerEvents;
+
 	public EventBroker() {
 		this.eventQueue = new LinkedList<IEvent>();
 		this.entityRegistration = new HashMap<Integer, IEventDestination>();
 		this.eventRegistration = new HashMap<String, List<Integer>>();
+
+		this.triggerEntityIds = new LinkedList<Integer>();
+		this.triggerEvents = new LinkedList<IEvent>();
 	}
 
 	@Override
 	public void emit(final IEvent event) {
 		eventQueue.offer(event);
+	}
+
+	@Override
+	public void trigger(final int entityId, final IEvent event) {
+		if (!entityRegistration.containsKey(entityId))
+			return;
+
+		triggerEntityIds.offer(entityId);
+		triggerEvents.offer(event);
 	}
 
 	@Override
@@ -32,6 +47,14 @@ public class EventBroker implements IEventBroker {
 				continue;
 			for (final Integer id : registrees)
 				entityRegistration.get(id).send(event);
+		}
+
+		while(!triggerEntityIds.isEmpty()) {
+			final int triggerEntityId = triggerEntityIds.poll();
+			final IEvent triggerEvent = triggerEvents.poll();
+			if (!entityRegistration.containsKey(triggerEntityId))
+				continue;
+			entityRegistration.get(triggerEntityId).send(triggerEvent);
 		}
 	}
 

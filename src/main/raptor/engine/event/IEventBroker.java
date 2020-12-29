@@ -2,6 +2,7 @@ package raptor.engine.event;
 
 public interface IEventBroker {
 	void emit(IEvent event);
+	void trigger(int entityId, IEvent event);
 	void distribute();
 	IEventSource register(int entityId);
 	void register(int entityId, String eventName);
