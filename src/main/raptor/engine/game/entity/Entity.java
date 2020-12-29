@@ -10,9 +10,6 @@ public abstract class Entity implements IEntity {
 	private final IEventSource eventSource;
 	private final ICollisionShape collision;
 
-	private final ICircle physicsCollision;
-	private final int weight;
-
 	private final Point position;
 
 	public Entity(final long id, final IEventSource eventSource, final ICollisionShape collision) {
@@ -23,9 +20,6 @@ public abstract class Entity implements IEntity {
 		this.id = id;
 		this.eventSource = eventSource;
 		this.collision = collision;
-
-		this.physicsCollision = physicsCollision;
-		this.weight = weight;
 
 		this.position = new Point(0, 0);
 	}
@@ -58,21 +52,6 @@ public abstract class Entity implements IEntity {
 	@Override
 	public ICollisionShape getCollision() {
 		return collision;
-	}
-
-	@Override
-	public boolean isPhysicsEnabled() {
-		return physicsCollision != null;
-	}
-
-	@Override
-	public ICircle  getPhysicsCollision() {
-		return physicsCollision;
-	}
-
-	@Override
-	public int getWeight() {
-		return weight;
 	}
 
 	protected IEventSource getEventSource() {

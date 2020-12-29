@@ -12,6 +12,7 @@ import raptor.engine.collision.geometry.CollisionTriangle;
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.event.EventBroker;
 import raptor.engine.event.IEventBroker;
+import raptor.engine.event.events.EntityCollisionEvent;
 import raptor.engine.game.entity.DrawDepthEntityComparator;
 import raptor.engine.game.entity.IEntity;
 import raptor.engine.nav.api.INavigator;
@@ -24,14 +25,12 @@ public abstract class Level implements IDrawable {
 
 	private final IEventBroker eventBroker;
 	private final Map<Long, IEntity> entities;
-	private final Map<Long, IEntity> physicsEnabledEntities;
 	private final IIdProvider idProvider;
 	private final Map<Integer, INavigator> navigators;
 
 	public Level() {
 		this.eventBroker = new EventBroker();
 		this.entities = new HashMap<Long, IEntity>();
-		this.physicsEnabledEntities = new HashMap<Long, IEntity>();
 		this.idProvider = new IdProvider();
 		this.navigators = new HashMap<Integer, INavigator>();
 	}
@@ -41,13 +40,12 @@ public abstract class Level implements IDrawable {
 	}
 
 	public void advanceFrame() {
+		checkCollisions();
+
 		eventBroker.distribute();
 
 		for (final IEntity e : entities.values())
 			e.update();
-
-		checkCollisions();
-		resolvePhysicsCollisions();
 	}
 
 	/* FIXME
@@ -75,40 +73,18 @@ public abstract class Level implements IDrawable {
 				if (target.getCollision() instanceof CollisionTriangle) {
 					final CollisionTriangle triangle = (CollisionTriangle) target.getCollision();
 					if (source.getCollision().collidesWithTriangle(triangle)) {
-						source.onCollision(target);
-						target.onCollision(source);
+						eventBroker.trigger(source.getId(), new EntityCollisionEvent(target));
+						eventBroker.trigger(target.getId(), new EntityCollisionEvent(source));
 					}
 				} else if (target.getCollision() instanceof CollisionCircle) {
 					final CollisionCircle circle = (CollisionCircle) target.getCollision();
 					if (source.getCollision().collidesWithCircle(circle)) {
-						source.onCollision(target);
-						target.onCollision(source);
+						eventBroker.trigger(source.getId(), new EntityCollisionEvent(target));
+						eventBroker.trigger(target.getId(), new EntityCollisionEvent(source));
 					}
 				}
 			}
 		}
-	}
-
-	private void resolvePhysicsCollisions() {
-		// TODO: Implement this
-		/*
-		* 1. Iterate through physics enabled entities
-		* 2. Go through area bounds and check for collisions
-		* 3. If colliding then:
-		* 	a) Get normal N from center of entity to segment
-		* 	b) Take radius of collision as R
-		* 	c) Move entity R - magnitude(N) away from the segment in the opposite direction of the normal
-		* 4. Go through phyics enabled entities
-		* 5. Compare each to eachother and check for collisions
-		* 6. If they collide then:
-		* 	a) Get the distance from the center of each entity as distTo
-		* 	b) Add entity radius together as minValidDist
-		* 	c) Compare each entity's weight to get weight ratios as r1 and r2 for each entity respectively
-		* 	d) Calculate total amount to move to reach minValidDist as toMove using minValidDist - (radius of 1 + radius of 2)
-		* 	e) Calculate magnitude of resultant move vectors using toMove scaled by weight ratios
-		* 	f) Calculate move vectors which are unit vectors pointing away from the other entity scaled by the calculated magnitudes
-		* 	b) Apply move vectors
-		*/
 	}
 
 	public Iterator<IDrawable> getDrawables() {
@@ -147,14 +123,10 @@ public abstract class Level implements IDrawable {
 			throw new IllegalArgumentException("Cannot add an entity if another has the same id. id=" + entity.getId());
 
 		entities.put(entity.getId(), entity);
-
-		if (entity.isPhysicsEnabled())
-			physicsEnabledEntities.put(entity.getId(), entity);
 	}
 
 	public void removeEntity(final long id) {
 		entities.remove(id);
-		physicsEnabledEntities.remove(id);
 	}
 
 	public IEntity getEntity(final long id) {
