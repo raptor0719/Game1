@@ -26,14 +26,14 @@ public abstract class Level implements IDrawable {
 	private final Map<Long, IEntity> entities;
 	private final Map<Long, IEntity> physicsEnabledEntities;
 	private final IIdProvider idProvider;
-	private INavigator navigator;
+	private final Map<Integer, INavigator> navigators;
 
 	public Level() {
 		this.eventBroker = new EventBroker();
 		this.entities = new HashMap<Long, IEntity>();
 		this.physicsEnabledEntities = new HashMap<Long, IEntity>();
 		this.idProvider = new IdProvider();
-		this.navigator = null;
+		this.navigators = new HashMap<Integer, INavigator>();
 	}
 
 	public void init() {
@@ -123,12 +123,23 @@ public abstract class Level implements IDrawable {
 		return idProvider;
 	}
 
-	public void setNavigator(final INavigator navigator) {
-		this.navigator = navigator;
+	public void addNavigator(final int id, final INavigator newNavigator) {
+		navigators.put(id, newNavigator);
 	}
 
-	public INavigator getNavigator() {
-		return navigator;
+	public void removeNavigator(final int id) {
+		navigators.remove(id);
+	}
+
+	public INavigator getNavigator(final int id) {
+		return navigators.get(id);
+	}
+
+	public INavigator getNavigator(final int x, final int y) {
+		for (final INavigator n : navigators.values())
+			if (n.containsPoint(x, y))
+				return n;
+		return null;
 	}
 
 	public void addEntity(final IEntity entity) throws IllegalArgumentException {
