@@ -144,7 +144,6 @@ public class BinaryTree<T> {
 		if (current == null || current.leftChild == null)
 			return false;
 
-		System.out.println("Moving Left");
 		current = current.leftChild;
 		return true;
 	}
@@ -158,7 +157,6 @@ public class BinaryTree<T> {
 		if (current == null || current.rightChild == null)
 			return false;
 
-		System.out.println("Moving Right");
 		current = current.rightChild;
 		return true;
 	}
