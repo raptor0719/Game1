@@ -8,19 +8,22 @@ import java.util.List;
 
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.display.render.IGraphics;
+import raptor.engine.util.IdProvider;
 import raptor.engine.util.ListSortingIterator;
 
 public class UserInterface implements IDrawable {
-	private static final Comparator<UIElement> ELEMENT_COMPARATOR = new DepthSortComparator();
+	public static final IdProvider UI_ID_PROVIDER = new IdProvider();
+
+	protected static final Comparator<UIElement> ELEMENT_COMPARATOR = new DepthSortComparator();
 
 	private final int width;
 	private final int height;
 
 	private final List<UIElement> elements;
 
-	public UserInterface(final int width, final int height) {
-		this.width = width;
-		this.height = height;
+	public UserInterface(final int viewportWidth, final int viewportHeight) {
+		this.width = viewportWidth;
+		this.height = viewportHeight;
 		this.elements = new ArrayList<>();
 	}
 
@@ -40,13 +43,10 @@ public class UserInterface implements IDrawable {
 		elements.add(newElement);
 	}
 
-	public void removeElement(final UIElement element) {
-		elements.remove(element);
-	}
-
-	public void removeElement(final int index) {
+	public UIElement removeElement(final int index) {
 		if (index < elements.size() && index > -1)
-			elements.remove(index);
+			return elements.remove(index);
+		return null;
 	}
 
 	@Override
@@ -56,9 +56,11 @@ public class UserInterface implements IDrawable {
 		if (!sorted.hasNext())
 			return;
 
-		UIElement current = sorted.next();
-		while (sorted.hasNext())
+		UIElement current = null;
+		while (sorted.hasNext()) {
+			current = sorted.next();
 			current.draw(graphics);
+		}
 	}
 
 	private static class DepthSortComparator implements Comparator<UIElement> {
