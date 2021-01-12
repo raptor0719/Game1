@@ -11,6 +11,7 @@ import raptor.engine.util.ListSortingIterator;
 public abstract class UIElement implements IDrawable {
 	private final long id;
 	private final List<UIElement> children;
+	private UIElement parent;
 
 	private int x;
 	private int y;
@@ -18,10 +19,12 @@ public abstract class UIElement implements IDrawable {
 	private int width;
 	private int height;
 	private int depth;
+	private boolean useAbsolutePositioning;
 
 	public UIElement(final int x, final int y, final UIAnchorPoint anchor, final int width, final int height, final int depth) {
 		this.id = UserInterface.UI_ID_PROVIDER.get();
 		this.children = new ArrayList<>();
+		this.parent = null;
 
 		this.x = x;
 		this.y = y;
@@ -29,6 +32,7 @@ public abstract class UIElement implements IDrawable {
 		this.width = width;
 		this.height = height;
 		this.depth = depth;
+		this.useAbsolutePositioning = false;
 	}
 
 	public long getId() {
@@ -37,13 +41,31 @@ public abstract class UIElement implements IDrawable {
 
 	public void addChild(final UIElement newChild) {
 		children.add(newChild);
+		newChild.setParent(this);
 	}
 
 	public UIElement removeChild(final int id) {
-		for (int i = 0; i < children.size(); i++)
-			if (children.get(i).getId() == id)
-				return children.remove(i);
+		for (int i = 0; i < children.size(); i++) {
+			if (children.get(i).getId() == id) {
+				final UIElement removedChild = children.remove(i);
+				removedChild.setParent(null);
+				return removedChild;
+			}
+		}
 		return null;
+	}
+
+	public UIElement getParent() {
+		return parent;
+	}
+
+	protected void setParent(final UIElement newParent) {
+		this.parent = newParent;
+	}
+
+	public int getAbsoluteX() {
+		final int xToUse = (useAbsolutePositioning) ? x : parent.getAbsoluteX() + x;
+		return anchor.translateX(xToUse, width);
 	}
 
 	public int getX() {
@@ -52,6 +74,11 @@ public abstract class UIElement implements IDrawable {
 
 	public void setX(final int newX) {
 		this.x = newX;
+	}
+
+	public int getAbsoluteY() {
+		final int yToUse = (useAbsolutePositioning) ? y : parent.getAbsoluteY() + y;
+		return anchor.translateY(yToUse, height);
 	}
 
 	public int getY() {
@@ -74,7 +101,7 @@ public abstract class UIElement implements IDrawable {
 		return width;
 	}
 
-	public void setWdith(final int newWidth) {
+	public void setWidth(final int newWidth) {
 		this.width = newWidth;
 	}
 
@@ -94,6 +121,14 @@ public abstract class UIElement implements IDrawable {
 		this.depth = newDepth;
 	}
 
+	public boolean isUseAbsolutePositioning() {
+		return useAbsolutePositioning;
+	}
+
+	public void useAbsolutePositioning(final boolean set) {
+		this.useAbsolutePositioning = set;
+	}
+
 	@Override
 	public void draw(final IGraphics graphics) {
 		drawThis(graphics);
@@ -111,4 +146,14 @@ public abstract class UIElement implements IDrawable {
 	}
 
 	protected abstract void drawThis(IGraphics graphics);
+
+	@Override
+	public boolean equals(final Object o) {
+		if (!(o instanceof UIElement))
+			return false;
+
+		final UIElement casted = (UIElement)o;
+
+		return casted.getId() == this.getId();
+	}
 }
