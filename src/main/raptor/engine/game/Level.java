@@ -17,6 +17,7 @@ import raptor.engine.event.events.TerrainCollisionEvent;
 import raptor.engine.game.entity.DrawDepthEntityComparator;
 import raptor.engine.game.entity.IEntity;
 import raptor.engine.nav.api.INavigator;
+import raptor.engine.ui.UserInterface;
 import raptor.engine.util.IIdProvider;
 import raptor.engine.util.IdProvider;
 import raptor.engine.util.ListSortingIterator;
@@ -29,6 +30,8 @@ public abstract class Level implements IDrawable {
 	private final IIdProvider idProvider;
 	private final Map<Integer, INavigator> navigators;
 	private final Map<Integer, Terrain> terrains;
+
+	private UserInterface userInterface;
 
 	public Level() {
 		this.eventBroker = new EventBroker();
@@ -103,7 +106,7 @@ public abstract class Level implements IDrawable {
 	}
 
 	public Iterator<IDrawable> getDrawables() {
-		return new InsertingDrawableIteratorWrapper(this, new ListSortingIterator<>(entities.values(), DRAW_DEPTH_COMPARE));
+		return new InsertingDrawableIteratorWrapper(this, new ListSortingIterator<>(entities.values(), DRAW_DEPTH_COMPARE), userInterface);
 	}
 
 	public IEventBroker getEventBroker() {
@@ -164,28 +167,53 @@ public abstract class Level implements IDrawable {
 		return new ArrayList<IEntity>(entities.values());
 	}
 
-	private static class InsertingDrawableIteratorWrapper implements Iterator<IDrawable> {
-		private final IDrawable inserted;
-		private final Iterator<IEntity> wrapped;
-		private boolean insertedHasBeenServed;
+	public UserInterface getUserInterface() {
+		return userInterface;
+	}
 
-		public InsertingDrawableIteratorWrapper(final IDrawable inserted, final Iterator<IEntity> wrapped) {
-			this.inserted = inserted;
+	public void setUserInterface(final UserInterface newUserInterface) {
+		this.userInterface = newUserInterface;
+	}
+
+	private static class InsertingDrawableIteratorWrapper implements Iterator<IDrawable> {
+		private final IDrawable insertedBefore;
+		private final IDrawable insertedAfter;
+		private final Iterator<IEntity> wrapped;
+		private boolean insertedBeforeHasBeenServed;
+		private boolean insertedAfterHasBeenServed;
+
+		public InsertingDrawableIteratorWrapper(final IDrawable insertedBefore, final Iterator<IEntity> wrapped, final IDrawable insertedAfter) {
+			this.insertedBefore = insertedBefore;
+			this.insertedAfter = insertedAfter;
 			this.wrapped = wrapped;
-			insertedHasBeenServed = false;
+			insertedBeforeHasBeenServed = false;
+			insertedAfterHasBeenServed = false;
 		}
 
 		@Override
 		public boolean hasNext() {
-			return !insertedHasBeenServed || wrapped.hasNext();
+			return !insertedBeforeHasBeenServed || wrapped.hasNext() || !insertedAfterHasBeenServed;
 		}
 
 		@Override
 		public IDrawable next() {
-			if (insertedHasBeenServed)
-				return wrapped.next();
-			insertedHasBeenServed = true;
-			return inserted;
+			if (hasBefore()) {
+				insertedBeforeHasBeenServed = true;
+				return insertedBefore;
+			} else if (hasAfter() && !wrapped.hasNext()) {
+				insertedAfterHasBeenServed = true;
+				return insertedAfter;
+			}
+
+			return wrapped.next();
+		}
+
+		private boolean hasBefore() {
+			return insertedBefore != null && !insertedBeforeHasBeenServed;
+		}
+
+		private boolean hasAfter() {
+			return insertedAfter != null && !insertedAfterHasBeenServed;
 		}
 	}
 }
