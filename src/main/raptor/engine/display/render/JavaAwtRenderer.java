@@ -43,6 +43,16 @@ public class JavaAwtRenderer implements IRenderer {
 		awtGraphics.drawImage(buffer, 0, 0, null);
 	}
 
+	@Override
+	public int getRenderingSpaceWidth() {
+		return viewport.getWidth();
+	}
+
+	@Override
+	public int getRenderingSpaceHeight() {
+		return viewport.getHeight();
+	}
+
 	private void clear() {
 		toBuffer.setColor(Color.WHITE);
 		toBuffer.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
