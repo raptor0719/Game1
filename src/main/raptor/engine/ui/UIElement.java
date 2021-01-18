@@ -68,7 +68,7 @@ public abstract class UIElement implements IDrawable {
 		return anchor.translateX(xToUse, width);
 	}
 
-	public int getX() {
+	public int getRelativeX() {
 		return x;
 	}
 
@@ -81,7 +81,7 @@ public abstract class UIElement implements IDrawable {
 		return anchor.translateY(yToUse, height);
 	}
 
-	public int getY() {
+	public int getRelativeY() {
 		return y;
 	}
 
