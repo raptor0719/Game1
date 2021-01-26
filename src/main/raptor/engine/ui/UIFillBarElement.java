@@ -24,7 +24,7 @@ public class UIFillBarElement extends UIElement {
 	}
 
 	@Override
-	protected void drawThis(final IGraphics graphics) {
+	public void draw(final IGraphics graphics) {
 		// TODO implement this
 	}
 

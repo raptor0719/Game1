@@ -9,7 +9,6 @@ import java.util.List;
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.display.render.IGraphics;
 import raptor.engine.util.IdProvider;
-import raptor.engine.util.ListSortingIterator;
 
 public class UserInterface implements IDrawable {
 	public static final IdProvider UI_ID_PROVIDER = new IdProvider();
@@ -41,6 +40,7 @@ public class UserInterface implements IDrawable {
 
 	public void addElement(final UIElement newElement) {
 		elements.add(newElement);
+		elements.sort(ELEMENT_COMPARATOR);
 	}
 
 	public UIElement removeElement(final int index) {
@@ -51,7 +51,7 @@ public class UserInterface implements IDrawable {
 
 	@Override
 	public void draw(final IGraphics graphics) {
-		final Iterator<UIElement> sorted = new ListSortingIterator<>(elements, ELEMENT_COMPARATOR);
+		final Iterator<UIElement> sorted = elements.iterator();
 
 		if (!sorted.hasNext())
 			return;

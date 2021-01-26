@@ -1,16 +1,9 @@
 package raptor.engine.ui;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import raptor.engine.display.render.IDrawable;
-import raptor.engine.display.render.IGraphics;
-import raptor.engine.util.ListSortingIterator;
 
 public abstract class UIElement implements IDrawable {
 	private final long id;
-	private final List<UIElement> children;
 	private UIElement parent;
 
 	private int x;
@@ -19,11 +12,9 @@ public abstract class UIElement implements IDrawable {
 	private int width;
 	private int height;
 	private int depth;
-	private boolean useAbsolutePositioning;
 
 	public UIElement(final int x, final int y, final UIAnchorPoint anchor, final int width, final int height, final int depth) {
 		this.id = UserInterface.UI_ID_PROVIDER.get();
-		this.children = new ArrayList<>();
 		this.parent = null;
 
 		this.x = x;
@@ -32,27 +23,10 @@ public abstract class UIElement implements IDrawable {
 		this.width = width;
 		this.height = height;
 		this.depth = depth;
-		this.useAbsolutePositioning = false;
 	}
 
 	public long getId() {
 		return id;
-	}
-
-	public void addChild(final UIElement newChild) {
-		children.add(newChild);
-		newChild.setParent(this);
-	}
-
-	public UIElement removeChild(final int id) {
-		for (int i = 0; i < children.size(); i++) {
-			if (children.get(i).getId() == id) {
-				final UIElement removedChild = children.remove(i);
-				removedChild.setParent(null);
-				return removedChild;
-			}
-		}
-		return null;
 	}
 
 	public UIElement getParent() {
@@ -64,7 +38,7 @@ public abstract class UIElement implements IDrawable {
 	}
 
 	public int getAbsoluteX() {
-		final int xToUse = (useAbsolutePositioning) ? x : parent.getAbsoluteX() + x;
+		final int xToUse = (parent == null) ? x : parent.getAbsoluteX() + x;
 		return anchor.translateX(xToUse, width);
 	}
 
@@ -77,7 +51,7 @@ public abstract class UIElement implements IDrawable {
 	}
 
 	public int getAbsoluteY() {
-		final int yToUse = (useAbsolutePositioning) ? y : parent.getAbsoluteY() + y;
+		final int yToUse = (parent == null) ? y : parent.getAbsoluteY() + y;
 		return anchor.translateY(yToUse, height);
 	}
 
@@ -120,32 +94,6 @@ public abstract class UIElement implements IDrawable {
 	public void setDepth(final int newDepth) {
 		this.depth = newDepth;
 	}
-
-	public boolean isUseAbsolutePositioning() {
-		return useAbsolutePositioning;
-	}
-
-	public void useAbsolutePositioning(final boolean set) {
-		this.useAbsolutePositioning = set;
-	}
-
-	@Override
-	public void draw(final IGraphics graphics) {
-		drawThis(graphics);
-
-		final Iterator<UIElement> sorted = new ListSortingIterator<>(children, UserInterface.ELEMENT_COMPARATOR);
-
-		if (!sorted.hasNext())
-			return;
-
-		UIElement current = null;
-		while (sorted.hasNext()) {
-			current = sorted.next();
-			current.draw(graphics);
-		}
-	}
-
-	protected abstract void drawThis(IGraphics graphics);
 
 	@Override
 	public boolean equals(final Object o) {

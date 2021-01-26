@@ -12,7 +12,7 @@ public class UIImage extends UIElement {
 	}
 
 	@Override
-	protected void drawThis(final IGraphics graphics) {
+	public void draw(final IGraphics graphics) {
 		if (image == null)
 			return;
 		graphics.drawImage(image, getAbsoluteX(), getAbsoluteY());
