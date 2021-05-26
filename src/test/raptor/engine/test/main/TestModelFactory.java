@@ -10,7 +10,6 @@ import javax.imageio.ImageIO;
 import raptor.engine.model.HardpointPosition;
 import raptor.engine.model.Model;
 import raptor.engine.model.WireModel;
-import raptor.engine.model.WireModelAnimationDescriptor;
 import raptor.engine.model.WireModelFrame;
 
 public class TestModelFactory {
@@ -49,13 +48,7 @@ public class TestModelFactory {
 
 		final int[][] directionMapping = new int[][] { {0, 1, 2, 3, 4} };
 
-		final int[] anim0_frameMappings = new int[] {0, 1, 2, 3, 4};
-		final int[] anim0_framePortions = new int[] {2, 1, 1, 1, 2};
-		final WireModelAnimationDescriptor anim0 = new WireModelAnimationDescriptor(0, anim0_frameMappings, anim0_framePortions);
-
-		final List<WireModelAnimationDescriptor> animations = Arrays.asList(new WireModelAnimationDescriptor[] {anim0});
-
-		final WireModel wireModel = new WireModel(frameList, directionMapping, animations, frame0);
+		final WireModel wireModel = new WireModel(frameList, directionMapping);
 
 		return new Model(wireModel);
 	}

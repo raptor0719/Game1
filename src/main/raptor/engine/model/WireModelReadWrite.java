@@ -26,18 +26,12 @@ public class WireModelReadWrite {
 
 		final List<WireModelFrame> frameList = readFrameList(trueFrameCount, hardpointCount, dis);
 
-		final WireModelFrame defaultFrame = readFrame(hardpointCount, dis);
-
 		final int logicalFrameCount = dis.readInt();
 		final int directionCount = dis.readInt();
 
 		final int[][] directionMappings = readDirectionMappings(directionCount, logicalFrameCount, dis);
 
-		final int animationCount = dis.readInt();
-
-		final List<WireModelAnimationDescriptor> animations = readAnimations(animationCount, dis);
-
-		return new WireModel(frameList, directionMappings, animations, defaultFrame);
+		return new WireModel(frameList, directionMappings);
 	}
 
 	private static List<WireModelFrame> readFrameList(final int trueFrameCount, final int hardpointCount, final DataInputStream dis) throws IOException {
@@ -74,49 +68,19 @@ public class WireModelReadWrite {
 		return directionMappings;
 	}
 
-	private static List<WireModelAnimationDescriptor> readAnimations(final int animationCount, final DataInputStream dis) throws IOException {
-		final List<WireModelAnimationDescriptor> animations = new ArrayList<>();
-
-		for (int i = 0; i < animationCount; i++)
-			animations.add(readAnimation(dis));
-
-		return animations;
-	}
-
-	private static WireModelAnimationDescriptor readAnimation(final DataInputStream dis) throws IOException {
-		final int id = dis.readInt();
-		final int frameCount = dis.readInt();
-
-		final int[] logicalFrameIndices = new int[frameCount];
-		for (int i = 0; i < frameCount; i++)
-			logicalFrameIndices[i] = dis.readInt();
-
-		final int[] portions = new int[frameCount];
-		for (int i = 0; i < frameCount; i++)
-			portions[i] = dis.readInt();
-
-		return new WireModelAnimationDescriptor(id, logicalFrameIndices, portions);
-	}
-
 	public static void write(final WireModel toWrite, final OutputStream stream) throws IOException {
 		final DataOutputStream dos = new DataOutputStream(stream);
 
 		dos.write(MAGIC_NUMBER);
 
-		dos.writeInt(toWrite.hardpointCount);
+		dos.writeInt(toWrite.getHardpointCount());
 
-		dos.writeInt(toWrite.frameList.size());
-		writeFramesList(toWrite.frameList, dos);
+		dos.writeInt(toWrite.getFrameList().size());
+		writeFramesList(toWrite.getFrameList(), dos);
 
-		writeFrame(toWrite.defaultFrame, dos);
-
-		dos.writeInt(toWrite.logicalFrameCount);
-		dos.writeInt(toWrite.directionCount);
-		writeDirectionMappings(toWrite.mappings, dos);
-
-		dos.writeInt(toWrite.animations.values().size());
-
-		writeAnimations(new ArrayList<>(toWrite.animations.values()), dos);
+		dos.writeInt(toWrite.getFrameCount());
+		dos.writeInt(toWrite.getDirectionCount());
+		writeDirectionMappings(toWrite.getMappings(), dos);
 	}
 
 	private static void writeFramesList(final List<WireModelFrame> frameList, final DataOutputStream dos) throws IOException {
@@ -144,22 +108,5 @@ public class WireModelReadWrite {
 		for (final int[] direction : directionMappings)
 			for (final int index : direction)
 				dos.writeInt(index);
-	}
-
-	private static void writeAnimations(final List<WireModelAnimationDescriptor> animations, final DataOutputStream dos) throws IOException {
-		for (final WireModelAnimationDescriptor animation : animations)
-			writeAnimation(animation, dos);
-	}
-
-	private static void writeAnimation(final WireModelAnimationDescriptor animation, final DataOutputStream dos) throws IOException {
-		dos.writeInt(animation.getId());
-
-		dos.writeInt(animation.getFrames().length);
-
-		for (final int frameIndex : animation.getFrames())
-			dos.writeInt(frameIndex);
-
-		for (final int portion : animation.getFrameProportions())
-			dos.writeInt(portion);
 	}
 }
