@@ -3,10 +3,10 @@ package raptor.engine.ui.input;
 import java.util.Collection;
 
 public interface IInputMap {
-	void mapInput(String physicalInput, String logicalInput);
-	void unmapInput(String physicalInput, String logicalInput);
-	boolean physicalIsMapped(String physicalInput);
+	void mapInput(PhysicalInput physicalInput, String logicalInput);
+	void unmapInput(PhysicalInput physicalInput, String logicalInput);
+	boolean physicalIsMapped(PhysicalInput physicalInput);
 	boolean logicalIsMapped(String logicalInput);
-	Collection<String> getMappedLogicalInputs(String physicalInput);
-	Collection<String> getMappedPhysicalInputs(String logicalInput);
+	Collection<String> getMappedLogicalInputs(PhysicalInput physicalInput);
+	Collection<PhysicalInput> getMappedPhysicalInputs(String logicalInput);
 }

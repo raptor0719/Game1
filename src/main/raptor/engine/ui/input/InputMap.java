@@ -1,47 +1,70 @@
 package raptor.engine.ui.input;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class InputMap implements IInputSwitch, IInputPoll, IMousePositionSwitch, IMousePositionPoll {
-	private final Map<String, Float> inputMap;
-	private int mouseX;
-	private int mouseY;
+public class InputMap implements IInputMap {
+	private final Map<PhysicalInput, List<String>> physicalToLogical;
+	private final Map<String, List<PhysicalInput>> logicalToPhysical;
 
-	public InputMap(final Collection<String> inputs) {
-		inputMap = new HashMap<String, Float>();
-		for (final String s : inputs)
-			inputMap.put(s, 0.0F);
+	public InputMap() {
+		physicalToLogical = new HashMap<>();
+		logicalToPhysical = new HashMap<>();
 	}
 
 	@Override
-	public float getInputValue(final String input) {
-		return inputMap.get(input);
+	public void mapInput(final PhysicalInput physicalInput, final String logicalInput) {
+		if (!physicalToLogical.containsKey(physicalInput))
+			physicalToLogical.put(physicalInput, new ArrayList<>());
+
+		if (!logicalToPhysical.containsKey(logicalInput))
+			logicalToPhysical.put(logicalInput, new ArrayList<>());
+
+		if (!physicalToLogical.get(physicalInput).contains(logicalInput))
+			physicalToLogical.get(physicalInput).add(logicalInput);
+
+		if (!logicalToPhysical.get(logicalInput).contains(physicalInput))
+			logicalToPhysical.get(logicalInput).add(physicalInput);
 	}
 
 	@Override
-	public void setInput(final String name, final float value) {
-		inputMap.put(name, value);
+	public void unmapInput(final PhysicalInput physicalInput, final String logicalInput) {
+		if (physicalToLogical.containsKey(physicalInput))
+			if (physicalToLogical.get(physicalInput).contains(logicalInput))
+				physicalToLogical.get(physicalInput).remove(logicalInput);
+
+		if (logicalToPhysical.containsKey(logicalInput))
+			if (logicalToPhysical.get(logicalInput).contains(physicalInput))
+				logicalToPhysical.get(logicalInput).remove(physicalInput);
 	}
 
 	@Override
-	public int getMousePositionX() {
-		return mouseX;
+	public boolean physicalIsMapped(final PhysicalInput physicalInput) {
+		return physicalToLogical.containsKey(physicalInput) && !physicalToLogical.get(physicalInput).isEmpty();
 	}
 
 	@Override
-	public int getMousePositionY() {
-		return mouseY;
+	public boolean logicalIsMapped(final String logicalInput) {
+		return logicalToPhysical.containsKey(logicalInput) && !logicalToPhysical.get(logicalInput).isEmpty();
 	}
 
 	@Override
-	public void setMouseX(final int x) {
-		mouseX = x;
+	public Collection<String> getMappedLogicalInputs(final PhysicalInput physicalInput) {
+		if (!physicalToLogical.containsKey(physicalInput))
+			return Collections.emptyList();
+
+		return physicalToLogical.get(physicalInput);
 	}
 
 	@Override
-	public void setMouseY(final int y) {
-		mouseY = y;
+	public Collection<PhysicalInput> getMappedPhysicalInputs(final String logicalInput) {
+		if (!logicalToPhysical.containsKey(logicalInput))
+			return Collections.emptyList();
+
+		return logicalToPhysical.get(logicalInput);
 	}
 }

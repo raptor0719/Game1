@@ -1,6 +1,6 @@
 package raptor.engine.ui.input;
 
-public enum KeyboardInput {
+public enum PhysicalInput {
 	Q_KEY,
 	W_KEY,
 	E_KEY,
@@ -14,5 +14,9 @@ public enum KeyboardInput {
 	UP_ARROW,
 	LEFT_ARROW,
 	DOWN_ARROW,
-	RIGHT_ARROW
+	RIGHT_ARROW,
+
+	LEFT_MOUSE,
+	RIGHT_MOUSE,
+	MIDDLE_MOUSE
 }
