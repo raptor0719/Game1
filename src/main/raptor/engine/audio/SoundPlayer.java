@@ -33,6 +33,13 @@ public class SoundPlayer {
 			return;
 
 		listener.stop();
+		soundIdProvider.free(id);
+	}
+
+	public void stopAll() {
+		for (final Map.Entry<Long, BlockingLineListener> e : idedSounds.entrySet())
+			e.getValue().stop();
+		soundIdProvider.freeAll();
 	}
 
 	public void playSound(final InputStream audio) {
@@ -53,6 +60,7 @@ public class SoundPlayer {
 	}
 
 	public long playSoundWithId(final InputStream audio) {
+		final long id = soundIdProvider.get();
 		final BlockingLineListener listener = new BlockingLineListener();
 		final Thread thread = new Thread() {
 			@Override
@@ -62,13 +70,14 @@ public class SoundPlayer {
 				} catch (Exception e) {
 					System.err.println("Encountered error when attempting to play sound...");
 					e.printStackTrace();
+				} finally {
+					soundIdProvider.free(id);
 				}
 			}
 		};
 
 		thread.start();
 
-		final long id = soundIdProvider.get();
 		idedSounds.put(id, listener);
 		return id;
 	}
@@ -91,6 +100,7 @@ public class SoundPlayer {
 	}
 
 	public long playSoundWithId(final AudioFormat format, final byte[] data) {
+		final long id = soundIdProvider.get();
 		final BlockingLineListener listener = new BlockingLineListener();
 		final Thread thread = new Thread() {
 			@Override
@@ -100,13 +110,14 @@ public class SoundPlayer {
 				} catch (Exception e) {
 					System.err.println("Encountered error when attempting to play sound...");
 					e.printStackTrace();
+				} finally {
+					soundIdProvider.free(id);
 				}
 			}
 		};
 
 		thread.start();
 
-		final long id = soundIdProvider.get();
 		idedSounds.put(id, listener);
 		return id;
 	}
