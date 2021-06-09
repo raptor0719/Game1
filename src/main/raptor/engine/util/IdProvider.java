@@ -23,7 +23,7 @@ public class IdProvider implements IIdProvider {
 
 	@Override
 	public long allocate(final long request) {
-		if (request < nextAvailable || !available.contains(request))
+		if (request < nextAvailable && !available.contains(request))
 			throw new IllegalArgumentException(String.format("Attempted allocation of used id: %s", request));
 
 		if (request == nextAvailable)
@@ -42,6 +42,8 @@ public class IdProvider implements IIdProvider {
 
 	@Override
 	public void free(final long id) {
+		if (available.contains(id))
+			return;
 		available.offer(id);
 	}
 
