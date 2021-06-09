@@ -23,8 +23,8 @@ public class WireModel {
 		this.mappings = directionMappings;
 	}
 
-	public WireModelFrame getFrame(final int index, final int direction) {
-		return frameList.get(mappings[direction][index]);
+	public WireModelFrame getFrame(final int index, final Direction direction) {
+		return frameList.get(mappings[direction.getValue()][index]);
 	}
 
 	public int getHardpointCount() {

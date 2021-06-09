@@ -5,19 +5,19 @@ public class Model {
 	private final int hardpointCount;
 
 	private int currentFrame;
-	private int direction;
+	private Direction direction;
 
 	public Model(final WireModel wireModel) {
 		this.wireModel = wireModel;
 		this.hardpointCount = wireModel.getHardpointCount();
-		this.direction = 0;
+		this.direction = Direction.NORTH;
 	}
 
 	public void setFrame(final int frameId) {
 		currentFrame = frameId;
 	}
 
-	public void setDirection(final int direction) {
+	public void setDirection(final Direction direction) {
 		this.direction = direction;
 	}
 
