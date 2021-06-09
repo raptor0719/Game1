@@ -27,9 +27,8 @@ public class WireModelReadWrite {
 		final List<WireModelFrame> frameList = readFrameList(trueFrameCount, hardpointCount, dis);
 
 		final int logicalFrameCount = dis.readInt();
-		final int directionCount = dis.readInt();
 
-		final int[][] directionMappings = readDirectionMappings(directionCount, logicalFrameCount, dis);
+		final int[][] directionMappings = readDirectionMappings(logicalFrameCount, dis);
 
 		return new WireModel(frameList, directionMappings);
 	}
@@ -58,7 +57,8 @@ public class WireModelReadWrite {
 		return new WireModelFrame(hardpoints);
 	}
 
-	private static int[][] readDirectionMappings(final int directionCount, final int logicalFrameCount, final DataInputStream dis) throws IOException {
+	private static int[][] readDirectionMappings(final int logicalFrameCount, final DataInputStream dis) throws IOException {
+		final int directionCount = Direction.values().length;
 		final int[][] directionMappings = new int[directionCount][logicalFrameCount];
 
 		for (int i = 0; i < directionCount; i++)
@@ -79,7 +79,6 @@ public class WireModelReadWrite {
 		writeFramesList(toWrite.getFrameList(), dos);
 
 		dos.writeInt(toWrite.getFrameCount());
-		dos.writeInt(toWrite.getDirectionCount());
 		writeDirectionMappings(toWrite.getMappings(), dos);
 	}
 

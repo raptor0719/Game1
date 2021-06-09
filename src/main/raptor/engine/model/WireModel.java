@@ -1,11 +1,15 @@
 package raptor.engine.model;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class WireModel {
 	private final List<WireModelFrame> frameList;
 	private final int[][] mappings;
+
+	private final DirectionalObjectManager<WireModelFrame> manager;
 
 	public WireModel(final List<WireModelFrame> frameList, int[][] directionMappings) {
 		if (frameList == null || directionMappings == null)
@@ -21,22 +25,19 @@ public class WireModel {
 
 		this.frameList = frameList;
 		this.mappings = directionMappings;
+		this.manager = buildFrameManager(frameList, directionMappings);
 	}
 
 	public WireModelFrame getFrame(final int index, final Direction direction) {
-		return frameList.get(mappings[direction.getValue()][index]);
+		return manager.get(index, direction);
 	}
 
 	public int getHardpointCount() {
-		return frameList.get(0).getHardpointPositions().length;
+		return manager.count();
 	}
 
 	protected List<WireModelFrame> getFrameList() {
 		return Collections.unmodifiableList(frameList);
-	}
-
-	protected int getDirectionCount() {
-		return mappings.length;
 	}
 
 	protected int getFrameCount() {
@@ -72,5 +73,23 @@ public class WireModel {
 			if (f.getHardpointPositions().length != hardpointCount)
 				return false;
 		return true;
+	}
+
+	private DirectionalObjectManager<WireModelFrame> buildFrameManager(final List<WireModelFrame> frameList, int[][] directionMappings) {
+		final Map<Direction, WireModelFrame[]> mappings = new HashMap<>();
+
+		final Direction[] directions = Direction.values();
+		final int count = directionMappings[0].length;
+		for (int i = 0; i < directions.length; i++) {
+			final Direction currentDirection = directions[i];
+			if (!mappings.containsKey(currentDirection))
+				mappings.put(currentDirection, new WireModelFrame[count]);
+
+			final WireModelFrame[] currentFrames = mappings.get(currentDirection);
+			for (int j = 0; j < count; j++)
+				currentFrames[j] = frameList.get(directionMappings[i][j]);
+		}
+
+		return new DirectionalObjectManager<>(mappings);
 	}
 }
