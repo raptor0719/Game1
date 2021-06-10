@@ -1,7 +1,5 @@
 package raptor.engine.model;
 
-import java.util.Map;
-
 public class Model {
 	private final WireModel wireModel;
 	private final int hardpointCount;
@@ -9,7 +7,7 @@ public class Model {
 	private int currentFrame;
 	private Direction direction;
 
-	public Model(final WireModel wireModel, Map<Direction, Sprite[]> sprites) {
+	public Model(final WireModel wireModel) {
 		this.wireModel = wireModel;
 		this.hardpointCount = wireModel.getHardpointCount();
 		this.direction = Direction.NORTH;

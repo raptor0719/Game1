@@ -50,7 +50,7 @@ public class TestModelFactory {
 
 		final WireModel wireModel = new WireModel(frameList, directionMapping);
 
-		return new Model(wireModel, null);
+		return new Model(wireModel);
 	}
 
 	public static Image getRectangle(final int width, final int height) {
