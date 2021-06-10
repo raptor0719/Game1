@@ -5,12 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import raptor.engine.display.render.IDrawable;
-import raptor.engine.display.render.IGraphics;
 import raptor.engine.util.IIdProvider;
 import raptor.engine.util.IdProvider;
 
-public class Model implements IDrawable {
+public class Model {
 	private final WireModel wireModel;
 	private final int hardpointCount;
 
@@ -69,12 +67,6 @@ public class Model implements IDrawable {
 	public void unattach(final long id) {
 		attachments.remove(id);
 		attachmentIdProvider.free(id);
-	}
-
-	@Override
-	public void draw(final IGraphics graphics) {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void recalculateDrawList() {
