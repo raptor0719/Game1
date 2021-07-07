@@ -70,6 +70,9 @@ public abstract class Level implements IDrawable {
 		for (int i = 0; i < rawEntities.size(); i++) {
 			final IEntity source = rawEntities.get(i);
 
+			if (!source.hasCollision())
+				continue;
+
 			for (final Terrain terrain : terrains.values()) {
 				if (source.getCollision() instanceof CollisionTriangle) {
 					final CollisionTriangle sourceTriangle = (CollisionTriangle) source.getCollision();

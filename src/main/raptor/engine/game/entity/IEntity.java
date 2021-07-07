@@ -10,5 +10,6 @@ public interface IEntity extends IDrawable {
 	int getY();
 	void setX(int newX);
 	void setY(int newY);
+	boolean hasCollision();
 	ICollisionShape getCollision();
 }
