@@ -6,21 +6,23 @@ import raptor.engine.util.geometry.Point;
 
 public abstract class Entity implements IEntity {
 	private final long id;
+	private final String name;
 	private final IEventSource eventSource;
 	private final ICollisionShape collision;
 
 	private final Point position;
 
-	public Entity(final long id, final IEventSource eventSource, final ICollisionShape collision) {
+	public Entity(final long id, final String name, final IEventSource eventSource, final ICollisionShape collision) {
 		this.id = id;
+		this.name = name;
 		this.eventSource = eventSource;
 		this.collision = collision;
 
 		this.position = new Point(0, 0);
 	}
 
-	public Entity(final long id, final IEventSource eventSource) {
-		this(id, eventSource, null);
+	public Entity(final long id, final String name, final IEventSource eventSource) {
+		this(id, name, eventSource, null);
 	}
 
 	@Override

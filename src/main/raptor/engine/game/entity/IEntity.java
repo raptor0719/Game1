@@ -5,6 +5,7 @@ import raptor.engine.display.render.IDrawable;
 
 public interface IEntity extends IDrawable {
 	long getId();
+	String getName();
 	void update();
 	int getX();
 	int getY();
