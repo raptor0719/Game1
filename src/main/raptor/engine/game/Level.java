@@ -27,7 +27,7 @@ public abstract class Level implements IDrawable {
 
 	private final IEventBroker eventBroker;
 	private final Map<Long, IEntity> entities;
-	private final IIdProvider idProvider;
+	private final IIdProvider entityIdProvider;
 	private final Map<Integer, INavigator> navigators;
 	private final Map<Integer, Terrain> terrains;
 
@@ -36,7 +36,7 @@ public abstract class Level implements IDrawable {
 	public Level() {
 		this.eventBroker = new EventBroker();
 		this.entities = new HashMap<Long, IEntity>();
-		this.idProvider = new IdProvider();
+		this.entityIdProvider = new IdProvider();
 		this.navigators = new HashMap<Integer, INavigator>();
 		this.terrains = new HashMap<Integer, Terrain>();
 	}
@@ -116,8 +116,8 @@ public abstract class Level implements IDrawable {
 		return eventBroker;
 	}
 
-	public IIdProvider getIdProvider() {
-		return idProvider;
+	public IIdProvider getEntityIdProvider() {
+		return entityIdProvider;
 	}
 
 	public void addNavigator(final int id, final INavigator newNavigator) {
