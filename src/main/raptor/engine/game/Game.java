@@ -38,7 +38,7 @@ public class Game {
 
 			if (timeSinceLastFrame >= 17) {
 				previousTime = currentTime;
-				currentLevel.advanceFrame();
+				currentLevel.tick();
 			}
 
 			renderer.draw(currentLevel.getDrawables());

@@ -45,7 +45,7 @@ public abstract class Level implements IDrawable {
 		// Let implementing classes override if wanted
 	}
 
-	public void advanceFrame() {
+	public void tick() {
 		checkCollisions();
 
 		eventBroker.distribute();
