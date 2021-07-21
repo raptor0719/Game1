@@ -10,8 +10,8 @@ public class Rectangle implements IRectangle {
 	private final IPoint[] points;
 	private final LineSegment[] lineSegments;
 
-	private final Point min;
-	private final Point max;
+	private Point min;
+	private Point max;
 
 	public Rectangle(final int x1, final int y1, final int x2, final int y2, final int x3, final int y3, final int x4, final int y4) {
 		points = new Point[4];
@@ -21,6 +21,21 @@ public class Rectangle implements IRectangle {
 		points[3] = new Point(x4, y4);
 
 		lineSegments = new LineSegment[4];
+		calculateInternals();
+	}
+
+	public Rectangle(final IPoint point1, final IPoint point2, final IPoint point3, final IPoint point4) {
+		points = new Point[4];
+		points[0] = point1;
+		points[1] = point2;
+		points[2] = point3;
+		points[3] = point4;
+
+		lineSegments = new LineSegment[4];
+		calculateInternals();
+	}
+
+	private void calculateInternals() {
 		lineSegments[0] = new LineSegment(points[0], points[1]);
 		lineSegments[1] = new LineSegment(points[1], points[2]);
 		lineSegments[2] = new LineSegment(points[2], points[3]);
