@@ -31,6 +31,11 @@ public abstract class Entity implements IEntity {
 	}
 
 	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
 	public int getX() {
 		return position.getX();
 	}
