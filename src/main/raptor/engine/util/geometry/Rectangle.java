@@ -7,7 +7,7 @@ import raptor.engine.util.geometry.api.IPoint;
 import raptor.engine.util.geometry.api.IRectangle;
 
 public class Rectangle implements IRectangle {
-	private final Point[] points;
+	private final IPoint[] points;
 	private final LineSegment[] lineSegments;
 
 	private final Point min;
@@ -30,7 +30,7 @@ public class Rectangle implements IRectangle {
 		int tempMinY = Integer.MAX_VALUE;
 		int tempMaxX = Integer.MIN_VALUE;
 		int tempMaxY = Integer.MIN_VALUE;
-		for (final Point p : points) {
+		for (final IPoint p : points) {
 			tempMinX = Math.min(tempMinX, p.getX());
 			tempMinY = Math.min(tempMinY, p.getY());
 			tempMaxX = Math.max(tempMaxX, p.getX());

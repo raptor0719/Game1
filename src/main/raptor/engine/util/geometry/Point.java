@@ -120,9 +120,7 @@ public class Point implements IPoint {
 		return (new Point(px, py)).distanceTo(new LineSegment(new Point(l1x, l1y), new Point(l2x, l2y)));
 	}
 
-	/* INTERNALS */
-
-	private boolean pointIsOnLineSegment(final Point c, final ILineSegment l) {
+	public static boolean pointIsOnLineSegment(final Point c, final ILineSegment l) {
 		final IPoint a = l.getStart();
 		final IPoint b = l.getEnd();
 
@@ -137,11 +135,11 @@ public class Point implements IPoint {
 		return (cross == 0 && dot > 0 && dot < lLengthSquared);
 	}
 
-	private int crossProduct(final IPoint a, final IPoint b, final IPoint c) {
+	public static int crossProduct(final IPoint a, final IPoint b, final IPoint c) {
 		return ((c.getY() - a.getY()) * (b.getX() - a.getX())) - ((c.getX() - a.getX()) * (b.getY() - a.getY()));
 	}
 
-	private int dotProduct(final IPoint a, final IPoint b, final IPoint c) {
+	public static int dotProduct(final IPoint a, final IPoint b, final IPoint c) {
 		return ((c.getX() - a.getX()) * (b.getX() - a.getX())) + ((c.getY() - a.getY()) * (b.getY() - a.getY()));
 	}
 }

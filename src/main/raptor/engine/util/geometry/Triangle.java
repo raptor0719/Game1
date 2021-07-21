@@ -3,12 +3,12 @@ package raptor.engine.util.geometry;
 import raptor.engine.util.geometry.api.IPoint;
 
 public class Triangle {
-	private final Point[] points;
+	private final IPoint[] points;
 	private final LineSegment[] lines;
 	private final double area;
 
-	public Triangle(final Point p0, final Point p1, final Point p2) {
-		points = new Point[3];
+	public Triangle(final IPoint p0, final IPoint p1, final IPoint p2) {
+		points = new IPoint[3];
 		points[0] = p0;
 		points[1] = p1;
 		points[2] = p2;
@@ -21,8 +21,8 @@ public class Triangle {
 		this.area = calculateArea(p0, p1, p2);
 	}
 
-	public Point[] getPoints() {
-		final Point[] tmp = new Point[3];
+	public IPoint[] getPoints() {
+		final IPoint[] tmp = new IPoint[3];
 		System.arraycopy(points, 0, tmp, 0, 3);
 		return tmp;
 	}
@@ -68,11 +68,11 @@ public class Triangle {
 
 		final Triangle t = (Triangle)o;
 
-		final Point[] thisPoints = this.getPoints();
-		final Point[] tPoints = t.getPoints();
+		final IPoint[] thisPoints = this.getPoints();
+		final IPoint[] tPoints = t.getPoints();
 
 		for (int i = 0; i < 3; i++) {
-			final Point thisPoint = thisPoints[i];
+			final IPoint thisPoint = thisPoints[i];
 			boolean hasPoint = false;
 			for (int j = 0; j < 3; j++) {
 				if (thisPoint.equals(tPoints[j])) {

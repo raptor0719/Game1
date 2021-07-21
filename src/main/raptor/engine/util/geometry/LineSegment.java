@@ -5,21 +5,27 @@ import raptor.engine.util.geometry.api.ILineSegment;
 import raptor.engine.util.geometry.api.IPoint;
 
 public class LineSegment implements ILineSegment {
-	private final Point a;
-	private final Point b;
+	private IPoint a;
+	private IPoint b;
 	private float length;
 	private float slope;
 
 	private Vector aToB;
 
+	public LineSegment(final int aX, final int aY, final int bX, final int bY) {
+		this.a = new Point(aX, aY);
+		this.b = new Point(bX, bY);
+		calculateInternalMeasurements();
+	}
+
 	public LineSegment(final IPoint a, final IPoint b) {
-		this.a = new Point(a.getX(), a.getY());
-		this.b = new Point(b.getX(), b.getY());
+		this.a = a;
+		this.b = b;
 		calculateInternalMeasurements();
 	}
 
 	public ValuePair<Point, Point> getPoints() {
-		return new ValuePair<Point, Point>(a, b);
+		return new ValuePair<Point, Point>(new Point(a.getX(), a.getY()), new Point(b.getX(), b.getY()));
 	}
 
 	@Override
@@ -28,8 +34,12 @@ public class LineSegment implements ILineSegment {
 	}
 
 	public void setStart(final int x, final int y) {
-		a.setX(x);
-		a.setY(y);
+		a = new Point(x, y);
+		calculateInternalMeasurements();
+	}
+
+	public void setStart(final IPoint start) {
+		a = start;
 		calculateInternalMeasurements();
 	}
 
@@ -39,21 +49,24 @@ public class LineSegment implements ILineSegment {
 	}
 
 	public void setEnd(final int x, final int y) {
-		b.setX(x);
-		b.setY(y);
+		b = new Point(x, y);
+		calculateInternalMeasurements();
+	}
+
+	public void setEnd(final IPoint end) {
+		b = end;
 		calculateInternalMeasurements();
 	}
 
 	public void setPoints(final int ax, final int ay, final int bx, final int by) {
-		a.setX(ax);
-		a.setY(ay);
-		b.setX(bx);
-		b.setY(by);
+		a = new Point(ax, ay);
+		b = new Point(bx, by);
 		calculateInternalMeasurements();
 	}
 
-	public void setPoints(final Point a, final Point b) {
-		setPoints(a.getX(), a.getY(), b.getX(), b.getY());
+	public void setPoints(final IPoint a, final IPoint b) {
+		this.a = a;
+		this.b = b;
 	}
 
 	@Override
@@ -92,8 +105,8 @@ public class LineSegment implements ILineSegment {
 		 * t = scalar of r
 		 * u = scalar of s
 		 */
-		final Vector p = Vector.toVector(a);
-		final Vector q = Vector.toVector(ls.a);
+		final Vector p = Vector.toVector(new Point(a.getX(), a.getY()));
+		final Vector q = Vector.toVector(new Point(ls.a.getX(), ls.a.getY()));
 		final Vector r = aToB;
 		final Vector s = ls.aToB;
 
@@ -241,7 +254,7 @@ public class LineSegment implements ILineSegment {
 		aToB = calculateAToB(a, b);
 	}
 
-	private float calculateLength(final Point a, final Point b) {
+	private float calculateLength(final IPoint a, final IPoint b) {
 		// length = sqrt((xb-xa)^2+(yb-ya)^2)
 
 		final int xDiff = b.getX() - a.getX();
@@ -255,7 +268,7 @@ public class LineSegment implements ILineSegment {
 		return distance;
 	}
 
-	private Vector calculateAToB(final Point a, final Point b) {
+	private Vector calculateAToB(final IPoint a, final IPoint b) {
 		return new Vector(b.getX() - a.getX(), b.getY() - a.getY());
 	}
 
@@ -275,7 +288,7 @@ public class LineSegment implements ILineSegment {
 		return null;
 	}
 
-	private float calculateSlope(final Point a, final Point b) {
+	private float calculateSlope(final IPoint a, final IPoint b) {
 		if (b.getX() - a.getX() == 0)
 			return 0;
 		return ((b.getY() - a.getY())/(b.getX() - a.getX()));

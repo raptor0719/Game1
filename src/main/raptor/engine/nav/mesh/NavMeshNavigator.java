@@ -20,6 +20,7 @@ import raptor.engine.util.geometry.LineSegment;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Polygon;
 import raptor.engine.util.geometry.Triangle;
+import raptor.engine.util.geometry.api.IPoint;
 
 public class NavMeshNavigator implements INavigator {
 	private final IPointResolver<NavMeshNode> navMap;
@@ -168,7 +169,7 @@ public class NavMeshNavigator implements INavigator {
 		final Triangle nodeTriangle = node.getData();
 
 		// If the cell contains a point of the triangle we know for sure it's in there
-		for (final Point p : nodeTriangle.getPoints())
+		for (final IPoint p : nodeTriangle.getPoints())
 			if (cellPoly.containsPoint(p.getX(), p.getY()))
 				return true;
 

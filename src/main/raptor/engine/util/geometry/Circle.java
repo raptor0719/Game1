@@ -4,11 +4,16 @@ import raptor.engine.util.geometry.api.ICircle;
 import raptor.engine.util.geometry.api.IPoint;
 
 public class Circle implements ICircle {
-	private final Point origin;
+	private IPoint origin;
 	private int radius;
 
 	public Circle(final int originX, final int originY, final int radius) {
 		origin = new Point(originX, originY);
+		this.radius = radius;
+	}
+
+	public Circle(final IPoint origin, final int radius) {
+		this.origin = origin;
 		this.radius = radius;
 	}
 
@@ -23,8 +28,11 @@ public class Circle implements ICircle {
 	}
 
 	public void setOrigin(final int x, final int y) {
-		origin.setX(x);
-		origin.setY(y);
+		origin = new Point(x, y);
+	}
+
+	public void setOrigin(final IPoint origin) {
+		this.origin = origin;
 	}
 
 	public void setRadius(final int radius) {

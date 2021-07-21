@@ -3,7 +3,6 @@ package raptor.engine.collision.geometry;
 import raptor.engine.collision.api.ICollisionShape;
 import raptor.engine.util.geometry.Circle;
 import raptor.engine.util.geometry.LineSegment;
-import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.Triangle;
 import raptor.engine.util.geometry.api.IPoint;
 
@@ -16,10 +15,10 @@ public class CollisionTriangle implements ICollisionShape {
 
 	@Override
 	public boolean collidesWithTriangle(final CollisionTriangle t) {
-		for (final Point p : t.getCollision().getPoints())
+		for (final IPoint p : t.getCollision().getPoints())
 			if (collisionTriangle.containsPoint(p))
 				return true;
-		for (final Point p : collisionTriangle.getPoints())
+		for (final IPoint p : collisionTriangle.getPoints())
 			if (t.getCollision().containsPoint(p))
 				return true;
 		for (final LineSegment ls : collisionTriangle.getLines())
@@ -42,7 +41,7 @@ public class CollisionTriangle implements ICollisionShape {
 			if (collisionTriangle.containsPoint(inputPoint))
 				return true;
 
-		for (final Point thisPoint : collisionTriangle.getPoints())
+		for (final IPoint thisPoint : collisionTriangle.getPoints())
 			if (r.getCollision().containsPoint(thisPoint))
 				return true;
 
