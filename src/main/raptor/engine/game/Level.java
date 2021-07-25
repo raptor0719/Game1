@@ -7,13 +7,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import raptor.engine.collision.geometry.CollisionCircle;
-import raptor.engine.collision.geometry.CollisionTriangle;
+import raptor.engine.collision.CollisionPlane;
+import raptor.engine.collision.CollisionPlaneHandler;
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.event.EventBroker;
 import raptor.engine.event.IEventBroker;
-import raptor.engine.event.events.EntityCollisionEvent;
-import raptor.engine.event.events.TerrainCollisionEvent;
 import raptor.engine.game.entity.DrawDepthEntityComparator;
 import raptor.engine.game.entity.IEntity;
 import raptor.engine.nav.api.INavigator;
@@ -30,6 +28,7 @@ public abstract class Level implements IDrawable {
 	private final IIdProvider entityIdProvider;
 	private final Map<Integer, INavigator> navigators;
 	private final Map<Integer, Terrain> terrains;
+	private final Map<Integer, CollisionPlane> collisionPlanes;
 
 	private UserInterface userInterface;
 
@@ -39,6 +38,7 @@ public abstract class Level implements IDrawable {
 		this.entityIdProvider = new IdProvider();
 		this.navigators = new HashMap<Integer, INavigator>();
 		this.terrains = new HashMap<Integer, Terrain>();
+		this.collisionPlanes = new HashMap<Integer, CollisionPlane>();
 	}
 
 	public void init() {
@@ -54,58 +54,9 @@ public abstract class Level implements IDrawable {
 			e.update();
 	}
 
-	/* FIXME
-	* This isn't the best because it's checking collisions of ALL
-	* entities in the level vs all other entities. Ideally we filter
-	* by proximity. I think we could do this by having the level
-	* space sectioned in a grid pattern and putting entities in a
-	* bucket corresponding to what part of the grid they are in.
-	* We can then only check collisions for an entity with other
-	* entities either in the same grid-square along with surrounding
-	* grid-squares.
-	*/
 	private void checkCollisions() {
-		final List<IEntity> rawEntities = new ArrayList<>(entities.values());
-
-		for (int i = 0; i < rawEntities.size(); i++) {
-			final IEntity source = rawEntities.get(i);
-
-			if (!source.hasCollision())
-				continue;
-
-			for (final Terrain terrain : terrains.values()) {
-				if (source.getCollision() instanceof CollisionTriangle) {
-					final CollisionTriangle sourceTriangle = (CollisionTriangle) source.getCollision();
-					if (terrain.collidesWithTriangle(sourceTriangle))
-						eventBroker.trigger(source.getId(), new TerrainCollisionEvent(terrain));
-				} else if (source.getCollision() instanceof CollisionCircle) {
-					final CollisionCircle sourceCircle = (CollisionCircle) source.getCollision();
-					if (terrain.collidesWithCircle(sourceCircle))
-						eventBroker.trigger(source.getId(), new TerrainCollisionEvent(terrain));
-				}
-			}
-
-			if (i+1 >= rawEntities.size())
-				break;
-
-			for (int j = i+1; j < rawEntities.size(); j++) {
-				final IEntity target = rawEntities.get(j);
-
-				if (target.getCollision() instanceof CollisionTriangle) {
-					final CollisionTriangle triangle = (CollisionTriangle) target.getCollision();
-					if (source.getCollision().collidesWithTriangle(triangle)) {
-						eventBroker.trigger(source.getId(), new EntityCollisionEvent(target));
-						eventBroker.trigger(target.getId(), new EntityCollisionEvent(source));
-					}
-				} else if (target.getCollision() instanceof CollisionCircle) {
-					final CollisionCircle circle = (CollisionCircle) target.getCollision();
-					if (source.getCollision().collidesWithCircle(circle)) {
-						eventBroker.trigger(source.getId(), new EntityCollisionEvent(target));
-						eventBroker.trigger(target.getId(), new EntityCollisionEvent(source));
-					}
-				}
-			}
-		}
+		for (final CollisionPlane collisionPlane : collisionPlanes.values())
+			collisionPlane.detectCollisions();
 	}
 
 	public Iterator<IDrawable> getDrawables() {
@@ -176,6 +127,18 @@ public abstract class Level implements IDrawable {
 
 	public void setUserInterface(final UserInterface newUserInterface) {
 		this.userInterface = newUserInterface;
+	}
+
+	public CollisionPlane getCollisionPlane(final int id) {
+		return collisionPlanes.get(id);
+	}
+
+	public CollisionPlane addCollisionPlane(final int id, final String name) {
+		final CollisionPlane newCollisionPlane = new CollisionPlane(id, name, new CollisionPlaneHandler(eventBroker));
+
+		collisionPlanes.put(id, newCollisionPlane);
+
+		return newCollisionPlane;
 	}
 
 	private static class InsertingDrawableIteratorWrapper implements Iterator<IDrawable> {

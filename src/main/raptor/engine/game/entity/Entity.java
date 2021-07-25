@@ -1,28 +1,25 @@
 package raptor.engine.game.entity;
 
+import java.util.Map;
+
 import raptor.engine.collision.api.ICollisionShape;
 import raptor.engine.event.IEventSource;
 import raptor.engine.util.geometry.Point;
+import raptor.engine.util.geometry.api.IPoint;
 
 public abstract class Entity implements IEntity {
 	private final long id;
 	private final String name;
 	private final IEventSource eventSource;
-	private final ICollisionShape collision;
-
 	private final Point position;
 
-	public Entity(final long id, final String name, final IEventSource eventSource, final ICollisionShape collision) {
+	private Map<Long, ICollisionShape> collisions;
+
+	public Entity(final long id, final String name, final IEventSource eventSource) {
 		this.id = id;
 		this.name = name;
 		this.eventSource = eventSource;
-		this.collision = collision;
-
 		this.position = new Point(0, 0);
-	}
-
-	public Entity(final long id, final String name, final IEventSource eventSource) {
-		this(id, name, eventSource, null);
 	}
 
 	@Override
@@ -56,16 +53,28 @@ public abstract class Entity implements IEntity {
 	}
 
 	@Override
-	public boolean hasCollision() {
-		return collision != null;
+	public boolean hasCollision(final long planeId) {
+		return collisions.containsKey(id);
 	}
 
 	@Override
-	public ICollisionShape getCollision() {
-		return collision;
+	public ICollisionShape getCollision(final long planeId) {
+		return collisions.get(id);
 	}
 
-	protected IEventSource getEventSource() {
+	public IPoint getPosition() {
+		return position;
+	}
+
+	public IEventSource getEventSource() {
 		return eventSource;
+	}
+
+	public void removeCollision(final long planeId) {
+		collisions.remove(planeId);
+	}
+
+	public void setCollision(final long planeId, final ICollisionShape collisionShape) {
+		collisions.put(planeId, collisionShape);
 	}
 }

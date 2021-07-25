@@ -15,10 +15,12 @@ public class Event implements IEvent {
 	}
 
 	public static final String COLLIDING_ENTITY = "collidingEntity";
+	public static final String COLLIDING_ENTITY_OTHER = "collidingEntityOther";
 	public static final String COLLIDING_TERRAIN = "collidingTerrain";
 	public static final Collection<String> EVENT_PROPERTY_NAMES = new ArrayList<>();
 	static {
 		EVENT_PROPERTY_NAMES.add(COLLIDING_ENTITY);
+		EVENT_PROPERTY_NAMES.add(COLLIDING_ENTITY_OTHER);
 		EVENT_PROPERTY_NAMES.add(COLLIDING_TERRAIN);
 	}
 
