@@ -8,63 +8,47 @@ import java.util.List;
 import java.util.Map;
 
 public class InputMap implements IInputMap {
-	private final Map<PhysicalInput, List<String>> physicalToLogical;
-	private final Map<String, List<PhysicalInput>> logicalToPhysical;
+	private final Map<PhysicalInputAction, List<String>> inputToActions;
 
 	public InputMap() {
-		physicalToLogical = new HashMap<>();
-		logicalToPhysical = new HashMap<>();
+		this.inputToActions = new HashMap<>();
 	}
 
 	@Override
-	public void mapInput(final PhysicalInput physicalInput, final String logicalInput) {
-		if (!physicalToLogical.containsKey(physicalInput))
-			physicalToLogical.put(physicalInput, new ArrayList<>());
+	public void mapInput(final PhysicalInput input, final KeyAction keyAction, final String action) {
+		final PhysicalInputAction inputAction = new PhysicalInputAction(input, keyAction);
 
-		if (!logicalToPhysical.containsKey(logicalInput))
-			logicalToPhysical.put(logicalInput, new ArrayList<>());
+		if (!inputToActions.containsKey(inputAction))
+			inputToActions.put(inputAction, new ArrayList<>());
 
-		if (!physicalToLogical.get(physicalInput).contains(logicalInput))
-			physicalToLogical.get(physicalInput).add(logicalInput);
-
-		if (!logicalToPhysical.get(logicalInput).contains(physicalInput))
-			logicalToPhysical.get(logicalInput).add(physicalInput);
+		inputToActions.get(inputAction).remove(action);
+		inputToActions.get(inputAction).add(action);
 	}
 
 	@Override
-	public void unmapInput(final PhysicalInput physicalInput, final String logicalInput) {
-		if (physicalToLogical.containsKey(physicalInput))
-			if (physicalToLogical.get(physicalInput).contains(logicalInput))
-				physicalToLogical.get(physicalInput).remove(logicalInput);
+	public void unmapInput(final PhysicalInput input, final KeyAction keyAction, final String action) {
+		final PhysicalInputAction inputAction = new PhysicalInputAction(input, keyAction);
 
-		if (logicalToPhysical.containsKey(logicalInput))
-			if (logicalToPhysical.get(logicalInput).contains(physicalInput))
-				logicalToPhysical.get(logicalInput).remove(physicalInput);
+		if (!inputToActions.containsKey(inputAction))
+			return;
+
+		inputToActions.get(inputAction).remove(action);
 	}
 
 	@Override
-	public boolean physicalIsMapped(final PhysicalInput physicalInput) {
-		return physicalToLogical.containsKey(physicalInput) && !physicalToLogical.get(physicalInput).isEmpty();
+	public boolean inputIsMapped(final PhysicalInput input, final KeyAction keyAction) {
+		final PhysicalInputAction inputAction = new PhysicalInputAction(input, keyAction);
+
+		return inputToActions.containsKey(inputAction) && inputToActions.get(inputAction).size() > 0;
 	}
 
 	@Override
-	public boolean logicalIsMapped(final String logicalInput) {
-		return logicalToPhysical.containsKey(logicalInput) && !logicalToPhysical.get(logicalInput).isEmpty();
-	}
+	public Collection<String> getMappedActions(final PhysicalInput input, final KeyAction keyAction) {
+		final PhysicalInputAction inputAction = new PhysicalInputAction(input, keyAction);
 
-	@Override
-	public Collection<String> getMappedLogicalInputs(final PhysicalInput physicalInput) {
-		if (!physicalToLogical.containsKey(physicalInput))
+		if (!inputToActions.containsKey(inputAction))
 			return Collections.emptyList();
 
-		return physicalToLogical.get(physicalInput);
-	}
-
-	@Override
-	public Collection<PhysicalInput> getMappedPhysicalInputs(final String logicalInput) {
-		if (!logicalToPhysical.containsKey(logicalInput))
-			return Collections.emptyList();
-
-		return logicalToPhysical.get(logicalInput);
+		return inputToActions.get(inputAction);
 	}
 }

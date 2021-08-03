@@ -48,6 +48,7 @@ public abstract class Level implements IDrawable {
 	public void tick() {
 		checkCollisions();
 
+		userInterface.processActions();
 		eventBroker.distribute();
 
 		for (final IEntity e : entities.values())

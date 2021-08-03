@@ -6,43 +6,29 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Queue;
 
+import raptor.engine.ui.UIAction;
 import raptor.engine.util.geometry.Point;
 
-public class JavaAwtInputManager implements IInputListener, IMousePositionPoll, MouseListener, KeyListener {
+public class JavaAwtInputManager implements IInputManager, IMousePositionPoll, MouseListener, KeyListener {
 
-	private final InputMap inputMap;
+	private IInputMap inputMap;
+	private Queue<UIAction> actionQueue;
 
-	private final Map<String, IInputHandler> pressedHandlers;
-	private final Map<String, IInputHandler> releasedHandlers;
+	public JavaAwtInputManager() {
+		this.inputMap = null;
+		this.actionQueue = null;
+	}
 
-	public JavaAwtInputManager(final InputMap inputMap) {
+	@Override
+	public void setInputMap(final IInputMap inputMap) {
 		this.inputMap = inputMap;
-
-		this.pressedHandlers = new HashMap<String, IInputHandler>();
-		this.releasedHandlers = new HashMap<String, IInputHandler>();
 	}
 
 	@Override
-	public void assignPressedHandler(final String logicalInput, final IInputHandler handler) {
-		pressedHandlers.put(logicalInput, handler);
-	}
-
-	@Override
-	public void assignReleasedHandler(final String logicalInput, final IInputHandler handler) {
-		releasedHandlers.put(logicalInput, handler);
-	}
-
-	@Override
-	public void unassignPressedHandler(final String logicalInput) {
-		pressedHandlers.remove(logicalInput);
-	}
-
-	@Override
-	public void unassignReleasedHandler(final String logicalInput) {
-		releasedHandlers.remove(logicalInput);
+	public void setActionQueue(final Queue<UIAction> actionQueue) {
+		this.actionQueue = actionQueue;
 	}
 
 	@Override
@@ -53,32 +39,38 @@ public class JavaAwtInputManager implements IInputListener, IMousePositionPoll, 
 
 	@Override
 	public void mousePressed(final MouseEvent event) {
-		activateHandlers(JavaAwtInputTranslator.translateMouseInput(event.getButton()), pressedHandlers);
+		final Collection<String> actions = inputMap.getMappedActions(JavaAwtInputTranslator.translateMouseInput(event.getButton()), KeyAction.PRESSED);
+		final Point mousePosition = getMousePosition();
+
+		for (final String action : actions)
+			actionQueue.add(new UIAction(mousePosition.getX(), mousePosition.getY(), action));
 	}
 
 	@Override
 	public void mouseReleased(final MouseEvent event) {
-		activateHandlers(JavaAwtInputTranslator.translateMouseInput(event.getButton()), releasedHandlers);
+		final Collection<String> actions = inputMap.getMappedActions(JavaAwtInputTranslator.translateMouseInput(event.getButton()), KeyAction.RELEASED);
+		final Point mousePosition = getMousePosition();
+
+		for (final String action : actions)
+			actionQueue.add(new UIAction(mousePosition.getX(), mousePosition.getY(), action));
 	}
 
 	@Override
 	public void keyPressed(final KeyEvent event) {
-		activateHandlers(JavaAwtInputTranslator.translateKeyInput(event.getKeyCode()), pressedHandlers);
+		final Collection<String> actions = inputMap.getMappedActions(JavaAwtInputTranslator.translateKeyInput(event.getKeyCode()), KeyAction.PRESSED);
+		final Point mousePosition = getMousePosition();
+
+		for (final String action : actions)
+			actionQueue.add(new UIAction(mousePosition.getX(), mousePosition.getY(), action));
 	}
 
 	@Override
 	public void keyReleased(final KeyEvent event) {
-		activateHandlers(JavaAwtInputTranslator.translateKeyInput(event.getKeyCode()), releasedHandlers);
-	}
-
-	private void activateHandlers(final PhysicalInput input, final Map<String, IInputHandler> handlers) {
-		final Collection<String> logicalInputs = inputMap.getMappedLogicalInputs(input);
+		final Collection<String> actions = inputMap.getMappedActions(JavaAwtInputTranslator.translateKeyInput(event.getKeyCode()), KeyAction.RELEASED);
 		final Point mousePosition = getMousePosition();
 
-		// TODO: Need to have a translation layer here
-		for (final String logicalInput : logicalInputs)
-			if (handlers.containsKey(logicalInput))
-				handlers.get(logicalInput).handleInput(mousePosition.getX(), mousePosition.getY());
+		for (final String action : actions)
+			actionQueue.add(new UIAction(mousePosition.getX(), mousePosition.getY(), action));
 	}
 
 	// NO-OP Methods

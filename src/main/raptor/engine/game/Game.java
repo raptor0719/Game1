@@ -1,7 +1,6 @@
 package raptor.engine.game;
 
 import raptor.engine.display.render.IRenderer;
-import raptor.engine.ui.input.IMainLoopInputHandler;
 
 public class Game {
 	private static long timeSinceLastFrame;
@@ -17,22 +16,17 @@ public class Game {
 		gameInstantiated = false;
 	}
 
-	private final IMainLoopInputHandler inputHandler;
-
-	protected Game(final Level initLevel, final IRenderer setRenderer, final IMainLoopInputHandler inputHandler) {
+	protected Game(final Level initLevel, final IRenderer setRenderer) {
 		if (currentLevel != null)
 			throw new IllegalStateException("Only 1 instance of the Game is allowed.");
 		currentLevel = initLevel;
 		renderer = setRenderer;
-		this.inputHandler = (inputHandler == null) ? new NoopInputHandler() : inputHandler;
 		gameInstantiated = true;
 	}
 
 	public void start() {
 		long previousTime = System.currentTimeMillis();
 		while (true) {
-			inputHandler.handleInputs();
-
 			long currentTime = System.currentTimeMillis();
 			timeSinceLastFrame = currentTime - previousTime;
 
@@ -66,14 +60,5 @@ public class Game {
 		if (!gameInstantiated)
 			throw new IllegalStateException("The game must be instantiated before static calls can be made.");
 		return renderer;
-	}
-
-	/* INTERNALS */
-
-	private static class NoopInputHandler implements IMainLoopInputHandler {
-		@Override
-		public void handleInputs() {
-			/* no-op */
-		}
 	}
 }

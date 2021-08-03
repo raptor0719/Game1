@@ -9,22 +9,26 @@ import java.util.Map;
 
 import raptor.engine.ui.elements.UIButton;
 import raptor.engine.ui.elements.UIElement;
-import raptor.engine.ui.input.IInputHandler;
+import raptor.engine.ui.input.IActionHandler;
+import raptor.engine.ui.input.IInputMap;
 
 public class UIState {
 	private static final Comparator<UIElement> ELEMENT_COMPARATOR = new DepthSortComparator();
 
 	private final List<UIElement> elements;
 	private final Map<String, UIState> transitions;
-	private final Map<String, IInputHandler> handlers;
+	private final Map<String, IActionHandler> actionHandlers;
 
 	private final List<UIButton> buttons;
+
+	private IInputMap inputMap;
 
 	public UIState() {
 		this.elements = new ArrayList<>();
 		this.transitions = new HashMap<>();
-		this.handlers = new HashMap<>();
+		this.actionHandlers = new HashMap<>();
 		this.buttons = new ArrayList<>();
+		this.inputMap = null;
 	}
 
 	public void addElement(final UIElement newElement) {
@@ -62,6 +66,10 @@ public class UIState {
 		return elements.iterator();
 	}
 
+	public Iterator<UIButton> getButtons() {
+		return buttons.iterator();
+	}
+
 	public void clearElements() {
 		elements.clear();
 		buttons.clear();
@@ -83,20 +91,28 @@ public class UIState {
 		transitions.clear();
 	}
 
-	public void addInputHandler(final String action, final IInputHandler handler) {
-		handlers.put(action, handler);
+	public void addActionHandler(final String action, final IActionHandler handler) {
+		actionHandlers.put(action, handler);
 	}
 
-	public IInputHandler removeInputHandler(final String action) {
-		return handlers.remove(action);
+	public IActionHandler removeActionHandler(final String action) {
+		return actionHandlers.remove(action);
 	}
 
-	public IInputHandler getInputHandler(final String action) {
-		return handlers.get(action);
+	public IActionHandler getActionHandler(final String action) {
+		return actionHandlers.get(action);
 	}
 
-	public void clearInputHandlers() {
-		handlers.clear();
+	public void clearActionHandlers() {
+		actionHandlers.clear();
+	}
+
+	public void setInputMap(final IInputMap inputMap) {
+		this.inputMap = inputMap;
+	}
+
+	public IInputMap getInputMap() {
+		return inputMap;
 	}
 
 	private static class DepthSortComparator implements Comparator<UIElement> {
