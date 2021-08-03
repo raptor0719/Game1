@@ -1,7 +1,8 @@
-package raptor.engine.ui;
+package raptor.engine.ui.elements;
 
 import raptor.engine.display.render.IColor;
 import raptor.engine.display.render.IGraphics;
+import raptor.engine.ui.UIAnchorPoint;
 import raptor.engine.util.valueProviders.IntegerValueProvider;
 
 public class UIFillBarElement extends UIElement {

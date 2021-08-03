@@ -8,6 +8,7 @@ import java.util.List;
 
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.display.render.IGraphics;
+import raptor.engine.ui.elements.UIElement;
 import raptor.engine.util.IdProvider;
 
 public class UserInterface implements IDrawable {

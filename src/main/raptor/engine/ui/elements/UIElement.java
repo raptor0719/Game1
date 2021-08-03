@@ -1,6 +1,8 @@
-package raptor.engine.ui;
+package raptor.engine.ui.elements;
 
 import raptor.engine.display.render.IDrawable;
+import raptor.engine.ui.UIAnchorPoint;
+import raptor.engine.ui.UserInterface;
 
 public abstract class UIElement implements IDrawable {
 	private final long id;

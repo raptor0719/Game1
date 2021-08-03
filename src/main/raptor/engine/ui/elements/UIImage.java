@@ -1,8 +1,9 @@
-package raptor.engine.ui;
+package raptor.engine.ui.elements;
 
 import java.awt.Image;
 
 import raptor.engine.display.render.IGraphics;
+import raptor.engine.ui.UIAnchorPoint;
 
 public class UIImage extends UIElement {
 	private Image image;
