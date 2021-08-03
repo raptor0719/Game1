@@ -62,6 +62,11 @@ public class UIState {
 		return elements.iterator();
 	}
 
+	public void clearElements() {
+		elements.clear();
+		buttons.clear();
+	}
+
 	public void addTransition(final String action, final UIState destination) {
 		transitions.put(action, destination);
 	}
@@ -74,6 +79,10 @@ public class UIState {
 		return transitions.get(action);
 	}
 
+	public void clearTransitions() {
+		transitions.clear();
+	}
+
 	public void addInputHandler(final String action, final IInputHandler handler) {
 		handlers.put(action, handler);
 	}
@@ -84,6 +93,10 @@ public class UIState {
 
 	public IInputHandler getInputHandler(final String action) {
 		return handlers.get(action);
+	}
+
+	public void clearInputHandlers() {
+		handlers.clear();
 	}
 
 	private static class DepthSortComparator implements Comparator<UIElement> {
