@@ -1,5 +1,5 @@
 package raptor.engine.ui.input;
 
 public interface IInputHandler {
-	void handleInput();
+	void handleInput(int mouseX, int mouseY);
 }

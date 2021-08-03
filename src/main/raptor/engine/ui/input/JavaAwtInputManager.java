@@ -73,9 +73,12 @@ public class JavaAwtInputManager implements IInputListener, IMousePositionPoll, 
 
 	private void activateHandlers(final PhysicalInput input, final Map<String, IInputHandler> handlers) {
 		final Collection<String> logicalInputs = inputMap.getMappedLogicalInputs(input);
+		final Point mousePosition = getMousePosition();
+
+		// TODO: Need to have a translation layer here
 		for (final String logicalInput : logicalInputs)
 			if (handlers.containsKey(logicalInput))
-				handlers.get(logicalInput).handleInput();
+				handlers.get(logicalInput).handleInput(mousePosition.getX(), mousePosition.getY());
 	}
 
 	// NO-OP Methods

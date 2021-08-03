@@ -1,58 +1,52 @@
 package raptor.engine.ui;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Queue;
 
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.display.render.IGraphics;
 import raptor.engine.ui.elements.UIElement;
+import raptor.engine.ui.input.IInputHandler;
 import raptor.engine.util.IdProvider;
 
 public class UserInterface implements IDrawable {
 	public static final IdProvider UI_ID_PROVIDER = new IdProvider();
 
-	protected static final Comparator<UIElement> ELEMENT_COMPARATOR = new DepthSortComparator();
+	private final Queue<UIAction> receiveActionQueue;
 
-	private final int width;
-	private final int height;
+	private UIState currentState;
 
-	private final List<UIElement> elements;
-
-	public UserInterface(final int viewportWidth, final int viewportHeight) {
-		this.width = viewportWidth;
-		this.height = viewportHeight;
-		this.elements = new ArrayList<>();
+	public UserInterface(final UIState startState, final Queue<UIAction> receiveActionQueue) {
+		this.receiveActionQueue = receiveActionQueue;
+		this.currentState = startState;
 	}
 
-	public int getWidth() {
-		return width;
+	public void processInputs() {
+		for (final UIAction action : receiveActionQueue) {
+			final UIState potentialDestination = currentState.getDestination(action.getAction());
+			if (potentialDestination != null) {
+				currentState = potentialDestination;
+				receiveActionQueue.clear();
+				return;
+			}
+		}
+
+		UIAction current = receiveActionQueue.poll();
+		while (current != null) {
+			final IInputHandler handler = currentState.getInputHandler(current.getAction());
+			if (handler != null)
+				handler.handleInput(current.getMouseX(), current.getMouseY());
+			current = receiveActionQueue.poll();
+		}
 	}
 
-	public int getHeight() {
-		return height;
-	}
-
-	public Collection<UIElement> getElements() {
-		return elements;
-	}
-
-	public void addElement(final UIElement newElement) {
-		elements.add(newElement);
-		elements.sort(ELEMENT_COMPARATOR);
-	}
-
-	public UIElement removeElement(final int index) {
-		if (index < elements.size() && index > -1)
-			return elements.remove(index);
-		return null;
+	public void setState(final UIState newState) {
+		this.currentState = newState;
 	}
 
 	@Override
 	public void draw(final IGraphics graphics) {
-		final Iterator<UIElement> sorted = elements.iterator();
+		final Iterator<UIElement> sorted = currentState.getElements();
 
 		if (!sorted.hasNext())
 			return;
@@ -61,17 +55,6 @@ public class UserInterface implements IDrawable {
 		while (sorted.hasNext()) {
 			current = sorted.next();
 			current.draw(graphics);
-		}
-	}
-
-	private static class DepthSortComparator implements Comparator<UIElement> {
-		@Override
-		public int compare(final UIElement o1, final UIElement o2) {
-			if (o1.getDepth() < o2.getDepth())
-				return -1;
-			else if (o1.getDepth() > o2.getDepth())
-				return 1;
-			return 0;
 		}
 	}
 }
