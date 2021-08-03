@@ -22,17 +22,16 @@ public class UserInterface implements IDrawable {
 	}
 
 	public void processInputs() {
-		for (final UIAction action : receiveActionQueue) {
-			final UIState potentialDestination = currentState.getDestination(action.getAction());
-			if (potentialDestination != null) {
-				currentState = potentialDestination;
-				receiveActionQueue.clear();
-				return;
-			}
-		}
-
 		UIAction current = receiveActionQueue.poll();
 		while (current != null) {
+			final UIState potentialDestination = currentState.getDestination(current.getAction());
+
+			if (potentialDestination != null) {
+				receiveActionQueue.clear();
+				currentState = potentialDestination;
+				return;
+			}
+
 			final IInputHandler handler = currentState.getInputHandler(current.getAction());
 			if (handler != null)
 				handler.handleInput(current.getMouseX(), current.getMouseY());
