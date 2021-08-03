@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import raptor.engine.ui.elements.UIButton;
 import raptor.engine.ui.elements.UIElement;
 import raptor.engine.ui.input.IInputHandler;
 
@@ -17,23 +18,26 @@ public class UIState {
 	private final Map<String, UIState> transitions;
 	private final Map<String, IInputHandler> handlers;
 
+	private final List<UIButton> buttons;
+
 	public UIState() {
 		this.elements = new ArrayList<>();
 		this.transitions = new HashMap<>();
 		this.handlers = new HashMap<>();
+		this.buttons = new ArrayList<>();
 	}
 
 	public void addElement(final UIElement newElement) {
-		for (int i = 0; i < elements.size(); i++) {
-			final UIElement element = elements.get(i);
-			if (element.equals(newElement)) {
-				elements.remove(element);
-				break;
-			}
-		}
+		elements.remove(newElement);
 
 		elements.add(newElement);
 		elements.sort(ELEMENT_COMPARATOR);
+
+		if (newElement instanceof UIButton) {
+			final UIButton button = (UIButton)newElement;
+			buttons.remove(button);
+			buttons.add(button);
+		}
 	}
 
 	public UIElement removeElement(final long id) {
@@ -41,9 +45,16 @@ public class UIState {
 			final UIElement element = elements.get(i);
 			if (element.getId() == id) {
 				elements.remove(element);
+
+				if (element instanceof UIButton) {
+					final UIButton button = (UIButton)element;
+					buttons.remove(button);
+				}
+
 				return element;
 			}
 		}
+
 		return null;
 	}
 
