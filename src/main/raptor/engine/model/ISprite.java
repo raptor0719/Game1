@@ -2,11 +2,9 @@ package raptor.engine.model;
 
 import java.awt.Image;
 
-import raptor.engine.util.geometry.Point;
+import raptor.engine.util.geometry.api.IPoint;
 
 public interface ISprite {
-	int getWidth();
-	int getHeight();
-	Point getAttachPoint();
+	IPoint getAttachPoint();
 	Image getImage();
 }

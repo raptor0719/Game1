@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import raptor.engine.util.BinaryDataTools;
+
 public class WireModelReadWrite {
 	private static final byte[] MAGIC_NUMBER = new byte[] {'m', 'o', 'd', 'e', 'l'};
 
@@ -43,15 +45,15 @@ public class WireModelReadWrite {
 	}
 
 	private static WireModelFrame readFrame(final int hardpointCount, final DataInputStream dis) throws IOException {
-		final HardpointPosition[] hardpoints = new HardpointPosition[hardpointCount];
+		final IHardpoint[] hardpoints = new IHardpoint[hardpointCount];
 
 		for (int i = 0; i < hardpointCount; i++) {
+			final String name = BinaryDataTools.marshalString(dis);
 			final int x = dis.readInt();
 			final int y = dis.readInt();
-			final int rotation = dis.readInt();
 			final int depth = dis.readInt();
 
-			hardpoints[i] = new Hardpoint(x, y, rotation, depth);
+			hardpoints[i] = new Hardpoint(name, x, y, depth);
 		}
 
 		return new WireModelFrame(hardpoints);
@@ -88,18 +90,18 @@ public class WireModelReadWrite {
 	}
 
 	private static void writeFrame(final WireModelFrame model, final DataOutputStream dos) throws IOException {
-		writeHardpoints(model.getHardpointPositions(), dos);
+		writeHardpoints(model.getSortedHardpoints(), dos);
 	}
 
-	private static void writeHardpoints(final HardpointPosition[] hardpoints, final DataOutputStream dos) throws IOException {
-		for (final HardpointPosition h : hardpoints)
+	private static void writeHardpoints(final IHardpoint[] hardpoints, final DataOutputStream dos) throws IOException {
+		for (final IHardpoint h : hardpoints)
 			writeHardpoint(h, dos);
 	}
 
-	private static void writeHardpoint(final HardpointPosition hardpoint, final DataOutputStream dos) throws IOException {
+	private static void writeHardpoint(final IHardpoint hardpoint, final DataOutputStream dos) throws IOException {
+		dos.write(BinaryDataTools.serializeString(hardpoint.getName()));
 		dos.writeInt(hardpoint.getX());
 		dos.writeInt(hardpoint.getY());
-		dos.writeInt(hardpoint.getRotation());
 		dos.writeInt(hardpoint.getDepth());
 	}
 
