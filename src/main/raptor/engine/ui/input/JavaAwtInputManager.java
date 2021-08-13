@@ -8,17 +8,20 @@ import java.awt.event.MouseListener;
 import java.util.Collection;
 import java.util.Queue;
 
+import raptor.engine.display.render.ViewportToLocationTransformer;
 import raptor.engine.ui.UIAction;
 import raptor.engine.util.geometry.Point;
 
 public class JavaAwtInputManager implements IInputManager, IMousePositionPoll, MouseListener, KeyListener {
+	private final ViewportToLocationTransformer toLocationTransformer;
 
 	private IInputMap inputMap;
 	private Queue<UIAction> actionQueue;
 
-	public JavaAwtInputManager() {
+	public JavaAwtInputManager(final ViewportToLocationTransformer toLocationTransformer) {
 		this.inputMap = null;
 		this.actionQueue = null;
+		this.toLocationTransformer = toLocationTransformer;
 	}
 
 	@Override
@@ -43,7 +46,7 @@ public class JavaAwtInputManager implements IInputManager, IMousePositionPoll, M
 		final Point mousePosition = getMousePosition();
 
 		for (final String action : actions)
-			actionQueue.add(new UIAction(mousePosition.getX(), mousePosition.getY(), action));
+			actionQueue.add(createAction(mousePosition.getX(), mousePosition.getY(), action));
 	}
 
 	@Override
@@ -52,7 +55,7 @@ public class JavaAwtInputManager implements IInputManager, IMousePositionPoll, M
 		final Point mousePosition = getMousePosition();
 
 		for (final String action : actions)
-			actionQueue.add(new UIAction(mousePosition.getX(), mousePosition.getY(), action));
+			actionQueue.add(createAction(mousePosition.getX(), mousePosition.getY(), action));
 	}
 
 	@Override
@@ -61,7 +64,7 @@ public class JavaAwtInputManager implements IInputManager, IMousePositionPoll, M
 		final Point mousePosition = getMousePosition();
 
 		for (final String action : actions)
-			actionQueue.add(new UIAction(mousePosition.getX(), mousePosition.getY(), action));
+			actionQueue.add(createAction(mousePosition.getX(), mousePosition.getY(), action));
 	}
 
 	@Override
@@ -70,7 +73,11 @@ public class JavaAwtInputManager implements IInputManager, IMousePositionPoll, M
 		final Point mousePosition = getMousePosition();
 
 		for (final String action : actions)
-			actionQueue.add(new UIAction(mousePosition.getX(), mousePosition.getY(), action));
+			actionQueue.add(createAction(mousePosition.getX(), mousePosition.getY(), action));
+	}
+
+	private UIAction createAction(final int viewportMousePositionX, final int viewportMousePositionY, final String action) {
+		return new UIAction(toLocationTransformer.transformX(viewportMousePositionX), toLocationTransformer.transformY(viewportMousePositionY), action);
 	}
 
 	// NO-OP Methods
