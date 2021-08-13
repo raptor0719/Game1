@@ -1,10 +1,10 @@
 package raptor.engine.display.render;
 
 public class LocationToViewportTransformer {
-	private final Viewport vp;
+	private final IViewport vp;
 	private final int scale;
 
-	public LocationToViewportTransformer(final Viewport vp, final int scale) {
+	public LocationToViewportTransformer(final IViewport vp, final int scale) {
 		this.vp = vp;
 		this.scale = scale;
 	}
