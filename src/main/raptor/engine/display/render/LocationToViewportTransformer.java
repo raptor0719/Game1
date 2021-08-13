@@ -10,10 +10,10 @@ public class LocationToViewportTransformer {
 	}
 
 	public Integer transformX(final Integer in) {
-		return (in / scale) - vp.getXpos();
+		return (in / scale) - vp.getXPosition();
 	}
 
 	public Integer transformY(final Integer in) {
-		return (in / scale) - vp.getYpos();
+		return (in / scale) - vp.getYPosition();
 	}
 }

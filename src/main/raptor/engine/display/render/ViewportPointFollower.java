@@ -19,7 +19,7 @@ public class ViewportPointFollower {
 	}
 
 	public void follow() {
-		viewport.setXpos((point.getX() / scale) - (viewport.getWidth() / 2));
-		viewport.setYpos((point.getY() / scale) - (viewport.getHeight() / 2));
+		viewport.setXPosition((point.getX() / scale) - (viewport.getWidth() / 2));
+		viewport.setYPosition((point.getY() / scale) - (viewport.getHeight() / 2));
 	}
 }

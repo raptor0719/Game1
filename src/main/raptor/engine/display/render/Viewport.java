@@ -1,39 +1,45 @@
 package raptor.engine.display.render;
 
-public class Viewport {
+public class Viewport implements IViewport {
 	private final int width;
 	private final int height;
-	private int posX;
-	private int posY;
+	private int positionX;
+	private int positionY;
 
-	public Viewport(final int width, final int height, final int posX, final int posY) {
+	public Viewport(final int width, final int height, final int positionX, final int positionY) {
 		this.width = width;
 		this.height = height;
-		this.posX = posX;
-		this.posY = posY;
+		this.positionX = positionX;
+		this.positionY = positionY;
 	}
 
+	@Override
 	public int getWidth() {
 		return width;
 	}
 
+	@Override
 	public int getHeight() {
 		return height;
 	}
 
-	public int getXpos() {
-		return posX;
+	@Override
+	public int getXPosition() {
+		return positionX;
 	}
 
-	public int getYpos() {
-		return posY;
+	@Override
+	public int getYPosition() {
+		return positionY;
 	}
 
-	public void setXpos(final int newX) {
-		posX = newX;
+	@Override
+	public void setXPosition(final int newXPosition) {
+		this.positionX = newXPosition;
 	}
 
-	public void setYpos(final int newY) {
-		posY = newY;
+	@Override
+	public void setYPosition(final int newYPosition) {
+		this.positionY = newYPosition;
 	}
 }

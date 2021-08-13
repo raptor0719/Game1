@@ -16,16 +16,15 @@ public class JavaAwtRenderer implements IRenderer {
 
 	private final IGraphics graphics;
 
-	public JavaAwtRenderer(final Graphics2D awtGraphics, final Viewport viewport) {
+	public JavaAwtRenderer(final Graphics2D awtGraphics, final int width, final int height) {
 		this.awtGraphics = awtGraphics;
+		this.viewport = new Viewport(width, height, 0, 0);
 
 		buffer = new BufferedImage(viewport.getWidth(), viewport.getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
 		this.toBuffer = buffer.createGraphics();
 
 		toBuffer.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		awtGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		this.viewport = viewport;
 
 		graphics = new ToViewportGraphicsWrapper(new JavaAwtGraphics(toBuffer), viewport);
 	}
@@ -51,6 +50,16 @@ public class JavaAwtRenderer implements IRenderer {
 	@Override
 	public int getRenderingSpaceHeight() {
 		return viewport.getHeight();
+	}
+
+	@Override
+	public void setViewportX(final int newX) {
+		viewport.setXPosition(newX);
+	}
+
+	@Override
+	public void setViewportY(final int newY) {
+		viewport.setYPosition(newY);
 	}
 
 	private void clear() {
