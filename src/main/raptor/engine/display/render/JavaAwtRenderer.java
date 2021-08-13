@@ -43,23 +43,8 @@ public class JavaAwtRenderer implements IRenderer {
 	}
 
 	@Override
-	public int getRenderingSpaceWidth() {
-		return viewport.getWidth();
-	}
-
-	@Override
-	public int getRenderingSpaceHeight() {
-		return viewport.getHeight();
-	}
-
-	@Override
-	public void setViewportX(final int newX) {
-		viewport.setXPosition(newX);
-	}
-
-	@Override
-	public void setViewportY(final int newY) {
-		viewport.setYPosition(newY);
+	public IViewport getViewport() {
+		return viewport;
 	}
 
 	private void clear() {
