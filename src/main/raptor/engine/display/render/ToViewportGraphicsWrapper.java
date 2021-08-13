@@ -9,7 +9,7 @@ public class ToViewportGraphicsWrapper implements IGraphics {
 
 	public ToViewportGraphicsWrapper(final IGraphics graphics, final Viewport viewport) {
 		this.graphics = graphics;
-		this.toViewport = new LocationToViewportTransformer(viewport, 1);
+		this.toViewport = new LocationToViewportTransformer(viewport);
 		this.viewport = viewport;
 	}
 
