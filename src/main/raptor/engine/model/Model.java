@@ -1,5 +1,7 @@
 package raptor.engine.model;
 
+import java.util.Collection;
+
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.display.render.IGraphics;
 import raptor.engine.util.geometry.api.IPoint;
@@ -18,9 +20,6 @@ public class Model implements IDrawable {
 		this.wireModel = wireModel;
 		this.hardpointCount = wireModel.getHardpointCount();
 
-		if (this.hardpointCount != spriteModel.getHardpointCount())
-			throw new IllegalArgumentException("Wire model hardpoint count did not match sprite model hardpoint count");
-
 		this.spriteModel = spriteModel;
 
 		this.direction = Direction.NORTH;
@@ -34,12 +33,12 @@ public class Model implements IDrawable {
 		this.direction = direction;
 	}
 
-	public WireModelFrame getCurrentFrame() {
-		return wireModel.getAsset(currentFrame, direction);
+	public IHardpoint getHardpoint(final String name) {
+		return wireModel.getAsset(currentFrame, direction).getHardpoint(name);
 	}
 
-	public SpriteFrame getCurrentSprites() {
-		return spriteModel.getAsset(currentFrame, direction);
+	public SpriteModel getSpriteModel() {
+		return spriteModel;
 	}
 
 	public int getHardpointCount() {
@@ -52,17 +51,22 @@ public class Model implements IDrawable {
 
 	@Override
 	public void draw(final IGraphics graphics) {
-		final WireModelFrame wire = getCurrentFrame();
-		final SpriteFrame visuals = getCurrentSprites();
+		final WireModelFrame wire = wireModel.getAsset(currentFrame, direction);
 
 		for (final IHardpoint h : wire.getSortedHardpoints()) {
-			final Sprite sprite = visuals.getSprite(h.getName());
-			final IPoint attach = sprite.getAttachPoint();
+			final Collection<SpriteCollection> sprites = spriteModel.getSpriteCollection(h.getName()).getCollections();
+			if (sprites == null || sprites.size() <= 0)
+				continue;
 
-			final int x = position.getX() + h.getX() - attach.getX();
-			final int y = position.getY() + h.getY() - attach.getY();
+			for (final SpriteCollection spriteCollection : sprites) {
+				final Sprite sprite = spriteCollection.getAsset(currentFrame, direction);
+				final IPoint attach = sprite.getAttachPoint();
 
-			graphics.drawImage(sprite.getImage(), x, y);
+				final int x = position.getX() + h.getX() - attach.getX();
+				final int y = position.getY() + h.getY() - attach.getY();
+
+				graphics.drawImage(sprite.getImage(), x, y);
+			}
 		}
 	}
 }

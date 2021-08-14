@@ -1,30 +1,32 @@
 package raptor.engine.model;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class SpriteModel extends DirectionalAssetCollection<SpriteFrame> {
-	private final int hardpointCount;
+public class SpriteModel  {
+	private final int frameCount;
+	private final Map<String, HardpointSpriteCollection> sprites;
 
-	public SpriteModel(final List<SpriteFrame> spriteFrames, final int[][] directionMappings) {
-		super(spriteFrames, directionMappings);
-		this.hardpointCount = spriteFrames.get(0).getCount();
+	public SpriteModel(final int frameCount) {
+		this.frameCount = frameCount;
+		this.sprites = new HashMap<>();
 	}
 
-	public int getHardpointCount() {
-		return hardpointCount;
+	public boolean isMapped(final String hardpointName) {
+		return sprites.containsKey(hardpointName);
 	}
 
-	@Override
-	protected boolean isValidAssets(final List<SpriteFrame> assetList) {
-		if (assetList.isEmpty())
-			return false;
+	public void addMapping(final String hardpointName) {
+		if (sprites.containsKey(hardpointName))
+			return;
+		sprites.put(hardpointName, new HardpointSpriteCollection(frameCount));
+	}
 
-		final int hardpointCount = assetList.get(0).getCount();
+	public HardpointSpriteCollection getSpriteCollection(final String hardpointName) {
+		return sprites.get(hardpointName);
+	}
 
-		for (final SpriteFrame s : assetList)
-			if (s.getCount() != hardpointCount)
-				return false;
-
-		return true;
+	public void unmap(final String hardpointName) {
+		sprites.remove(hardpointName);
 	}
 }
