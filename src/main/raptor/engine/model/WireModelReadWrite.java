@@ -80,7 +80,7 @@ public class WireModelReadWrite {
 		dos.writeInt(toWrite.getFrameList().size());
 		writeFramesList(toWrite.getFrameList(), dos);
 
-		dos.writeInt(toWrite.getFrameCount());
+		dos.writeInt(toWrite.getCount());
 		writeDirectionMappings(toWrite.getMappings(), dos);
 	}
 

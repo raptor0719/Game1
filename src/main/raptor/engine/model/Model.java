@@ -35,11 +35,11 @@ public class Model implements IDrawable {
 	}
 
 	public WireModelFrame getCurrentFrame() {
-		return wireModel.getFrame(currentFrame, direction);
+		return wireModel.getAsset(currentFrame, direction);
 	}
 
 	public SpriteFrame getCurrentSprites() {
-		return spriteModel.getFrame(currentFrame, direction);
+		return spriteModel.getAsset(currentFrame, direction);
 	}
 
 	public int getHardpointCount() {

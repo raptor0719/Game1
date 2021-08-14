@@ -7,37 +7,37 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class ModelComponent<T> {
-	private final List<T> frameList;
+	private final List<T> assetList;
 	private final int[][] mappings;
 
 	private final DirectionalObjectManager<List<T>> manager;
 
-	public ModelComponent(final List<T> frameList, int[][] directionMappings) {
-		if (frameList == null || directionMappings == null)
+	public ModelComponent(final List<T> assetList, int[][] directionMappings) {
+		if (assetList == null || directionMappings == null)
 			throw new IllegalArgumentException("Null argument given for mapping.");
-		if (frameList.size() <= 0 || directionMappings.length <= 0 || directionMappings[0].length <= 0)
+		if (assetList.size() <= 0 || directionMappings.length <= 0 || directionMappings[0].length <= 0)
 			throw new IllegalArgumentException("0 length argument given for mapping.");
-		if (!isValidAssets(frameList))
-			throw new IllegalArgumentException("Given frames were not valid.");
+		if (!isValidAssets(assetList))
+			throw new IllegalArgumentException("Given assets were not valid.");
 		if (!isRectangularArray(directionMappings))
 			throw new IllegalArgumentException("Mappings differed in length.");
-		if (!isValidMapping(frameList, directionMappings))
+		if (!isValidMapping(assetList, directionMappings))
 			throw new IllegalArgumentException("Mappings referenced non-existent asset in asset list.");
 
-		this.frameList = frameList;
+		this.assetList = assetList;
 		this.mappings = directionMappings;
-		this.manager = buildFrameManager(frameList, directionMappings);
+		this.manager = buildFrameManager(assetList, directionMappings);
 	}
 
-	public T getFrame(final int index, final Direction direction) {
+	public T getAsset(final int index, final Direction direction) {
 		return manager.get(direction).get(index);
 	}
 
 	protected List<T> getFrameList() {
-		return Collections.unmodifiableList(frameList);
+		return Collections.unmodifiableList(assetList);
 	}
 
-	protected int getFrameCount() {
+	protected int getCount() {
 		return mappings[0].length;
 	}
 
