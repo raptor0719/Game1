@@ -2,7 +2,7 @@ package raptor.engine.model;
 
 import java.util.List;
 
-public class WireModel extends ModelComponent<WireModelFrame> {
+public class WireModel extends DirectionalAssetCollection<WireModelFrame> {
 	private final int hardpointCount;
 
 	public WireModel(final List<WireModelFrame> frameList, int[][] directionMappings) {

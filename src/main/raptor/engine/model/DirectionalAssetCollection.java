@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class ModelComponent<T> {
+public abstract class DirectionalAssetCollection<T> {
 	private final List<T> assetList;
 	private final int[][] mappings;
 
 	private final DirectionalObjectManager<List<T>> manager;
 
-	public ModelComponent(final List<T> assetList, int[][] directionMappings) {
+	public DirectionalAssetCollection(final List<T> assetList, int[][] directionMappings) {
 		if (assetList == null || directionMappings == null)
 			throw new IllegalArgumentException("Null argument given for mapping.");
 		if (assetList.size() <= 0 || directionMappings.length <= 0 || directionMappings[0].length <= 0)

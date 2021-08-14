@@ -2,7 +2,7 @@ package raptor.engine.model;
 
 import java.util.List;
 
-public class SpriteModel extends ModelComponent<SpriteFrame> {
+public class SpriteModel extends DirectionalAssetCollection<SpriteFrame> {
 	private final int hardpointCount;
 
 	public SpriteModel(final List<SpriteFrame> spriteFrames, final int[][] directionMappings) {
