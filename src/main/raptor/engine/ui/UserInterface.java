@@ -18,17 +18,19 @@ public class UserInterface implements IDrawable {
 
 	public static final IdProvider UI_ID_PROVIDER = new IdProvider();
 
+	public static final UIState EMPTY_STATE = new UIState();
+
 	private final Queue<UIAction> receiveActionQueue;
 	private final IInputManager inputManager;
 	private final IMousePositionPoll mousePositionPoll;
 
 	private UIState currentState;
 
-	public UserInterface(final UIState startState, final IInputManager inputManager, final IMousePositionPoll mousePositionPoll) {
+	public UserInterface(final IInputManager inputManager, final IMousePositionPoll mousePositionPoll) {
 		this.receiveActionQueue = new LinkedList<>();
 		this.inputManager = inputManager;
 		this.mousePositionPoll = mousePositionPoll;
-		this.currentState = startState;
+		this.currentState = EMPTY_STATE;
 
 		inputManager.setActionQueue(receiveActionQueue);
 		inputManager.setInputMap(currentState.getInputMap());

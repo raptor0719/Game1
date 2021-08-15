@@ -3,6 +3,9 @@ package raptor.engine.game;
 import raptor.engine.display.render.IRenderer;
 import raptor.engine.display.render.LocationToViewportTransformer;
 import raptor.engine.display.render.ViewportToLocationTransformer;
+import raptor.engine.ui.UserInterface;
+import raptor.engine.ui.input.IInputManager;
+import raptor.engine.ui.input.IMousePositionPoll;
 
 public class Game {
 	private static long timeSinceLastFrame;
@@ -15,13 +18,15 @@ public class Game {
 	private static ViewportToLocationTransformer toLocationTransformer;
 	private static LocationToViewportTransformer toViewportTransformer;
 
+	private static UserInterface userInterface;
+
 	static {
 		timeSinceLastFrame = 0;
 		currentLevel = null;
 		gameInstantiated = false;
 	}
 
-	protected Game(final Level initLevel, final IRenderer setRenderer) {
+	protected Game(final Level initLevel, final IRenderer setRenderer, final IInputManager inputManager, final IMousePositionPoll mousePositionPoll) {
 		if (currentLevel != null)
 			throw new IllegalStateException("Only 1 instance of the Game is allowed.");
 		currentLevel = initLevel;
@@ -29,6 +34,7 @@ public class Game {
 		gameInstantiated = true;
 		toLocationTransformer = new ViewportToLocationTransformer(setRenderer.getViewport());
 		toViewportTransformer = new LocationToViewportTransformer(setRenderer.getViewport());
+		userInterface = new UserInterface(inputManager, mousePositionPoll);
 	}
 
 	public void start() {
@@ -37,12 +43,15 @@ public class Game {
 			long currentTime = System.currentTimeMillis();
 			timeSinceLastFrame = currentTime - previousTime;
 
+			userInterface.processActions();
+
 			if (timeSinceLastFrame >= 17) {
 				previousTime = currentTime;
 				currentLevel.tick();
 			}
 
 			renderer.queueDrawables(currentLevel.getDrawables());
+			renderer.queueDrawable(userInterface);
 
 			renderer.draw();
 		}
@@ -69,6 +78,12 @@ public class Game {
 		if (!gameInstantiated)
 			throw new IllegalStateException("The game must be instantiated before static calls can be made.");
 		return renderer;
+	}
+
+	public static UserInterface getUserInterface() {
+		if (!gameInstantiated)
+			throw new IllegalStateException("The game must be instantiated before static calls can be made.");
+		return userInterface;
 	}
 
 	public static ViewportToLocationTransformer getViewportToLocation() {

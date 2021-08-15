@@ -16,7 +16,6 @@ import raptor.engine.event.IEventBroker;
 import raptor.engine.game.entity.DrawDepthEntityComparator;
 import raptor.engine.game.entity.IEntity;
 import raptor.engine.nav.api.INavigator;
-import raptor.engine.ui.UserInterface;
 import raptor.engine.util.IIdProvider;
 import raptor.engine.util.IdProvider;
 import raptor.engine.util.ListSortingIterator;
@@ -30,8 +29,6 @@ public abstract class Level implements IDrawable {
 	private final Map<Integer, INavigator> navigators;
 	private final Map<Integer, Terrain> terrains;
 	private final Map<Integer, CollisionPlane> collisionPlanes;
-
-	private UserInterface userInterface;
 
 	public Level() {
 		this.eventBroker = new EventBroker();
@@ -53,7 +50,6 @@ public abstract class Level implements IDrawable {
 	public void tick() {
 		checkCollisions();
 
-		userInterface.processActions();
 		eventBroker.distribute();
 
 		for (final IEntity e : entities.values())
@@ -68,7 +64,7 @@ public abstract class Level implements IDrawable {
 	}
 
 	public Iterator<IDrawable> getDrawables() {
-		return new InsertingDrawableIteratorWrapper(this, new ListSortingIterator<>(entities.values(), DRAW_DEPTH_COMPARE), userInterface);
+		return new InsertingDrawableIteratorWrapper(this, new ListSortingIterator<>(entities.values(), DRAW_DEPTH_COMPARE), null);
 	}
 
 	public IEventBroker getEventBroker() {
@@ -127,14 +123,6 @@ public abstract class Level implements IDrawable {
 
 	public List<IEntity> getAllEntities() {
 		return new ArrayList<IEntity>(entities.values());
-	}
-
-	public UserInterface getUserInterface() {
-		return userInterface;
-	}
-
-	public void setUserInterface(final UserInterface newUserInterface) {
-		this.userInterface = newUserInterface;
 	}
 
 	public CollisionPlane getCollisionPlane(final int id) {
