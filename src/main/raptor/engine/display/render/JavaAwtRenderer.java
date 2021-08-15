@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class JavaAwtRenderer implements IRenderer {
 	private final Graphics2D awtGraphics;
@@ -15,6 +17,8 @@ public class JavaAwtRenderer implements IRenderer {
 	private final Viewport viewport;
 
 	private final IGraphics graphics;
+
+	private final Queue<IDrawable> drawQueue;
 
 	public JavaAwtRenderer(final Graphics2D awtGraphics, final int width, final int height) {
 		this.awtGraphics = awtGraphics;
@@ -27,15 +31,28 @@ public class JavaAwtRenderer implements IRenderer {
 		awtGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		graphics = new ToViewportGraphicsWrapper(new JavaAwtGraphics(toBuffer), viewport);
+
+		drawQueue = new LinkedList<>();
 	}
 
 	@Override
-	public void draw(final Iterator<IDrawable> drawables) {
+	public void queueDrawable(final IDrawable drawable) {
+		drawQueue.add(drawable);
+	}
+
+	@Override
+	public void queueDrawables(Iterator<IDrawable> drawables) {
+		while (drawables.hasNext())
+			drawQueue.add(drawables.next());
+	}
+
+	@Override
+	public void draw() {
 		clear();
 
 		IDrawable current;
-		while(drawables.hasNext()) {
-			current = drawables.next();
+		while(!drawQueue.isEmpty()) {
+			current = drawQueue.poll();
 			current.draw(graphics);
 		}
 

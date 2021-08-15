@@ -42,7 +42,9 @@ public class Game {
 				currentLevel.tick();
 			}
 
-			renderer.draw(currentLevel.getDrawables());
+			renderer.queueDrawables(currentLevel.getDrawables());
+
+			renderer.draw();
 		}
 	}
 
