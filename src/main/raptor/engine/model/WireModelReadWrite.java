@@ -18,7 +18,7 @@ public class WireModelReadWrite {
 		final DataInputStream dis = new DataInputStream(stream);
 
 		final byte[] magicNumber = new byte[5];
-		dis.read(magicNumber);
+		dis.readFully(magicNumber);
 
 		if (!Arrays.equals(magicNumber, MAGIC_NUMBER))
 			throw new IOException("Was not a WireModel format.");
