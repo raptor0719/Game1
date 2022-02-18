@@ -130,7 +130,7 @@ public abstract class Level implements IDrawable {
 	}
 
 	public CollisionPlane addCollisionPlane(final int id, final String name) {
-		final CollisionPlane newCollisionPlane = new CollisionPlane(id, name, new CollisionPlaneHandler(eventBroker));
+		final CollisionPlane newCollisionPlane = new CollisionPlane(id, name, new CollisionPlaneHandler());
 
 		collisionPlanes.put(id, newCollisionPlane);
 
