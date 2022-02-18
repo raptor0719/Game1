@@ -6,6 +6,7 @@ import java.util.Queue;
 
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.display.render.IGraphics;
+import raptor.engine.ui.elements.UIButton;
 import raptor.engine.ui.elements.UIElement;
 import raptor.engine.ui.input.IActionHandler;
 import raptor.engine.ui.input.IInputManager;
@@ -37,9 +38,9 @@ public class UserInterface implements IDrawable {
 	}
 
 	public void processActions() {
-		UIAction current = receiveActionQueue.poll();
-		while (current != null) {
-			final UIState potentialDestination = currentState.getDestination(current.getAction());
+		UIAction currentAction = receiveActionQueue.poll();
+		while (currentAction != null) {
+			final UIState potentialDestination = currentState.getDestination(currentAction.getAction());
 
 			if (potentialDestination != null) {
 				receiveActionQueue.clear();
@@ -48,16 +49,23 @@ public class UserInterface implements IDrawable {
 				return;
 			}
 
-			// Look for ACTIVATE actions
-			// If there is one consume it
-			// - get the buttons from the current state
-			// - check if we activated any
-			// - if so call the activation method
+			boolean buttonWasActivated = false;
+			if (ACTIVATE_BUTTON_ACTION.equals(currentAction.getAction())) {
+				final UIButton activatedButton = currentState.getActivatedButton(currentAction.getScreenMouseX(), currentAction.getScreenMouseY());
 
-			final IActionHandler handler = currentState.getActionHandler(current.getAction());
-			if (handler != null)
-				handler.handleAction(current.getGameMouseX(), current.getGameMouseY());
-			current = receiveActionQueue.poll();
+				if (activatedButton != null) {
+					activatedButton.activate();
+					buttonWasActivated = true;
+				}
+			}
+
+			if (!buttonWasActivated) {
+				final IActionHandler handler = currentState.getActionHandler(currentAction.getAction());
+				if (handler != null)
+					handler.handleAction(currentAction.getGameMouseX(), currentAction.getGameMouseY());
+			}
+
+			currentAction = receiveActionQueue.poll();
 		}
 	}
 

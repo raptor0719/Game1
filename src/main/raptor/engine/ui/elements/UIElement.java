@@ -97,6 +97,10 @@ public abstract class UIElement implements IDrawable {
 		this.depth = newDepth;
 	}
 
+	public boolean positionIsInElement(final int posX, final int posY) {
+		return posX >= x && posX <= x + width && posY >= y && posY <= y + height;
+	}
+
 	@Override
 	public boolean equals(final Object o) {
 		if (!(o instanceof UIElement))

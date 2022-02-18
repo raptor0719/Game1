@@ -7,5 +7,5 @@ public abstract class UIButton extends UIElement {
 		super(x, y, anchor, width, height, depth);
 	}
 
-	protected abstract void onActivate();
+	public abstract void activate();
 }

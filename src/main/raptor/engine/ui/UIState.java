@@ -70,6 +70,14 @@ public class UIState {
 		return buttons.iterator();
 	}
 
+	public UIButton getActivatedButton(final int screenMouseX, final int screenMouseY) {
+		for (final UIButton button : buttons)
+			if (button.positionIsInElement(screenMouseX, screenMouseY))
+				return button;
+
+		return null;
+	}
+
 	public void clearElements() {
 		elements.clear();
 		buttons.clear();
