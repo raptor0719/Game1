@@ -56,7 +56,7 @@ public class UserInterface implements IDrawable {
 
 			final IActionHandler handler = currentState.getActionHandler(current.getAction());
 			if (handler != null)
-				handler.handleAction(current.getMouseX(), current.getMouseY());
+				handler.handleAction(current.getGameMouseX(), current.getGameMouseY());
 			current = receiveActionQueue.poll();
 		}
 	}

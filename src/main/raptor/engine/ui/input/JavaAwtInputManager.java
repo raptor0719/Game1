@@ -77,7 +77,7 @@ public class JavaAwtInputManager implements IInputManager, IMousePositionPoll, M
 	}
 
 	private UIAction createAction(final int viewportMousePositionX, final int viewportMousePositionY, final String action) {
-		return new UIAction(toLocationTransformer.transformX(viewportMousePositionX), toLocationTransformer.transformY(viewportMousePositionY), action);
+		return new UIAction(viewportMousePositionX, viewportMousePositionY, toLocationTransformer.transformX(viewportMousePositionX), toLocationTransformer.transformY(viewportMousePositionY), action);
 	}
 
 	// NO-OP Methods
