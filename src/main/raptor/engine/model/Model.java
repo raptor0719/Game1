@@ -1,9 +1,12 @@
 package raptor.engine.model;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Collection;
 
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.display.render.IGraphics;
+import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.api.IPoint;
 
 public class Model implements IDrawable {
@@ -60,7 +63,12 @@ public class Model implements IDrawable {
 
 			for (final SpriteCollection spriteCollection : sprites) {
 				final Sprite sprite = spriteCollection.getAsset(currentFrame, direction);
-				final IPoint attach = sprite.getAttachPoint();
+
+				final boolean isRotated = h.getRotation() != 0;
+
+				// TODO: We really should cache these rotations cause rotating these EVERY frame is gonna be super expensive
+				final BufferedImage image = (isRotated) ? rotateImage(sprite.getImage(), h.getRotation()) : sprite.getImage();
+				final IPoint attach = (isRotated) ? rotatePoint(sprite.getAttachPoint(), image.getWidth()/2, image.getHeight()/2, h.getRotation()) : sprite.getAttachPoint();
 
 				final int x = position.getX() + h.getX() - attach.getX();
 				final int y = position.getY() + h.getY() - attach.getY();
@@ -68,5 +76,37 @@ public class Model implements IDrawable {
 				graphics.drawImage(sprite.getImage(), x, y);
 			}
 		}
+	}
+
+	private BufferedImage rotateImage(final BufferedImage image, final int degrees) {
+		final int width = image.getWidth();
+		final int height = image.getHeight();
+
+		final double radians = Math.toRadians(degrees);
+
+		final BufferedImage rotated = new BufferedImage(width, height, image.getType());
+
+		final Graphics2D g = rotated.createGraphics();
+
+		g.rotate(radians, width/2, height/2);
+		g.drawImage(image, null, 0, 0);
+
+		return rotated;
+	}
+
+	private Point rotatePoint(final Point point, final int pivotX, final int pivotY, final int degrees) {
+		final double sin = Math.sin(Math.toRadians(degrees));
+		final double cos = Math.cos(Math.toRadians(degrees));
+
+		final int tX = point.getX() - pivotX;
+		final int tY = point.getY() - pivotY;
+
+		final double newX = tX * cos - tY * sin;
+		final double newY = tX * sin + tY * cos;
+
+		final double x = newX + pivotX;
+		final double y = newY + pivotY;
+
+		return new Point((int)x, (int)y);
 	}
 }

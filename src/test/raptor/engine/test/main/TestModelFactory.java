@@ -66,6 +66,6 @@ public class TestModelFactory {
 	}
 
 	private static IHardpoint point(int x, int y) {
-		return new Hardpoint("", x, y, 0);
+		return new Hardpoint("", x, y, 0, 0);
 	}
 }

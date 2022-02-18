@@ -1,14 +1,14 @@
 package raptor.engine.model;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import raptor.engine.util.geometry.Point;
 
 public class Sprite implements ISprite {
 	private final Point attachPoint;
-	private final Image image;
+	private final BufferedImage image;
 
-	public Sprite(final int x, final int y, final Image image) {
+	public Sprite(final int x, final int y, final BufferedImage image) {
 		this.attachPoint = new Point(x, y);
 		this.image = image;
 	}
@@ -19,7 +19,7 @@ public class Sprite implements ISprite {
 	}
 
 	@Override
-	public Image getImage() {
+	public BufferedImage getImage() {
 		return image;
 	}
 }

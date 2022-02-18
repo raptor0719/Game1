@@ -51,9 +51,10 @@ public class WireModelReadWrite {
 			final String name = BinaryDataTools.marshalString(dis);
 			final int x = dis.readInt();
 			final int y = dis.readInt();
+			final int rotation = dis.readInt();
 			final int depth = dis.readInt();
 
-			hardpoints[i] = new Hardpoint(name, x, y, depth);
+			hardpoints[i] = new Hardpoint(name, x, y, rotation, depth);
 		}
 
 		return new WireModelFrame(hardpoints);
@@ -102,6 +103,7 @@ public class WireModelReadWrite {
 		dos.write(BinaryDataTools.serializeString(hardpoint.getName()));
 		dos.writeInt(hardpoint.getX());
 		dos.writeInt(hardpoint.getY());
+		dos.writeInt(hardpoint.getRotation());
 		dos.writeInt(hardpoint.getDepth());
 	}
 
