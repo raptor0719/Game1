@@ -83,7 +83,7 @@ public class UserInterface implements IDrawable {
 	}
 
 	public void setState(final UIState newState) {
-		this.currentState = newState;
+		this.currentState = (newState == null) ? EMPTY_STATE : newState;
 		inputManager.setInputMap(currentState.getInputMap());
 	}
 
