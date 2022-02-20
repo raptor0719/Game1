@@ -65,7 +65,7 @@ public class JavaAwtRenderer implements IRenderer {
 	}
 
 	private void clear() {
-		toBuffer.setColor(Color.WHITE);
+		toBuffer.setColor(Color.BLACK);
 		toBuffer.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
 	}
 }
