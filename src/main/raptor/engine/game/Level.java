@@ -10,7 +10,6 @@ import java.util.Map;
 import raptor.engine.collision.CollisionPlane;
 import raptor.engine.collision.CollisionPlaneHandler;
 import raptor.engine.display.render.IDrawable;
-import raptor.engine.display.render.IViewport;
 import raptor.engine.event.EventBroker;
 import raptor.engine.event.IEventBroker;
 import raptor.engine.game.entity.DrawDepthEntityComparator;
@@ -43,19 +42,19 @@ public abstract class Level implements IDrawable {
 		// Let implementing classes override if wanted
 	}
 
-	protected void updateViewport(final IViewport viewport) {
+	protected void update() {
 		// Let implementing classes override if wanted
 	}
 
 	public void tick() {
-		checkCollisions();
-
 		eventBroker.distribute();
+
+		checkCollisions();
 
 		for (final IEntity e : entities.values())
 			e.update();
 
-		updateViewport(Game.getRenderer().getViewport());
+		update();
 	}
 
 	private void checkCollisions() {
