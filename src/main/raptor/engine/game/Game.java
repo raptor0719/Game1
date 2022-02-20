@@ -20,10 +20,13 @@ public class Game {
 
 	private static UserInterface userInterface;
 
+	private static boolean exitGame;
+
 	static {
 		timeSinceLastFrame = 0;
 		currentLevel = null;
 		gameInstantiated = false;
+		exitGame = false;
 	}
 
 	protected Game(final Level initLevel, final IRenderer setRenderer, final IInputManager inputManager, final IMousePositionPoll mousePositionPoll) {
@@ -39,7 +42,7 @@ public class Game {
 
 	public void start() {
 		long previousTime = System.currentTimeMillis();
-		while (true) {
+		while (!exitGame) {
 			long currentTime = System.currentTimeMillis();
 			timeSinceLastFrame = currentTime - previousTime;
 
@@ -72,6 +75,10 @@ public class Game {
 			throw new IllegalArgumentException("Attempted to load null level.");
 		level.init();
 		currentLevel = level;
+	}
+
+	public static void exitGame() {
+		exitGame = true;
 	}
 
 	public static IRenderer getRenderer() {
