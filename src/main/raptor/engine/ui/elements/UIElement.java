@@ -1,30 +1,40 @@
 package raptor.engine.ui.elements;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.ui.UIAnchorPoint;
 import raptor.engine.ui.UserInterface;
 
 public abstract class UIElement implements IDrawable {
 	private final long id;
+	private final List<UIElement> children;
 	private UIElement parent;
 
-	private int x;
-	private int y;
+	private int relativeX;
+	private int relativeY;
 	private UIAnchorPoint anchor;
 	private int width;
 	private int height;
 	private int depth;
 
+	private int absoluteX;
+	private int absoluteY;
+
 	public UIElement(final int x, final int y, final UIAnchorPoint anchor, final int width, final int height, final int depth) {
 		this.id = UserInterface.UI_ID_PROVIDER.get();
+		this.children = new ArrayList<>();
 		this.parent = null;
 
-		this.x = x;
-		this.y = y;
+		this.relativeX = x;
+		this.relativeY = y;
 		this.anchor = anchor;
 		this.width = width;
 		this.height = height;
 		this.depth = depth;
+
+		updateAbsolutePosition();
 	}
 
 	public long getId() {
@@ -35,34 +45,49 @@ public abstract class UIElement implements IDrawable {
 		return parent;
 	}
 
+	public List<UIElement> getChildren() {
+		return children;
+	}
+
+	public void addChild(final UIElement uiElement) {
+		if (children.contains(uiElement))
+			return;
+		children.add(uiElement);
+		uiElement.setParent(this);
+	}
+
 	protected void setParent(final UIElement newParent) {
+		if (parent != null)
+			parent.children.remove(this);
+
 		this.parent = newParent;
+		updateAbsolutePosition();
 	}
 
 	public int getAbsoluteX() {
-		final int xToUse = (parent == null) ? x : parent.getAbsoluteX() + x;
-		return anchor.translateX(xToUse, width);
+		return absoluteX;
 	}
 
 	public int getRelativeX() {
-		return x;
+		return relativeX;
 	}
 
 	public void setX(final int newX) {
-		this.x = newX;
+		this.relativeX = newX;
+		updateAbsolutePosition();
 	}
 
 	public int getAbsoluteY() {
-		final int yToUse = (parent == null) ? y : parent.getAbsoluteY() + y;
-		return anchor.translateY(yToUse, height);
+		return absoluteY;
 	}
 
 	public int getRelativeY() {
-		return y;
+		return relativeY;
 	}
 
 	public void setY(final int newY) {
-		this.y = newY;
+		this.relativeY = newY;
+		updateAbsolutePosition();
 	}
 
 	public UIAnchorPoint getAnchor() {
@@ -71,6 +96,7 @@ public abstract class UIElement implements IDrawable {
 
 	public void setAnchor(final UIAnchorPoint newAnchor) {
 		this.anchor = newAnchor;
+		updateAbsolutePosition();
 	}
 
 	public int getWidth() {
@@ -79,6 +105,7 @@ public abstract class UIElement implements IDrawable {
 
 	public void setWidth(final int newWidth) {
 		this.width = newWidth;
+		updateAbsolutePosition();
 	}
 
 	public int getHeight() {
@@ -87,6 +114,7 @@ public abstract class UIElement implements IDrawable {
 
 	public void setHeight(final int newHeight) {
 		this.height = newHeight;
+		updateAbsolutePosition();
 	}
 
 	public int getDepth() {
@@ -98,7 +126,7 @@ public abstract class UIElement implements IDrawable {
 	}
 
 	public boolean positionIsInElement(final int posX, final int posY) {
-		return posX >= x && posX <= x + width && posY >= y && posY <= y + height;
+		return posX >= absoluteX && posX <= absoluteX + width && posY >= absoluteY && posY <= absoluteY + height;
 	}
 
 	@Override
@@ -109,5 +137,23 @@ public abstract class UIElement implements IDrawable {
 		final UIElement casted = (UIElement)o;
 
 		return casted.getId() == this.getId();
+	}
+
+	protected void updateAbsolutePosition() {
+		this.absoluteX = calculateAbsoluteX();
+		this.absoluteY = calculateAbsoluteY();
+
+		for (final UIElement child : children)
+			child.updateAbsolutePosition();
+	}
+
+	private int calculateAbsoluteX() {
+		final int xToUse = (parent == null) ? relativeX : parent.getAbsoluteX() + relativeX;
+		return anchor.translateX(xToUse, width);
+	}
+
+	public int calculateAbsoluteY() {
+		final int yToUse = (parent == null) ? relativeY : parent.getAbsoluteY() + relativeY;
+		return anchor.translateY(yToUse, height);
 	}
 }
