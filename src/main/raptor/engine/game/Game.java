@@ -32,12 +32,14 @@ public class Game {
 	public Game(final Level initLevel, final IRenderer setRenderer, final IInputManager inputManager, final IMousePositionPoll mousePositionPoll) {
 		if (currentLevel != null)
 			throw new IllegalStateException("Only 1 instance of the Game is allowed.");
-		currentLevel = initLevel;
 		renderer = setRenderer;
-		gameInstantiated = true;
 		toLocationTransformer = new ViewportToLocationTransformer(setRenderer.getViewport());
 		toViewportTransformer = new LocationToViewportTransformer(setRenderer.getViewport());
 		userInterface = new UserInterface(inputManager, mousePositionPoll);
+
+		gameInstantiated = true;
+
+		loadLevel(initLevel);
 	}
 
 	public void start() {
