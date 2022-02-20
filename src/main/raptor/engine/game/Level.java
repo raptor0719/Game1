@@ -148,8 +148,8 @@ public abstract class Level implements IDrawable {
 			this.insertedBefore = insertedBefore;
 			this.insertedAfter = insertedAfter;
 			this.wrapped = wrapped;
-			insertedBeforeHasBeenServed = false;
-			insertedAfterHasBeenServed = false;
+			insertedBeforeHasBeenServed = insertedBefore == null;
+			insertedAfterHasBeenServed = insertedAfter == null;
 		}
 
 		@Override
