@@ -25,25 +25,25 @@ public class ToViewportGraphicsWrapper implements IGraphics {
 	}
 
 	@Override
-	public void drawOval(final int x, final int y, final int width, final int height, final IColor color) {
+	public void drawOval(final int x, final int y, final int width, final int height, final boolean fill, final IColor color) {
 		final int viewportX = toViewport.transformX(x);
 		final int viewportY = toViewport.transformY(y);
 
 		if (!isInViewport(viewportX, viewportY, width, height))
 			return;
 
-		graphics.drawOval(viewportX, viewportY, width, height, color);
+		graphics.drawOval(viewportX, viewportY, width, height, fill, color);
 	}
 
 	@Override
-	public void drawRectangle(final int x, final int y, final int width, final int height, final IColor color) {
+	public void drawRectangle(final int x, final int y, final int width, final int height, final boolean fill, final IColor color) {
 		final int viewportX = toViewport.transformX(x);
 		final int viewportY = toViewport.transformY(y);
 
 		if (!isInViewport(viewportX, viewportY, width, height))
 			return;
 
-		graphics.drawRectangle(viewportX, viewportY, width, height, color);
+		graphics.drawRectangle(viewportX, viewportY, width, height, fill, color);
 	}
 
 	private boolean isInViewport(final int viewportX, final int viewportY, final int width, final int height) {

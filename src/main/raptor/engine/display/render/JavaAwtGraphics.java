@@ -17,16 +17,16 @@ public class JavaAwtGraphics implements IGraphics {
 	}
 
 	@Override
-	public void drawOval(final int x, final int y, final int width, final int height, final IColor color) {
+	public void drawOval(final int x, final int y, final int width, final int height, final boolean fill, final IColor color) {
 		final Color awtColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 		graphics.setColor(awtColor);
-		graphics.drawOval(x, y, width, height);
+		graphics.fillOval(x, y, width, height);
 	}
 
 	@Override
-	public void drawRectangle(final int x, final int y, final int width, final int height, final IColor color) {
+	public void drawRectangle(final int x, final int y, final int width, final int height,final boolean fill,  final IColor color) {
 		final Color awtColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 		graphics.setColor(awtColor);
-		graphics.drawRect(x, y, width, height);
+		graphics.fillRect(x, y, width, height);
 	}
 }
