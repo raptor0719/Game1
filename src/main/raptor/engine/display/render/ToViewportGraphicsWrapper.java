@@ -53,17 +53,21 @@ public class ToViewportGraphicsWrapper implements IGraphics {
 		final int viewportEndX = toViewport.transformX(endX);
 		final int viewportEndY = toViewport.transformY(endY);
 
-		if (!isInViewport(viewportStartX, viewportStartY) && !isInViewport(viewportEndX, viewportEndY))
+		// Treat the line as a rectangle to test if it is in the viewport
+		// This handles the case where both endpoints are outside of the viewport BUT
+		//  it intersect into the viewport.
+		final int testX = (viewportStartX < viewportEndX) ? viewportStartX : viewportEndX;
+		final int testY = (viewportStartY < viewportEndY) ? viewportStartY : viewportEndY;
+		final int testWidth = (viewportStartX < viewportEndX) ? viewportEndX - viewportStartX : viewportStartX - viewportEndX;
+		final int testHeight = (viewportStartY < viewportEndY) ? viewportEndY - viewportStartY : viewportStartY - viewportEndY;
+
+		if (!isInViewport(testX, testY, testWidth, testHeight))
 			return;
 
 		graphics.drawLine(viewportStartX, viewportStartY, viewportEndX, viewportEndY, thickness, color);
 	}
 
-	private boolean isInViewport(final int viewportX, final int viewportY) {
-		return viewportX < viewport.getWidth() && viewportX > 0 && viewportY < viewport.getHeight() && viewportY > 0;
-	}
-
 	private boolean isInViewport(final int viewportX, final int viewportY, final int width, final int height) {
-		return (viewportX < viewport.getWidth()) && (viewportX + width > 0) && (viewportY < viewport.getHeight()) && (viewportY + height > 0);
+		return (viewportX <= viewport.getWidth()) && (viewportX + width >= 0) && (viewportY <= viewport.getHeight()) && (viewportY + height >= 0);
 	}
 }
