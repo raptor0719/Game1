@@ -43,4 +43,9 @@ public class JavaAwtGraphics implements IGraphics {
 		graphics.setStroke(new BasicStroke(thickness));
 		graphics.drawLine(startX, startY, endX, endY);
 	}
+
+	@Override
+	public IGraphics getViewportRenderer() {
+		return this;
+	}
 }

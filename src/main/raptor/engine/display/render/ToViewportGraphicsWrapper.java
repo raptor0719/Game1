@@ -67,6 +67,11 @@ public class ToViewportGraphicsWrapper implements IGraphics {
 		graphics.drawLine(viewportStartX, viewportStartY, viewportEndX, viewportEndY, thickness, color);
 	}
 
+	@Override
+	public IGraphics getViewportRenderer() {
+		return graphics;
+	}
+
 	private boolean isInViewport(final int viewportX, final int viewportY, final int width, final int height) {
 		return (viewportX <= viewport.getWidth()) && (viewportX + width >= 0) && (viewportY <= viewport.getHeight()) && (viewportY + height >= 0);
 	}

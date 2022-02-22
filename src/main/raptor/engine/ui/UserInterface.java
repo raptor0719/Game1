@@ -92,7 +92,9 @@ public class UserInterface implements IDrawable {
 	}
 
 	@Override
-	public void draw(final IGraphics graphics) {
+	public void draw(final IGraphics translatedGraphics) {
+		final IGraphics graphics = translatedGraphics.getViewportRenderer();
+
 		final Iterator<UIElement> sorted = currentState.getElements();
 
 		if (!sorted.hasNext())
