@@ -2,7 +2,6 @@ package raptor.engine.nav.agent;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
 import raptor.engine.nav.api.INavAgent;
 import raptor.engine.nav.api.INavigator;
@@ -10,14 +9,19 @@ import raptor.engine.util.geometry.DoubleVector;
 import raptor.engine.util.geometry.Point;
 
 public class DefaultNavAgent implements INavAgent {
-	private final INavigator navigator;
+	private INavigator navigator;
 
 	private int positionX;
 	private int positionY;
 	private int currentWaypointX;
 	private int currentWaypointY;
 
-	private Queue<Point> path;
+	private int destinationX;
+	private int destinationY;
+
+	private List<Point> path;
+
+	private DoubleVector currentMovementUnitVector;
 
 	public DefaultNavAgent(final INavigator navigator) {
 		this.navigator = navigator;
@@ -27,7 +31,12 @@ public class DefaultNavAgent implements INavAgent {
 		currentWaypointX = 0;
 		currentWaypointY = 0;
 
+		destinationX = 0;
+		destinationY = 0;
+
 		path = new LinkedList<Point>();
+
+		currentMovementUnitVector = new DoubleVector(0, 0);
 	}
 
 	@Override
@@ -41,13 +50,27 @@ public class DefaultNavAgent implements INavAgent {
 	}
 
 	@Override
-	public Point getPosition() {
-		return new Point(positionX, positionY);
+	public int getPositionX() {
+		return positionX;
+	}
+
+	@Override
+	public int getPositionY() {
+		return positionY;
 	}
 
 	@Override
 	public void setDestination(final int x, final int y) {
-		setPath(navigator.findPath(getPosition(), new Point(x, y)));
+		setPath(navigator.findPath(new Point(positionX, positionY), new Point(x, y)));
+
+		final Point end = path.get(path.size() - 1);
+		destinationX = end.getX();
+		destinationY = end.getY();
+	}
+
+	@Override
+	public Point getDestination() {
+		return new Point(destinationX, destinationY);
 	}
 
 	@Override
@@ -68,7 +91,7 @@ public class DefaultNavAgent implements INavAgent {
 			if (path.isEmpty())
 				return;
 
-			final Point nextWaypoint = path.poll();
+			final Point nextWaypoint = path.remove(0);
 			currentWaypointX = nextWaypoint.getX();
 			currentWaypointY = nextWaypoint.getY();
 
@@ -79,11 +102,29 @@ public class DefaultNavAgent implements INavAgent {
 		positionX = positionX + round(totalMovementVector.getX());
 		positionY = positionY + round(totalMovementVector.getY());
 
+		currentMovementUnitVector = totalMovementVector;
+
 		if (atWaypoint() && !path.isEmpty()) {
-			final Point nextWaypoint = path.poll();
+			final Point nextWaypoint = path.remove(0);
 			currentWaypointX = nextWaypoint.getX();
 			currentWaypointY = nextWaypoint.getY();
 		}
+	}
+
+	@Override
+	public void setNavigator(final INavigator navigator) {
+		this.navigator = navigator;
+		setPosition(positionX, positionY);
+	}
+
+	@Override
+	public DoubleVector getFaceVector() {
+		return currentMovementUnitVector;
+	}
+
+	@Override
+	public boolean atDestination() {
+		return positionX == destinationX && positionY == destinationY;
 	}
 
 	/* INTERNAL */
@@ -95,7 +136,7 @@ public class DefaultNavAgent implements INavAgent {
 		path.clear();
 		path.addAll(newPath);
 
-		final Point start = path.poll();
+		final Point start = path.remove(0);
 		currentWaypointX = start.getX();
 		currentWaypointY = start.getY();
 	}
