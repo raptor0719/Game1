@@ -26,7 +26,6 @@ public abstract class Level implements IDrawable {
 	private final Map<Long, IEntity> entities;
 	private final IIdProvider entityIdProvider;
 	private final Map<Integer, INavigator> navigators;
-	private final Map<Integer, Terrain> terrains;
 	private final Map<Integer, CollisionPlane> collisionPlanes;
 
 	public Level() {
@@ -34,7 +33,6 @@ public abstract class Level implements IDrawable {
 		this.entities = new HashMap<Long, IEntity>();
 		this.entityIdProvider = new IdProvider();
 		this.navigators = new HashMap<Integer, INavigator>();
-		this.terrains = new HashMap<Integer, Terrain>();
 		this.collisionPlanes = new HashMap<Integer, CollisionPlane>();
 	}
 
@@ -91,18 +89,6 @@ public abstract class Level implements IDrawable {
 			if (n.containsPoint(x, y))
 				return n;
 		return null;
-	}
-
-	public void addTerrain(final Terrain terrain) {
-		terrains.put(terrain.getId(), terrain);
-	}
-
-	public void removeTerrain(final int id) {
-		terrains.remove(id);
-	}
-
-	public Terrain getTerrain(final int id) {
-		return terrains.get(id);
 	}
 
 	public void addEntity(final IEntity entity) throws IllegalArgumentException {
