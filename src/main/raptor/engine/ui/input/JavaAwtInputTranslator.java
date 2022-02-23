@@ -30,8 +30,8 @@ public class JavaAwtInputTranslator {
 		MOUSE_INPUT_MAP = new HashMap<Integer, PhysicalInput>();
 
 		MOUSE_INPUT_MAP.put(MouseEvent.BUTTON1, PhysicalInput.LEFT_MOUSE);
-		MOUSE_INPUT_MAP.put(MouseEvent.BUTTON2, PhysicalInput.RIGHT_MOUSE);
-		MOUSE_INPUT_MAP.put(MouseEvent.BUTTON3, PhysicalInput.MIDDLE_MOUSE);
+		MOUSE_INPUT_MAP.put(MouseEvent.BUTTON2, PhysicalInput.MIDDLE_MOUSE);
+		MOUSE_INPUT_MAP.put(MouseEvent.BUTTON3, PhysicalInput.RIGHT_MOUSE);
 	}
 
 	public static PhysicalInput translateKeyInput(final Integer in) {
