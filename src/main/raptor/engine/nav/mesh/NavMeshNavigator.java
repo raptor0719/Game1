@@ -37,11 +37,25 @@ public class NavMeshNavigator implements INavigator {
 
 	@Override
 	public List<Point> findPath(final Point start, final Point end) {
-		final NavMeshNode startNode = navMap.resolvePoint(start);
-		final NavMeshNode endNode = navMap.resolvePoint(end);
+		NavMeshNode startNode;
+		NavMeshNode endNode;
 
-		if (endNode == null || startNode == null)
-			return null;
+		try {
+			startNode = navMap.resolvePoint(start);
+			endNode = navMap.resolvePoint(end);
+		} catch (final NavMeshPointResolver.PointNotInBoundsException e) {
+			final List<Point> path = new ArrayList<Point>(2);
+			path.add(start);
+			path.add(start);
+			return path;
+		}
+
+		if (endNode == null || startNode == null) {
+			final List<Point> path = new ArrayList<Point>(2);
+			path.add(start);
+			path.add(start);
+			return path;
+		}
 
 		// Short circuit here if start and end nodes are the same
 		if (startNode.equals(endNode)) {

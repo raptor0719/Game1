@@ -55,6 +55,12 @@ public class NavMeshPointResolver implements IPointResolver<NavMeshNode> {
 			}
 			iter++;
 		}
-		throw new RuntimeException("Given point out of bounds");
+		throw new PointNotInBoundsException("Given point out of bounds");
+	}
+
+	public static class PointNotInBoundsException extends RuntimeException {
+		public PointNotInBoundsException(final String cause) {
+			super(cause);
+		}
 	}
 }
