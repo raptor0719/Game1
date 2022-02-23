@@ -46,6 +46,11 @@ public class DoubleVector {
 		return this.x * vector.getX() + this.y * vector.getY();
 	}
 
+	public double getAngleBetween(final DoubleVector v) {
+		final double magnitude = calculateMagnitude(this);
+		return Math.acos(dot(v) / (magnitude*v.getMagnitude()));
+	}
+
 	@Override
 	public String toString() {
 		return "DoubleVector:[x=" + x + ", y=" + y + "]";
