@@ -1,46 +1,80 @@
 package raptor.engine.model;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
-public class SpriteCollection extends DirectionalAssetCollection<Sprite> {
-	private final String name;
+public class SpriteCollection {
+	private final List<DirectionalSprite> spriteCollections;
 
-	public SpriteCollection(final String name, final List<Sprite> physicalSprites, final int[][] mappings) {
-		super(physicalSprites, mappings);
-		this.name = name;
+	public SpriteCollection() {
+		this.spriteCollections = new LinkedList<>();
 	}
 
-	public String getName() {
-		return name;
+	public void addCollectionOnTop(final DirectionalSprite newCollection) {
+		spriteCollections.add(newCollection);
 	}
 
-	@Override
-	protected boolean isValidAssets(final List<Sprite> assetList) {
-		return assetList != null && assetList.size() > 0;
+	public void addCollectionOnBottom(final DirectionalSprite newCollection) {
+		spriteCollections.add(0, newCollection);
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	public void addCollectionAfter(final DirectionalSprite newCollection, final String targetCollection) {
+		final int index = indexOfCollection(targetCollection);
+
+		if (index < 0)
+			throw new IllegalArgumentException("Target collection did not exist. Target Collection: " + targetCollection);
+
+		spriteCollections.add(index + 1, newCollection);
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		SpriteCollection other = (SpriteCollection) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public void addCollectionBefore(final DirectionalSprite newCollection, final String targetCollection) {
+		final int index = indexOfCollection(targetCollection);
+
+		if (index < 0)
+			throw new IllegalArgumentException("Target collection did not exist. Target Collection: " + targetCollection);
+
+		spriteCollections.add(index, newCollection);
+	}
+
+	public DirectionalSprite removeCollection(final String name) {
+		for (final DirectionalSprite c : spriteCollections) {
+			if (c.getName().equals(name)) {
+				spriteCollections.remove(c);
+				return c;
+			}
+		}
+		return null;
+	}
+
+	public DirectionalSprite removeCollection(final DirectionalSprite collection) {
+		final boolean removed = spriteCollections.remove(collection);
+		return (removed) ? collection : null;
+	}
+
+	public boolean hasCollection(final String name) {
+		for (final DirectionalSprite c : spriteCollections) {
+			if (c.getName().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean hasCollection(final DirectionalSprite collection) {
+		return spriteCollections.contains(collection);
+	}
+
+	public Collection<DirectionalSprite> getCollections() {
+		return spriteCollections;
+	}
+
+	private int indexOfCollection(final String collectionName) {
+		for (int i = 0; i < spriteCollections.size(); i++) {
+			if (spriteCollections.get(i).getName().equals(collectionName)) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }

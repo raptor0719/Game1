@@ -57,12 +57,12 @@ public class Model implements IDrawable {
 		final WireModelFrame wire = wireModel.getAsset(currentFrame, direction);
 
 		for (final IHardpoint h : wire.getSortedHardpoints()) {
-			final Collection<SpriteCollection> sprites = spriteModel.getSpriteCollection(h.getName()).getCollections();
+			final Collection<DirectionalSprite> sprites = spriteModel.getSpriteCollection(h.getName()).getCollections();
 			if (sprites == null || sprites.size() <= 0)
 				continue;
 
-			for (final SpriteCollection spriteCollection : sprites) {
-				final Sprite sprite = spriteCollection.getAsset(currentFrame, direction);
+			for (final DirectionalSprite spriteCollection : sprites) {
+				final Sprite sprite = spriteCollection.getSprite(direction);
 
 				final boolean isRotated = h.getRotation() != 0;
 

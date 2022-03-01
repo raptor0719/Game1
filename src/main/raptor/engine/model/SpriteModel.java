@@ -4,11 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SpriteModel  {
-	private final int frameCount;
-	private final Map<String, HardpointSpriteCollection> sprites;
+	private final Map<String, SpriteCollection> sprites;
 
-	public SpriteModel(final int frameCount) {
-		this.frameCount = frameCount;
+	public SpriteModel() {
 		this.sprites = new HashMap<>();
 	}
 
@@ -19,10 +17,10 @@ public class SpriteModel  {
 	public void addMapping(final String hardpointName) {
 		if (sprites.containsKey(hardpointName))
 			return;
-		sprites.put(hardpointName, new HardpointSpriteCollection(frameCount));
+		sprites.put(hardpointName, new SpriteCollection());
 	}
 
-	public HardpointSpriteCollection getSpriteCollection(final String hardpointName) {
+	public SpriteCollection getSpriteCollection(final String hardpointName) {
 		return sprites.get(hardpointName);
 	}
 
