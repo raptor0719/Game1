@@ -88,6 +88,10 @@ public abstract class Entity implements IEntity {
 		}
 	}
 
+	public Model getModel() {
+		return model;
+	}
+
 	public IPoint getPosition() {
 		return position;
 	}
