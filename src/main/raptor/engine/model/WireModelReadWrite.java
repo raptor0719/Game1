@@ -45,19 +45,21 @@ public class WireModelReadWrite {
 	}
 
 	private static WireModelFrame readFrame(final int hardpointCount, final DataInputStream dis) throws IOException {
+		final String frameName = BinaryDataTools.marshalString(dis);
+
 		final IHardpoint[] hardpoints = new IHardpoint[hardpointCount];
 
 		for (int i = 0; i < hardpointCount; i++) {
-			final String name = BinaryDataTools.marshalString(dis);
+			final String hardpointName = BinaryDataTools.marshalString(dis);
 			final int x = dis.readInt();
 			final int y = dis.readInt();
 			final int rotation = dis.readInt();
 			final int depth = dis.readInt();
 
-			hardpoints[i] = new Hardpoint(name, x, y, rotation, depth);
+			hardpoints[i] = new Hardpoint(hardpointName, x, y, rotation, depth);
 		}
 
-		return new WireModelFrame(hardpoints);
+		return new WireModelFrame(frameName, hardpoints);
 	}
 
 	private static int[][] readDirectionMappings(final int logicalFrameCount, final DataInputStream dis) throws IOException {
@@ -91,6 +93,7 @@ public class WireModelReadWrite {
 	}
 
 	private static void writeFrame(final WireModelFrame model, final DataOutputStream dos) throws IOException {
+		BinaryDataTools.serializeString(model.getName());
 		writeHardpoints(model.getSortedHardpoints(), dos);
 	}
 
