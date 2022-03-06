@@ -3,6 +3,7 @@ package raptor.engine.model;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
+import java.util.Map;
 
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.display.render.IGraphics;
@@ -19,11 +20,17 @@ public class Model implements IDrawable {
 
 	private IPoint position;
 
-	public Model(final WireModel wireModel, final SpriteModel spriteModel) {
+	public Model(final WireModel wireModel, final Map<String, DirectionalSprite> defaultVisuals) {
 		this.wireModel = wireModel;
 		this.hardpointCount = wireModel.getHardpointCount();
 
-		this.spriteModel = spriteModel;
+		this.spriteModel = new SpriteModel();
+		for (final Map.Entry<String, DirectionalSprite> entries : defaultVisuals.entrySet()) {
+			spriteModel.addMapping(entries.getKey());
+
+			final SpriteCollection collection = spriteModel.getSpriteCollection(entries.getKey());
+			collection.addCollectionOnTop(entries.getValue());
+		}
 
 		this.direction = Direction.NORTH;
 	}
