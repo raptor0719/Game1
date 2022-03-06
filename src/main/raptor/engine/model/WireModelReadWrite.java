@@ -7,46 +7,53 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import raptor.engine.util.BinaryDataTools;
 
 public class WireModelReadWrite {
-	private static final byte[] MAGIC_NUMBER = new byte[] {'m', 'o', 'd', 'e', 'l'};
+	private static final byte[] MAGIC_NUMBER = new byte[] {'w', 'i', 'r', 'e', 'm', 'o', 'd', 'e', 'l'};
 
 	public static WireModel read(final InputStream stream) throws IOException {
 		final DataInputStream dis = new DataInputStream(stream);
 
-		final byte[] magicNumber = new byte[5];
+		final byte[] magicNumber = new byte[9];
 		dis.readFully(magicNumber);
 
 		if (!Arrays.equals(magicNumber, MAGIC_NUMBER))
 			throw new IOException("Was not a WireModel format.");
 
+		final String name = BinaryDataTools.marshalString(dis);
 		final int hardpointCount = dis.readInt();
-		final int trueFrameCount = dis.readInt();
+		final int frameCount = dis.readInt();
 
-		final List<WireModelFrame> frameList = readFrameList(trueFrameCount, hardpointCount, dis);
+		final List<DirectionalWireModelFrame> frameList = readFrameList(frameCount, hardpointCount, dis);
 
-		final int logicalFrameCount = dis.readInt();
-
-		final int[][] directionMappings = readDirectionMappings(logicalFrameCount, dis);
-
-		return new WireModel(frameList, directionMappings);
+		return new WireModel(name, frameList);
 	}
 
-	private static List<WireModelFrame> readFrameList(final int trueFrameCount, final int hardpointCount, final DataInputStream dis) throws IOException {
-		final List<WireModelFrame> frameList = new ArrayList<>();
+	private static List<DirectionalWireModelFrame> readFrameList(final int frameCount, final int hardpointCount, final DataInputStream dis) throws IOException {
+		final List<DirectionalWireModelFrame> frameList = new ArrayList<>();
 
-		for (int i = 0; i < trueFrameCount; i++)
-			frameList.add(readFrame(hardpointCount, dis));
+		for (int i = 0; i < frameCount; i++)
+			frameList.add(readDirectionalFrame(hardpointCount, dis));
 
 		return frameList;
 	}
 
-	private static WireModelFrame readFrame(final int hardpointCount, final DataInputStream dis) throws IOException {
-		final String frameName = BinaryDataTools.marshalString(dis);
+	private static DirectionalWireModelFrame readDirectionalFrame(final int hardpointCount, final DataInputStream dis) throws IOException {
+		final String name = BinaryDataTools.marshalString(dis);
+		final Map<Direction, WireModelFrame> frames = new HashMap<>();
 
+		for (final Direction d : Direction.values())
+			frames.put(d, readFrame(hardpointCount, dis));
+
+		return new DirectionalWireModelFrame(name, frames);
+	}
+
+	private static WireModelFrame readFrame(final int hardpointCount, final DataInputStream dis) throws IOException {
 		final IHardpoint[] hardpoints = new IHardpoint[hardpointCount];
 
 		for (int i = 0; i < hardpointCount; i++) {
@@ -59,18 +66,7 @@ public class WireModelReadWrite {
 			hardpoints[i] = new Hardpoint(hardpointName, x, y, rotation, depth);
 		}
 
-		return new WireModelFrame(frameName, hardpoints);
-	}
-
-	private static int[][] readDirectionMappings(final int logicalFrameCount, final DataInputStream dis) throws IOException {
-		final int directionCount = Direction.values().length;
-		final int[][] directionMappings = new int[directionCount][logicalFrameCount];
-
-		for (int i = 0; i < directionCount; i++)
-			for (int j = 0; j < logicalFrameCount; j++)
-				directionMappings[i][j] = dis.readInt();
-
-		return directionMappings;
+		return new WireModelFrame(hardpoints);
 	}
 
 	public static void write(final WireModel toWrite, final OutputStream stream) throws IOException {
@@ -78,23 +74,28 @@ public class WireModelReadWrite {
 
 		dos.write(MAGIC_NUMBER);
 
+		dos.write(BinaryDataTools.serializeString(toWrite.getName()));
+
 		dos.writeInt(toWrite.getHardpointCount());
 
 		dos.writeInt(toWrite.getFrameList().size());
 		writeFramesList(toWrite.getFrameList(), dos);
-
-		dos.writeInt(toWrite.getCount());
-		writeDirectionMappings(toWrite.getMappings(), dos);
 	}
 
-	private static void writeFramesList(final List<WireModelFrame> frameList, final DataOutputStream dos) throws IOException {
-		for (final WireModelFrame frame : frameList)
-			writeFrame(frame, dos);
+	private static void writeFramesList(final List<DirectionalWireModelFrame> frameList, final DataOutputStream dos) throws IOException {
+		for (final DirectionalWireModelFrame frame : frameList)
+			writeDirectionalFrame(frame, dos);
 	}
 
-	private static void writeFrame(final WireModelFrame model, final DataOutputStream dos) throws IOException {
-		BinaryDataTools.serializeString(model.getName());
-		writeHardpoints(model.getSortedHardpoints(), dos);
+	private static void writeDirectionalFrame(final DirectionalWireModelFrame frame, final DataOutputStream dos) throws IOException {
+		dos.write(BinaryDataTools.serializeString(frame.getName()));
+
+		for (final Direction d : Direction.values())
+			writeFrame(frame.getFrameForDirection(d), dos);
+	}
+
+	private static void writeFrame(final WireModelFrame frame, final DataOutputStream dos) throws IOException {
+		writeHardpoints(frame.getSortedHardpoints(), dos);
 	}
 
 	private static void writeHardpoints(final IHardpoint[] hardpoints, final DataOutputStream dos) throws IOException {
@@ -108,11 +109,5 @@ public class WireModelReadWrite {
 		dos.writeInt(hardpoint.getY());
 		dos.writeInt(hardpoint.getRotation());
 		dos.writeInt(hardpoint.getDepth());
-	}
-
-	private static void writeDirectionMappings(final int[][] directionMappings, final DataOutputStream dos) throws IOException {
-		for (final int[] direction : directionMappings)
-			for (final int index : direction)
-				dos.writeInt(index);
 	}
 }

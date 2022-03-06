@@ -14,7 +14,7 @@ public class Model implements IDrawable {
 	private final int hardpointCount;
 	private final SpriteModel spriteModel;
 
-	private int currentFrame;
+	private String currentFrame;
 	private Direction direction;
 
 	private IPoint position;
@@ -28,8 +28,8 @@ public class Model implements IDrawable {
 		this.direction = Direction.NORTH;
 	}
 
-	public void setFrame(final int frameId) {
-		currentFrame = frameId;
+	public void setFrame(final String frameName) {
+		this.currentFrame = frameName;
 	}
 
 	public void setDirection(final Direction direction) {
@@ -37,7 +37,7 @@ public class Model implements IDrawable {
 	}
 
 	public IHardpoint getHardpoint(final String name) {
-		return wireModel.getAsset(currentFrame, direction).getHardpoint(name);
+		return wireModel.getFrame(currentFrame, direction).getHardpoint(name);
 	}
 
 	public SpriteModel getSpriteModel() {
@@ -54,7 +54,7 @@ public class Model implements IDrawable {
 
 	@Override
 	public void draw(final IGraphics graphics) {
-		final WireModelFrame wire = wireModel.getAsset(currentFrame, direction);
+		final WireModelFrame wire = wireModel.getFrame(currentFrame, direction);
 
 		for (final IHardpoint h : wire.getSortedHardpoints()) {
 			final Collection<DirectionalSprite> sprites = spriteModel.getSpriteCollection(h.getName()).getCollections();

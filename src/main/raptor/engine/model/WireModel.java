@@ -1,28 +1,47 @@
 package raptor.engine.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class WireModel extends DirectionalAssetCollection<WireModelFrame> {
+public class WireModel {
+	private final String name;
+	private final List<DirectionalWireModelFrame> frameList;
+	private final Map<String, DirectionalWireModelFrame> frames;
 	private final int hardpointCount;
 
-	public WireModel(final List<WireModelFrame> frameList, int[][] directionMappings) {
-		super(frameList, directionMappings);
-		hardpointCount = frameList.get(0).getSortedHardpoints().length;
+	public WireModel(final String name, final List<DirectionalWireModelFrame> frameList) {
+		this.name = name;
+		this.frameList = frameList;
+		this.frames = createFrameMap(frameList);
+		this.hardpointCount = frameList.get(0).getFrameForDirection(Direction.NORTH).getSortedHardpoints().length;
+	}
+
+	public WireModelFrame getFrame(final String name, final Direction direction) {
+		if (!frames.containsKey(name))
+			return null;
+
+		return frames.get(name).getFrameForDirection(direction);
+	}
+
+	public List<DirectionalWireModelFrame> getFrameList() {
+		return frameList;
 	}
 
 	public int getHardpointCount() {
 		return hardpointCount;
 	}
 
-	@Override
-	protected boolean isValidAssets(final List<WireModelFrame> assetList) {
-		if (assetList.isEmpty())
-			return false;
+	public String getName() {
+		return name;
+	}
 
-		int hardpointCount = assetList.get(0).getSortedHardpoints().length;
-		for (final WireModelFrame f : assetList)
-			if (f.getSortedHardpoints().length != hardpointCount)
-				return false;
-		return true;
+	private Map<String, DirectionalWireModelFrame> createFrameMap(final List<DirectionalWireModelFrame> frameList) {
+		final Map<String, DirectionalWireModelFrame> frames = new HashMap<>();
+
+		for (final DirectionalWireModelFrame frame : frameList)
+			frames.put(frame.getName(), frame);
+
+		return frames;
 	}
 }
