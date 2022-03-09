@@ -1,20 +1,21 @@
 package raptor.engine.model;
 
 public enum Direction {
-	NORTH(0, 338, 22),
-	NORTH_EAST(1, 23, 67),
-	EAST(2, 68, 112),
-	SOUTH_EAST(3, 113, 157),
-	SOUTH(4, 158, 202),
-	SOUTH_WEST(5, 203, 247),
-	WEST(6, 248, 292),
-	NORTH_WEST(7, 293, 337);
+	NORTH(0, 338, 22, "N"),
+	NORTH_EAST(1, 23, 67, "NE"),
+	EAST(2, 68, 112, "E"),
+	SOUTH_EAST(3, 113, 157, "SE"),
+	SOUTH(4, 158, 202, "S"),
+	SOUTH_WEST(5, 203, 247, "SW"),
+	WEST(6, 248, 292, "W"),
+	NORTH_WEST(7, 293, 337, "NW");
 
-	private int value;
-	private int min;
-	private int max;
+	private final int value;
+	private final int min;
+	private final int max;
+	private final String abbreviation;
 
-	private Direction(final int value, final int min, final int max) {
+	private Direction(final int value, final int min, final int max, final String abbreviation) {
 		this.value = value;
 
 		if (min < 0 || min > 360 || max < 0 || max > 360)
@@ -22,10 +23,15 @@ public enum Direction {
 
 		this.min = min;
 		this.max = max;
+		this.abbreviation = abbreviation;
 	}
 
 	public int getValue() {
 		return value;
+	}
+
+	public String getAbbreviation() {
+		return abbreviation;
 	}
 
 	public boolean isDirection(final int degrees) {
