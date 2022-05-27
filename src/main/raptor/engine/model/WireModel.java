@@ -14,7 +14,7 @@ public class WireModel {
 		this.name = name;
 		this.frameList = frameList;
 		this.frames = createFrameMap(frameList);
-		this.hardpointCount = frameList.get(0).getFrameForDirection(Direction.NORTH).getSortedHardpoints().length;
+		this.hardpointCount = frameList.get(0).getFrameForDirection(Direction.RIGHT).getSortedHardpoints().length;
 	}
 
 	public WireModelFrame getFrame(final String name, final Direction direction) {

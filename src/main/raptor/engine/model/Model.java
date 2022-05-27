@@ -32,7 +32,7 @@ public class Model implements IDrawable {
 			collection.addCollectionOnTop(entries.getValue());
 		}
 
-		this.direction = Direction.NORTH;
+		this.direction = Direction.RIGHT;
 	}
 
 	public void setFrame(final String frameName) {

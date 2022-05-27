@@ -1,14 +1,8 @@
 package raptor.engine.model;
 
 public enum Direction {
-	NORTH(0, 338, 22, "N"),
-	NORTH_EAST(1, 23, 67, "NE"),
-	EAST(2, 68, 112, "E"),
-	SOUTH_EAST(3, 113, 157, "SE"),
-	SOUTH(4, 158, 202, "S"),
-	SOUTH_WEST(5, 203, 247, "SW"),
-	WEST(6, 248, 292, "W"),
-	NORTH_WEST(7, 293, 337, "NW");
+	LEFT(0, 180, 359, "L"),
+	RIGHT(1, 0, 179, "R");
 
 	private final int value;
 	private final int min;

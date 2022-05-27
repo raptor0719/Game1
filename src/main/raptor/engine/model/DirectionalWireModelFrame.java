@@ -29,7 +29,7 @@ public class DirectionalWireModelFrame {
 	}
 
 	private void framesMatch() {
-		final IHardpoint[] compare = frames.get(Direction.NORTH).getSortedHardpoints();
+		final IHardpoint[] compare = frames.get(Direction.RIGHT).getSortedHardpoints();
 
 		for (final WireModelFrame current : frames.values()) {
 			if (current.getSortedHardpoints().length != compare.length)
