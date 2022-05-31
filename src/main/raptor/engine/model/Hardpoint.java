@@ -1,6 +1,6 @@
 package raptor.engine.model;
 
-public class Hardpoint implements IHardpoint {
+public class Hardpoint {
 	private final String name;
 	private final int x;
 	private final int y;
@@ -15,27 +15,22 @@ public class Hardpoint implements IHardpoint {
 		this.depth = depth;
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public int getX() {
 		return x;
 	}
 
-	@Override
 	public int getY() {
 		return y;
 	}
 
-	@Override
 	public int getRotation() {
 		return rotation;
 	}
 
-	@Override
 	public int getDepth() {
 		return depth;
 	}

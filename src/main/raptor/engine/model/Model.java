@@ -43,7 +43,7 @@ public class Model implements IDrawable {
 		this.direction = direction;
 	}
 
-	public IHardpoint getHardpoint(final String name) {
+	public Hardpoint getHardpoint(final String name) {
 		return wireModel.getFrame(currentFrame, direction).getHardpoint(name);
 	}
 
@@ -63,7 +63,7 @@ public class Model implements IDrawable {
 	public void draw(final IGraphics graphics) {
 		final WireModelFrame wire = wireModel.getFrame(currentFrame, direction);
 
-		for (final IHardpoint h : wire.getSortedHardpoints()) {
+		for (final Hardpoint h : wire.getSortedHardpoints()) {
 			final Collection<DirectionalSprite> sprites = spriteModel.getSpriteCollection(h.getName()).getCollections();
 			if (sprites == null || sprites.size() <= 0)
 				continue;

@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 import raptor.engine.util.geometry.Point;
 
-public class Sprite implements ISprite {
+public class Sprite {
 	private final Point attachPoint;
 	private final BufferedImage image;
 
@@ -13,12 +13,10 @@ public class Sprite implements ISprite {
 		this.image = image;
 	}
 
-	@Override
 	public Point getAttachPoint() {
 		return attachPoint;
 	}
 
-	@Override
 	public BufferedImage getImage() {
 		return image;
 	}

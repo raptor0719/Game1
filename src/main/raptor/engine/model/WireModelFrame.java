@@ -5,29 +5,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WireModelFrame {
-	private final IHardpoint[] sortedHardpoints;
-	private final Map<String, IHardpoint> hardpointMap;
+	private final Hardpoint[] sortedHardpoints;
+	private final Map<String, Hardpoint> hardpointMap;
 
-	public WireModelFrame(final IHardpoint[] hardpoints) {
+	public WireModelFrame(final Hardpoint[] hardpoints) {
 		this.sortedHardpoints = sort(hardpoints);
 		this.hardpointMap = map(hardpoints);
 	}
 
-	public IHardpoint[] getSortedHardpoints() {
+	public Hardpoint[] getSortedHardpoints() {
 		return sortedHardpoints;
 	}
 
-	public IHardpoint getHardpoint(final String name) {
+	public Hardpoint getHardpoint(final String name) {
 		return hardpointMap.get(name);
 	}
 
-	private IHardpoint[] sort(final IHardpoint[] hardpoints) {
-		final IHardpoint[] depthSorted = new IHardpoint[hardpoints.length];
+	private Hardpoint[] sort(final Hardpoint[] hardpoints) {
+		final Hardpoint[] depthSorted = new Hardpoint[hardpoints.length];
 		final boolean[] marked = new boolean[hardpoints.length];
 		Arrays.fill(marked, false);
 
 		for (int x = 0; x < depthSorted.length; x++) {
-			IHardpoint current = null;
+			Hardpoint current = null;
 			for (int y = 0; y < hardpoints.length; y++) {
 				if (marked[y])
 					continue;
@@ -37,7 +37,7 @@ public class WireModelFrame {
 					continue;
 				}
 
-				final IHardpoint compare = hardpoints[y];
+				final Hardpoint compare = hardpoints[y];
 				current = (compare.getDepth() < current.getDepth()) ? compare : current;
 			}
 			depthSorted[x] = current;
@@ -46,10 +46,10 @@ public class WireModelFrame {
 		return depthSorted;
 	}
 
-	private Map<String, IHardpoint> map(final IHardpoint[] hardpoints) {
-		final Map<String, IHardpoint> mapped = new HashMap<>();
+	private Map<String, Hardpoint> map(final Hardpoint[] hardpoints) {
+		final Map<String, Hardpoint> mapped = new HashMap<>();
 
-		for (final IHardpoint h : hardpoints)
+		for (final Hardpoint h : hardpoints)
 			mapped.put(h.getName(), h);
 
 		return mapped;

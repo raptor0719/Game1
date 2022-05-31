@@ -29,14 +29,14 @@ public class DirectionalWireModelFrame {
 	}
 
 	private void framesMatch() {
-		final IHardpoint[] compare = frames.get(Direction.RIGHT).getSortedHardpoints();
+		final Hardpoint[] compare = frames.get(Direction.RIGHT).getSortedHardpoints();
 
 		for (final WireModelFrame current : frames.values()) {
 			if (current.getSortedHardpoints().length != compare.length)
 				throw new IllegalArgumentException("Frames did not have the same number of hardpoints.");
 
-			for (final IHardpoint hardpoint : compare) {
-				final IHardpoint currentHardpoint = current.getHardpoint(hardpoint.getName());
+			for (final Hardpoint hardpoint : compare) {
+				final Hardpoint currentHardpoint = current.getHardpoint(hardpoint.getName());
 
 				if (currentHardpoint == null)
 					throw new IllegalArgumentException("All frames must have the same hardpoints.");
