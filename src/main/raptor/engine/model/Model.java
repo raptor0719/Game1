@@ -2,8 +2,6 @@ package raptor.engine.model;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Collection;
-import java.util.Map;
 
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.display.render.IGraphics;
@@ -20,17 +18,11 @@ public class Model implements IDrawable {
 
 	private IPoint position;
 
-	public Model(final WireModel wireModel, final Map<String, DirectionalSprite> defaultVisuals) {
+	public Model(final WireModel wireModel, final SpriteModel spriteModel) {
 		this.wireModel = wireModel;
 		this.hardpointCount = wireModel.getHardpointCount();
 
-		this.spriteModel = new SpriteModel();
-		for (final Map.Entry<String, DirectionalSprite> entries : defaultVisuals.entrySet()) {
-			spriteModel.addMapping(entries.getKey());
-
-			final SpriteCollection collection = spriteModel.getSpriteCollection(entries.getKey());
-			collection.addCollectionOnTop(entries.getValue());
-		}
+		this.spriteModel = spriteModel;
 
 		this.direction = Direction.RIGHT;
 	}
@@ -64,24 +56,23 @@ public class Model implements IDrawable {
 		final WireModelFrame wire = wireModel.getFrame(currentFrame, direction);
 
 		for (final Hardpoint h : wire.getSortedHardpoints()) {
-			final Collection<DirectionalSprite> sprites = spriteModel.getSpriteCollection(h.getName()).getCollections();
-			if (sprites == null || sprites.size() <= 0)
+			final DirectionalSprite spriteCollection = spriteModel.getSpriteCollection(h.getName()).getSprite(h.getPhase());
+
+			if (spriteCollection == null)
 				continue;
 
-			for (final DirectionalSprite spriteCollection : sprites) {
-				final Sprite sprite = spriteCollection.getSprite(direction);
+			final Sprite sprite = spriteCollection.getSprite(direction);
 
-				final boolean isRotated = h.getRotation() != 0;
+			final boolean isRotated = h.getRotation() != 0;
 
-				// TODO: We really should cache these rotations cause rotating these EVERY frame is gonna be super expensive
-				final BufferedImage image = (isRotated) ? rotateImage(sprite.getImage(), h.getRotation()) : sprite.getImage();
-				final IPoint attach = (isRotated) ? rotatePoint(sprite.getAttachPoint(), image.getWidth()/2, image.getHeight()/2, h.getRotation()) : sprite.getAttachPoint();
+			// TODO: We really should cache these rotations cause rotating these EVERY frame is gonna be super expensive
+			final BufferedImage image = (isRotated) ? rotateImage(sprite.getImage(), h.getRotation()) : sprite.getImage();
+			final IPoint attach = (isRotated) ? rotatePoint(sprite.getAttachPoint(), image.getWidth()/2, image.getHeight()/2, h.getRotation()) : sprite.getAttachPoint();
 
-				final int x = position.getX() + h.getX() - attach.getX();
-				final int y = position.getY() + h.getY() - attach.getY();
+			final int x = position.getX() + h.getX() - attach.getX();
+			final int y = position.getY() + h.getY() - attach.getY();
 
-				graphics.drawImage(sprite.getImage(), x, y);
-			}
+			graphics.drawImage(sprite.getImage(), x, y);
 		}
 	}
 
