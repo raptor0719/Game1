@@ -70,7 +70,7 @@ public class Model implements IDrawable {
 			final IPoint attach = (isRotated) ? rotatePoint(sprite.getAttachPoint(), image.getWidth()/2, image.getHeight()/2, h.getRotation()) : sprite.getAttachPoint();
 
 			final int x = position.getX() + h.getX() - attach.getX();
-			final int y = position.getY() + h.getY() - attach.getY();
+			final int y = position.getY() - h.getY() - attach.getY();
 
 			graphics.drawImage(sprite.getImage(), x, y);
 		}
