@@ -1,19 +1,13 @@
 package raptor.engine.model;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class SpriteCollection {
 	private final Map<String, DirectionalSprite> phases;
 	private final String name;
 
-	public SpriteCollection(final String name, final List<DirectionalSprite> phases) {
-		this.phases = new HashMap<>();
-
-		for (final DirectionalSprite sprite : phases)
-			this.phases.put(sprite.getName(), sprite);
-
+	public SpriteCollection(final String name, final Map<String, DirectionalSprite> phases) {
+		this.phases = phases;
 		this.name = name;
 	}
 
