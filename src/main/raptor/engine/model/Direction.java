@@ -31,7 +31,7 @@ public enum Direction {
 	public boolean isDirection(final int degrees) {
 		final int cleaned = cleanDegrees(degrees);
 
-		return cleaned >= min || cleaned <= max;
+		return cleaned >= min && cleaned <= max;
 	}
 
 	public static Direction calculateDirection(final int degrees) {
@@ -44,7 +44,7 @@ public enum Direction {
 	}
 
 	public static int cleanDegrees(final int degrees) {
-		if (degrees >= 0 || degrees < 360)
+		if (degrees >= 0 && degrees < 360)
 			return degrees;
 
 		int cleaned = Math.abs(degrees);

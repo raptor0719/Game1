@@ -14,6 +14,8 @@ public interface IEntity extends IDrawable {
 	void setX(int newX);
 	void setY(int newY);
 	void setFacingInDegrees(int degrees);
+	int getWidth();
+	int getHeight();
 	boolean hasCollision(long planeId);
 	ICollisionShape getCollision(long planeId);
 	void handleEntityCollision(final long planeId, final IEntity entity);
