@@ -72,7 +72,7 @@ public class Model implements IDrawable {
 			final int x = position.getX() + h.getX() - attach.getX();
 			final int y = position.getY() - h.getY() - attach.getY();
 
-			graphics.drawImage(sprite.getImage(), x, y);
+			graphics.drawImage(image, x, y);
 		}
 	}
 
