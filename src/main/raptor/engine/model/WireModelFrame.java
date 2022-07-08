@@ -25,7 +25,7 @@ public class WireModelFrame {
 	private Hardpoint[] sort(final Hardpoint[] hardpoints) {
 		final Hardpoint[] toSort = Arrays.copyOf(hardpoints, hardpoints.length);
 
-		Arrays.sort(hardpoints, new HardpointComparator());
+		Arrays.sort(toSort, new HardpointComparator());
 
 		return toSort;
 	}
