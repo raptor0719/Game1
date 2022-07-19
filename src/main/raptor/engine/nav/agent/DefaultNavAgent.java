@@ -43,10 +43,6 @@ public class DefaultNavAgent implements INavAgent {
 	public void setPosition(int x, int y) {
 		positionX = x;
 		positionY = y;
-		currentWaypointX = x;
-		currentWaypointY = y;
-
-		path.clear();
 	}
 
 	@Override
