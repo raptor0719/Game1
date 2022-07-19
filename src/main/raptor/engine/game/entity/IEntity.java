@@ -2,7 +2,6 @@ package raptor.engine.game.entity;
 
 import raptor.engine.collision.api.ICollisionShape;
 import raptor.engine.display.render.IDrawable;
-import raptor.engine.game.Terrain;
 
 public interface IEntity extends IDrawable {
 	long getId();
@@ -18,6 +17,4 @@ public interface IEntity extends IDrawable {
 	int getHeight();
 	boolean hasCollision(long planeId);
 	ICollisionShape getCollision(long planeId);
-	void handleEntityCollision(final long planeId, final IEntity entity);
-	void handleTerrainCollision(final long planeId, final Terrain terrain);
 }

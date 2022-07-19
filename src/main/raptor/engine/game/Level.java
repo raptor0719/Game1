@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import raptor.engine.collision.CollisionPlane;
-import raptor.engine.collision.CollisionPlaneHandler;
+import raptor.engine.collision.api.ICollisionPlaneHandler;
 import raptor.engine.display.render.IDrawable;
 import raptor.engine.event.EventBroker;
 import raptor.engine.event.IEventBroker;
@@ -114,8 +114,8 @@ public abstract class Level implements IDrawable {
 		return collisionPlanes.get(id);
 	}
 
-	public CollisionPlane addCollisionPlane(final int id, final String name) {
-		final CollisionPlane newCollisionPlane = new CollisionPlane(id, name, new CollisionPlaneHandler());
+	public CollisionPlane addCollisionPlane(final int id, final String name, final ICollisionPlaneHandler collisionPlaneHandler) {
+		final CollisionPlane newCollisionPlane = new CollisionPlane(id, name, collisionPlaneHandler);
 
 		collisionPlanes.put(id, newCollisionPlane);
 
