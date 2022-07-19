@@ -1,5 +1,6 @@
 package raptor.engine.game.entity;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import raptor.engine.collision.api.ICollisionShape;
@@ -36,6 +37,7 @@ public abstract class Entity implements IEntity {
 		if (model != null)
 			model.setPosition(position);
 
+		this.collisions = new HashMap<Long, ICollisionShape>();
 		facingInDegrees = 0;
 	}
 
@@ -91,12 +93,12 @@ public abstract class Entity implements IEntity {
 
 	@Override
 	public boolean hasCollision(final long planeId) {
-		return collisions.containsKey(id);
+		return collisions.containsKey(planeId);
 	}
 
 	@Override
 	public ICollisionShape getCollision(final long planeId) {
-		return collisions.get(id);
+		return collisions.get(planeId);
 	}
 
 	protected abstract void _draw(final IGraphics wrapped);
