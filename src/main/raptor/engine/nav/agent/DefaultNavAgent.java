@@ -43,6 +43,44 @@ public class DefaultNavAgent implements INavAgent {
 	public void setPosition(int x, int y) {
 		positionX = x;
 		positionY = y;
+		calculateOutOfBoundsFixModifier();
+	}
+
+	private void calculateOutOfBoundsFixModifier() {
+		int xCurrentFixModifier = 0;
+		int yCurrentFixModifier = 0;
+		boolean modifyX = true;
+		boolean positive = true;
+
+		while (true) {
+			final int currentSignFactor = (positive) ? 1 : -1;
+
+			final int currentWorkingBase = (modifyX) ? positionX : positionY;
+			final int currentFixModifier = ((modifyX) ? xCurrentFixModifier : yCurrentFixModifier) * currentSignFactor;
+
+			final int currentValue = currentWorkingBase + currentFixModifier;
+
+			final int checkX = (modifyX) ? currentValue : positionX;
+			final int checkY = (modifyX) ? positionY : currentValue;
+
+			if (navigator.containsPoint(checkX, checkY)) {
+				System.out.println(checkX + " " + checkY);
+				positionX = checkX;
+				positionY = checkY;
+				return;
+			}
+
+			if (!positive) {
+				if (modifyX)
+					xCurrentFixModifier++;
+				else
+					yCurrentFixModifier++;
+
+				modifyX = !modifyX;
+			}
+
+			positive = !positive;
+		}
 	}
 
 	@Override
