@@ -64,7 +64,6 @@ public class DefaultNavAgent implements INavAgent {
 			final int checkY = (modifyX) ? positionY : currentValue;
 
 			if (navigator.containsPoint(checkX, checkY)) {
-				System.out.println(checkX + " " + checkY);
 				positionX = checkX;
 				positionY = checkY;
 				return;
