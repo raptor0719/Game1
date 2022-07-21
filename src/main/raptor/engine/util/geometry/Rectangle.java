@@ -70,4 +70,12 @@ public class Rectangle implements IRectangle {
 	public boolean containsPoint(final IPoint point) {
 		return point.getX() >= min.getX() && point.getX() <= max.getX() && point.getY() >= min.getY() && point.getY() <= max.getY();
 	}
+
+	@Override
+	public int getArea() {
+		final int length = max.getX() - min.getX();
+		final int width = max.getY() - min.getY();
+
+		return length * width;
+	}
 }
