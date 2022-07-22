@@ -12,7 +12,6 @@ import raptor.engine.ui.input.IActionHandler;
 import raptor.engine.ui.input.IInputManager;
 import raptor.engine.ui.input.IMousePositionPoll;
 import raptor.engine.util.IdProvider;
-import raptor.engine.util.geometry.Point;
 
 public class UserInterface implements IDrawable {
 	public static final String ACTIVATE_BUTTON_ACTION = "ACTIVATE";
@@ -26,6 +25,7 @@ public class UserInterface implements IDrawable {
 	private final IMousePositionPoll mousePositionPoll;
 
 	private UIState currentState;
+	private IMouseVisual currentMouseVisual;
 
 	public UserInterface(final IInputManager inputManager, final IMousePositionPoll mousePositionPoll) {
 		this.receiveActionQueue = new LinkedList<>();
@@ -35,6 +35,8 @@ public class UserInterface implements IDrawable {
 
 		inputManager.setActionQueue(receiveActionQueue);
 		inputManager.setInputMap(currentState.getInputMap());
+
+		this.currentMouseVisual = new DefaultMouseVisual();
 	}
 
 	public void processActions() {
@@ -87,8 +89,12 @@ public class UserInterface implements IDrawable {
 		inputManager.setInputMap(currentState.getInputMap());
 	}
 
-	public Point getMousePosition() {
-		return mousePositionPoll.getMousePosition();
+	public int getMousePositionX() {
+		return mousePositionPoll.getMousePositionX();
+	}
+
+	public int getMousePositionY() {
+		return mousePositionPoll.getMousePositionY();
 	}
 
 	@Override
@@ -97,13 +103,14 @@ public class UserInterface implements IDrawable {
 
 		final Iterator<UIElement> sorted = currentState.getElements();
 
-		if (!sorted.hasNext())
-			return;
-
 		UIElement current = null;
 		while (sorted.hasNext()) {
 			current = sorted.next();
 			current.draw(graphics);
 		}
+
+		currentMouseVisual.setX(getMousePositionX());
+		currentMouseVisual.setY(getMousePositionY());
+		currentMouseVisual.draw(graphics);
 	}
 }
