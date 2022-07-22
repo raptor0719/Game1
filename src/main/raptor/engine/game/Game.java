@@ -53,12 +53,12 @@ public class Game {
 			if (timeSinceLastFrame >= 17) {
 				previousTime = currentTime;
 				currentLevel.tick();
+
+				renderer.queueDrawables(currentLevel.getDrawables());
+				renderer.queueDrawable(userInterface);
+
+				renderer.draw();
 			}
-
-			renderer.queueDrawables(currentLevel.getDrawables());
-			renderer.queueDrawable(userInterface);
-
-			renderer.draw();
 		}
 	}
 
