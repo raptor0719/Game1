@@ -35,11 +35,15 @@ public class Game {
 		renderer = setRenderer;
 		toLocationTransformer = new ViewportToLocationTransformer(setRenderer.getViewport());
 		toViewportTransformer = new LocationToViewportTransformer(setRenderer.getViewport());
-		userInterface = new UserInterface(inputManager, mousePositionPoll);
+		userInterface = buildUserInterface(inputManager, mousePositionPoll);
 
 		gameInstantiated = true;
 
 		loadLevel(initLevel);
+	}
+
+	protected UserInterface buildUserInterface(final IInputManager inputManager, final IMousePositionPoll mousePositionPoll) {
+		return new UserInterface(inputManager, mousePositionPoll);
 	}
 
 	public void start() {
