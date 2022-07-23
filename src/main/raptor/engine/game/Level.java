@@ -40,6 +40,10 @@ public abstract class Level implements IDrawable {
 		// Let implementing classes override if wanted
 	}
 
+	public void cleanup() {
+		// Let implementing classes override if wanted
+	}
+
 	protected void update() {
 		// Let implementing classes override if wanted
 	}

@@ -79,6 +79,8 @@ public class Game {
 	public static void loadLevel(final Level level) {
 		if (level == null)
 			throw new IllegalArgumentException("Attempted to load null level.");
+		if (currentLevel != null)
+			currentLevel.cleanup();
 		level.init();
 		currentLevel = level;
 	}
