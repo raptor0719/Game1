@@ -7,16 +7,17 @@ import raptor.engine.display.render.IGraphics;
 import raptor.engine.game.entity.IEntity;
 
 public class EntityDrawOriginGraphicsWrapper implements IGraphics {
-	private final IEntity entity;
+	private IEntity entity;
+	private IGraphics wrapped;
 
-	private IGraphics wrapped = null;
-
-	public EntityDrawOriginGraphicsWrapper(final IEntity entity) {
+	public EntityDrawOriginGraphicsWrapper setEntity(final IEntity entity) {
 		this.entity = entity;
+		return this;
 	}
 
-	public void setGraphics(final IGraphics wrapped) {
+	public EntityDrawOriginGraphicsWrapper setGraphics(final IGraphics wrapped) {
 		this.wrapped = wrapped;
+		return this;
 	}
 
 	@Override

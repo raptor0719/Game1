@@ -6,7 +6,6 @@ import java.util.Map;
 import raptor.engine.collision.api.ICollisionShape;
 import raptor.engine.display.render.IGraphics;
 import raptor.engine.model.Direction;
-import raptor.engine.model.EntityDrawOriginGraphicsWrapper;
 import raptor.engine.model.Model;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.api.IPoint;
@@ -19,7 +18,6 @@ public abstract class Entity implements IEntity {
 	private final int height;
 
 	private final Model model;
-	private final EntityDrawOriginGraphicsWrapper graphicsWrapper;
 
 	private Map<Long, ICollisionShape> collisions;
 	private int facingInDegrees;
@@ -32,7 +30,6 @@ public abstract class Entity implements IEntity {
 		this.height = height;
 
 		this.model = model;
-		this.graphicsWrapper = new EntityDrawOriginGraphicsWrapper(this);
 
 		if (model != null)
 			model.setPosition(position);
@@ -101,17 +98,12 @@ public abstract class Entity implements IEntity {
 		return collisions.get(planeId);
 	}
 
-	protected abstract void _draw(final IGraphics wrapped);
-
 	@Override
-	public void draw(final IGraphics wrapped) {
+	public void draw(final IGraphics graphics) {
 		if (model != null) {
-			graphicsWrapper.setGraphics(wrapped);
-
 			model.setDirection(Direction.calculateDirection(facingInDegrees));
-			model.draw(graphicsWrapper);
+			model.draw(graphics);
 		}
-		_draw(graphicsWrapper);
 	}
 
 	public Model getModel() {

@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import raptor.engine.game.entity.IEntity;
+import raptor.engine.model.EntityDrawOriginGraphicsWrapper;
+
 public class JavaAwtRenderer implements IRenderer {
 	private final Graphics2D awtGraphics;
 
@@ -19,6 +22,8 @@ public class JavaAwtRenderer implements IRenderer {
 	private final IGraphics graphics;
 
 	private final Queue<IDrawable> drawQueue;
+
+	private final EntityDrawOriginGraphicsWrapper entityOriginWrapper;
 
 	public JavaAwtRenderer(final Graphics2D awtGraphics, final int width, final int height) {
 		this.awtGraphics = awtGraphics;
@@ -33,6 +38,8 @@ public class JavaAwtRenderer implements IRenderer {
 		graphics = new ToViewportGraphicsWrapper(new JavaAwtGraphics(toBuffer), viewport);
 
 		drawQueue = new LinkedList<>();
+
+		entityOriginWrapper = new EntityDrawOriginGraphicsWrapper();
 	}
 
 	@Override
@@ -53,7 +60,11 @@ public class JavaAwtRenderer implements IRenderer {
 		IDrawable current;
 		while(!drawQueue.isEmpty()) {
 			current = drawQueue.poll();
-			current.draw(graphics);
+
+			if (current instanceof IEntity)
+				current.draw(entityOriginWrapper.setEntity((IEntity)current).setGraphics(graphics));
+			else
+				current.draw(graphics);
 		}
 
 		awtGraphics.drawImage(buffer, 0, 0, null);
