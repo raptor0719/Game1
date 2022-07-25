@@ -5,14 +5,40 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Stroke;
+import java.util.HashMap;
+import java.util.Map;
+
+import raptor.engine.model.Sprite;
 
 public class JavaAwtGraphics implements IGraphics {
 	private final Graphics2D graphics;
 	private final Stroke defaultStroke;
 
+	private final Map<Long, Sprite> spriteCache;
+
 	public JavaAwtGraphics(final Graphics2D graphics) {
 		this.graphics = graphics;
 		this.defaultStroke = new BasicStroke(2);
+		this.spriteCache = new HashMap<>();
+	}
+
+	@Override
+	public void drawSprite(final Sprite sprite, final int x, final int y, final int rotation) {
+		final long hash = calculateHash(sprite, rotation);
+
+		Sprite toDraw = null;
+		if (spriteCache.containsKey(hash)) {
+			toDraw = spriteCache.get(hash);
+		} else {
+			toDraw = SpriteUtility.translateSprite(sprite, rotation);
+			spriteCache.put(hash, toDraw);
+		}
+
+		drawImage(toDraw.getImage(), x - toDraw.getAttachPoint().getX(), y - toDraw.getAttachPoint().getY());
+	}
+
+	private long calculateHash(final Sprite sprite, final int rotation) {
+		return sprite.getHash() + rotation;
 	}
 
 	@Override

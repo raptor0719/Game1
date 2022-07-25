@@ -2,6 +2,8 @@ package raptor.engine.display.render;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Iterator;
@@ -25,11 +27,12 @@ public class JavaAwtRenderer implements IRenderer {
 
 	private final EntityDrawOriginGraphicsWrapper entityOriginWrapper;
 
-	public JavaAwtRenderer(final Graphics2D awtGraphics, final int width, final int height) {
+	public JavaAwtRenderer(final Graphics2D awtGraphics, final int width, final int height, final GraphicsDevice usedDevice) {
 		this.awtGraphics = awtGraphics;
 		this.viewport = new Viewport(width, height, 0, 0);
 
-		buffer = new BufferedImage(viewport.getWidth(), viewport.getHeight(), BufferedImage.TYPE_4BYTE_ABGR_PRE);
+		this.buffer = createOptimalBuffer(viewport, usedDevice);
+
 		this.toBuffer = buffer.createGraphics();
 
 		toBuffer.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -78,5 +81,11 @@ public class JavaAwtRenderer implements IRenderer {
 	private void clear() {
 		toBuffer.setColor(Color.BLACK);
 		toBuffer.fillRect(0, 0, viewport.getWidth(), viewport.getHeight());
+	}
+
+	private static BufferedImage createOptimalBuffer(final Viewport vp, final GraphicsDevice usedDevice) {
+		final GraphicsConfiguration graphicsConfiguration = usedDevice.getDefaultConfiguration();
+
+		return graphicsConfiguration.createCompatibleImage(vp.getWidth(), vp.getHeight());
 	}
 }

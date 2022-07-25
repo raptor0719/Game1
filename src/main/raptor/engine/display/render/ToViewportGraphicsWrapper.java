@@ -2,6 +2,8 @@ package raptor.engine.display.render;
 
 import java.awt.Image;
 
+import raptor.engine.model.Sprite;
+
 public class ToViewportGraphicsWrapper implements IGraphics {
 	private final IGraphics graphics;
 	private final LocationToViewportTransformer toViewport;
@@ -11,6 +13,17 @@ public class ToViewportGraphicsWrapper implements IGraphics {
 		this.graphics = graphics;
 		this.toViewport = new LocationToViewportTransformer(viewport);
 		this.viewport = viewport;
+	}
+
+	@Override
+	public void drawSprite(final Sprite sprite, final int x, final int y, final int rotation) {
+		final int viewportX = toViewport.transformX(x);
+		final int viewportY = toViewport.transformY(y);
+
+		if (!isInViewport(viewportX, viewportY, sprite.getImage().getWidth(null), sprite.getImage().getHeight(null)))
+			return;
+
+		graphics.drawSprite(sprite, viewportX, viewportY, rotation);
 	}
 
 	@Override

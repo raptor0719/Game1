@@ -21,6 +21,11 @@ public class EntityDrawOriginGraphicsWrapper implements IGraphics {
 	}
 
 	@Override
+	public void drawSprite(final Sprite sprite, final int x, final int y, final int rotation) {
+		wrapped.drawSprite(sprite, translateX(x), translateY(y), rotation);
+	}
+
+	@Override
 	public void drawImage(final Image image, final int x, final int y) {
 		wrapped.drawImage(image, translateX(x), translateY(y));
 	}
