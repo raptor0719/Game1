@@ -2,6 +2,7 @@ package raptor.engine.nav.mesh;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import raptor.engine.nav.api.INavigator;
@@ -27,12 +28,14 @@ public class NavMeshNavigator implements INavigator {
 	private final IGraphSearch graphSearch;
 	private final ITransformer<List<IGraphNode>, List<NavMeshNode>> typeTransformer;
 	private final IPathMaterializer<NavMeshNode> pathMaterializer;
+	private final List<LineSegment> walls;
 
-	public NavMeshNavigator(final IPointResolver<NavMeshNode> navMap, final IGraphSearch graphSearch, final ITransformer<List<IGraphNode>, List<NavMeshNode>> typeTransformer, final IPathMaterializer<NavMeshNode> pathMaterializer) {
+	public NavMeshNavigator(final IPointResolver<NavMeshNode> navMap, final IGraphSearch graphSearch, final ITransformer<List<IGraphNode>, List<NavMeshNode>> typeTransformer, final IPathMaterializer<NavMeshNode> pathMaterializer, final List<LineSegment> walls) {
 		this.navMap = navMap;
 		this.graphSearch = graphSearch;
 		this.typeTransformer = typeTransformer;
 		this.pathMaterializer = pathMaterializer;
+		this.walls = walls;
 	}
 
 	@Override
@@ -78,6 +81,11 @@ public class NavMeshNavigator implements INavigator {
 		return navMap.resolvePoint(new Point(x, y)) != null;
 	}
 
+	@Override
+	public List<LineSegment> getWalls() {
+		return walls;
+	}
+
 	public static NavMeshNavigator buildNavigator(final Polygon parent, final List<Polygon> holes) {
 		return buildNavigator(parent, holes, GeometryFunctions.fillPolygonWithTriangles(parent, holes));
 	}
@@ -106,7 +114,12 @@ public class NavMeshNavigator implements INavigator {
 		areaBounds.add(parent);
 		final IPathMaterializer<NavMeshNode> pathMaterializer = new NavMeshPathMaterializer(areaBounds);
 
-		return new NavMeshNavigator(navMap, graphSearch, typeTransformer, pathMaterializer);
+		final List<LineSegment> walls = new ArrayList<LineSegment>();
+		walls.addAll(parent.getLines());
+		for (final Polygon p : holes)
+			walls.addAll(p.getLines());
+
+		return new NavMeshNavigator(navMap, graphSearch, typeTransformer, pathMaterializer, Collections.unmodifiableList(walls));
 	}
 
 	private static Point getXYMaximums(final Polygon parent) {
