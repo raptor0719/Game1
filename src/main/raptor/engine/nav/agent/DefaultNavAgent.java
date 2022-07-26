@@ -107,7 +107,7 @@ public class DefaultNavAgent implements INavAgent {
 	}
 
 	@Override
-	public void move(final int unitsToMove) {
+	public void move(final double unitsToMove) {
 		if ((path.isEmpty() && atWaypoint()) || unitsToMove < 1)
 			return;
 

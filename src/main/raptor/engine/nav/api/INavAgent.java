@@ -9,7 +9,7 @@ public interface INavAgent {
 	int getPositionY();
 	void setDestination(int x, int y);
 	Point getDestination();
-	void move(int unitsToMove);
+	void move(double unitsToMove);
 	void setNavigator(INavigator navigator);
 	DoubleVector getFaceVector();
 	boolean atDestination();

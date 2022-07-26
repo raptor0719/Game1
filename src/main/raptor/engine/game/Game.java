@@ -8,6 +8,8 @@ import raptor.engine.ui.input.IInputManager;
 import raptor.engine.ui.input.IMousePositionPoll;
 
 public class Game {
+	private static final long TARGET_TIME_PER_TICK = 17;
+
 	private static long timeSinceLastFrame;
 	private static Level currentLevel;
 
@@ -54,20 +56,24 @@ public class Game {
 
 			userInterface.processActions();
 
-			if (timeSinceLastFrame >= 17) {
+			if (timeSinceLastFrame >= TARGET_TIME_PER_TICK) {
 				previousTime = currentTime;
-				currentLevel.tick();
-
-				renderer.queueDrawables(currentLevel.getDrawables());
-				renderer.queueDrawable(userInterface);
-
-				renderer.draw();
+				currentLevel.tick(timeSinceLastFrame/TARGET_TIME_PER_TICK);
 			}
+
+			renderer.queueDrawables(currentLevel.getDrawables());
+			renderer.queueDrawable(userInterface);
+
+			renderer.draw();
 		}
 	}
 
 	public static long getTimeSinceLastFrame() {
 		return timeSinceLastFrame;
+	}
+
+	public static long getTargetTimePerTicket() {
+		return TARGET_TIME_PER_TICK;
 	}
 
 	public static Level getCurrentLevel() {

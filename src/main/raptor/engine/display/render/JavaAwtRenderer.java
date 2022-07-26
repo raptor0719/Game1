@@ -58,6 +58,8 @@ public class JavaAwtRenderer implements IRenderer {
 
 	@Override
 	public void draw() {
+		viewport.update();
+
 		clear();
 
 		IDrawable current;
