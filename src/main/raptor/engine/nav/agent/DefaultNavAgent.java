@@ -135,7 +135,7 @@ public class DefaultNavAgent implements INavAgent {
 		positionX = positionX + round(totalMovementVector.getX());
 		positionY = positionY + round(totalMovementVector.getY());
 
-		currentMovementUnitVector = totalMovementVector;
+		currentMovementUnitVector = (totalMovementVector.getMagnitude() > 0) ? totalMovementVector : currentMovementUnitVector;
 
 		if (atWaypoint() && !path.isEmpty()) {
 			final Point nextWaypoint = path.remove(0);
