@@ -51,12 +51,12 @@ public abstract class Level implements IDrawable {
 	public void tick(final double tickCount) {
 		eventBroker.distribute();
 
-		checkCollisions();
-
 		for (final IEntity e : entities.values())
 			e.update(tickCount);
 
 		update(tickCount);
+
+		checkCollisions();
 	}
 
 	private void checkCollisions() {
