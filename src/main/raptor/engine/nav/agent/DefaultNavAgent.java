@@ -111,6 +111,12 @@ public class DefaultNavAgent implements INavAgent {
 		if ((path.isEmpty() && atWaypoint()) || unitsToMove < 1)
 			return;
 
+		if (atWaypoint() && !path.isEmpty()) {
+			final Point nextWaypoint = path.remove(0);
+			currentWaypointX = nextWaypoint.getX();
+			currentWaypointY = nextWaypoint.getY();
+		}
+
 		DoubleVector totalMovementVector = DoubleVector.unitVectorTowardPoint(positionX, positionY, currentWaypointX, currentWaypointY).scale(unitsToMove);
 		DoubleVector movementToWaypointVector = new DoubleVector(currentWaypointX - positionX, currentWaypointY - positionY);
 
@@ -136,12 +142,6 @@ public class DefaultNavAgent implements INavAgent {
 		positionY = positionY + round(totalMovementVector.getY());
 
 		currentMovementUnitVector = (totalMovementVector.getMagnitude() > 0) ? totalMovementVector : currentMovementUnitVector;
-
-		if (atWaypoint() && !path.isEmpty()) {
-			final Point nextWaypoint = path.remove(0);
-			currentWaypointX = nextWaypoint.getX();
-			currentWaypointY = nextWaypoint.getY();
-		}
 	}
 
 	@Override
