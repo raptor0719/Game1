@@ -19,7 +19,6 @@ public abstract class Entity implements IEntity {
 	private final Model model;
 
 	private Map<Long, ICollisionShape> collisions;
-	private int facingInDegrees;
 
 	public Entity(final long id, final String name, final Model model, final int width, final int height) {
 		this.id = id;
@@ -34,7 +33,6 @@ public abstract class Entity implements IEntity {
 			model.setPosition(position);
 
 		this.collisions = new HashMap<Long, ICollisionShape>();
-		facingInDegrees = 0;
 	}
 
 	@Override
