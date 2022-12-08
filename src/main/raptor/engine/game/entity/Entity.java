@@ -58,11 +58,6 @@ public abstract class Entity implements IEntity {
 	}
 
 	@Override
-	public int getFacingInDegrees() {
-		return facingInDegrees;
-	}
-
-	@Override
 	public void setX(final int x) {
 		position.setX(x);
 	}
@@ -70,11 +65,6 @@ public abstract class Entity implements IEntity {
 	@Override
 	public void setY(final int y) {
 		position.setY(y);
-	}
-
-	@Override
-	public void setFacingInDegrees(int degrees) {
-		this.facingInDegrees = degrees;
 	}
 
 	@Override
@@ -100,7 +90,6 @@ public abstract class Entity implements IEntity {
 	@Override
 	public void draw(final IGraphics graphics) {
 		if (model != null) {
-			model.setFacingInDegrees(facingInDegrees);
 			model.draw(graphics);
 		}
 	}

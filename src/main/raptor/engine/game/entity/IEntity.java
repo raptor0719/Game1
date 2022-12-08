@@ -9,10 +9,8 @@ public interface IEntity extends IDrawable {
 	void update(double tickCount);
 	int getX();
 	int getY();
-	int getFacingInDegrees();
 	void setX(int newX);
 	void setY(int newY);
-	void setFacingInDegrees(int degrees);
 	int getWidth();
 	int getHeight();
 	boolean hasCollision(long planeId);
