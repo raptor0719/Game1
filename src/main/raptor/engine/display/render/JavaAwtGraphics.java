@@ -59,7 +59,11 @@ public class JavaAwtGraphics implements IGraphics {
 		final Color awtColor = new Color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
 		graphics.setColor(awtColor);
 		graphics.setStroke(defaultStroke);
-		graphics.fillRect(x, y, width, height);
+
+		if (fill)
+			graphics.fillRect(x, y, width, height);
+		else
+			graphics.drawRect(x, y, width, height);
 	}
 
 	@Override
