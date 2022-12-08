@@ -6,12 +6,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WireModelFrame {
+	private final String name;
 	private final Hardpoint[] sortedHardpoints;
 	private final Map<String, Hardpoint> hardpointMap;
 
-	public WireModelFrame(final Hardpoint[] hardpoints) {
+	public WireModelFrame(final String name, final Hardpoint[] hardpoints) {
+		this.name = name;
 		this.sortedHardpoints = sort(hardpoints);
 		this.hardpointMap = map(hardpoints);
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	public Hardpoint[] getSortedHardpoints() {

@@ -5,7 +5,6 @@ import java.util.Map;
 
 import raptor.engine.collision.api.ICollisionShape;
 import raptor.engine.display.render.IGraphics;
-import raptor.engine.model.Direction;
 import raptor.engine.model.Model;
 import raptor.engine.util.geometry.Point;
 import raptor.engine.util.geometry.api.IPoint;
@@ -101,7 +100,7 @@ public abstract class Entity implements IEntity {
 	@Override
 	public void draw(final IGraphics graphics) {
 		if (model != null) {
-			model.setDirection(Direction.calculateDirection(facingInDegrees));
+			model.setFacingInDegrees(facingInDegrees);
 			model.draw(graphics);
 		}
 	}

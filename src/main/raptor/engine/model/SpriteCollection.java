@@ -3,15 +3,15 @@ package raptor.engine.model;
 import java.util.Map;
 
 public class SpriteCollection {
-	private final Map<String, DirectionalSprite> phases;
+	private final Map<String, Sprite> phases;
 	private final String name;
 
-	public SpriteCollection(final String name, final Map<String, DirectionalSprite> phases) {
+	public SpriteCollection(final String name, final Map<String, Sprite> phases) {
 		this.phases = phases;
 		this.name = name;
 	}
 
-	public DirectionalSprite getSprite(final String phase) {
+	public Sprite getSprite(final String phase) {
 		return phases.get(phase);
 	}
 
