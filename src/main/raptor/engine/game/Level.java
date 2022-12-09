@@ -44,17 +44,17 @@ public abstract class Level implements IDrawable {
 		// Let implementing classes override if wanted
 	}
 
-	protected void update(final double tickCount) {
+	protected void update(final long millisSinceLastFrame) {
 		// Let implementing classes override if wanted
 	}
 
-	public void tick(final double tickCount) {
+	public void tick(final long millisSinceLastFrame) {
 		eventBroker.distribute();
 
 		for (final IEntity e : entities.values())
-			e.update(tickCount);
+			e.update(millisSinceLastFrame);
 
-		update(tickCount);
+		update(millisSinceLastFrame);
 
 		checkCollisions();
 	}

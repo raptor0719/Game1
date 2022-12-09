@@ -6,7 +6,7 @@ import raptor.engine.display.render.IDrawable;
 public interface IEntity extends IDrawable {
 	long getId();
 	String getName();
-	void update(double tickCount);
+	void update(long millisSinceLastFrame);
 	int getX();
 	int getY();
 	void setX(int newX);
