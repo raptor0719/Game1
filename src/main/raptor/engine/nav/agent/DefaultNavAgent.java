@@ -23,6 +23,8 @@ public class DefaultNavAgent implements INavAgent {
 
 	private DoubleVector currentMovementUnitVector;
 
+	private double accumulator;
+
 	public DefaultNavAgent(final INavigator navigator) {
 		this.navigator = navigator;
 
@@ -37,6 +39,8 @@ public class DefaultNavAgent implements INavAgent {
 		path = new LinkedList<Point>();
 
 		currentMovementUnitVector = new DoubleVector(0, 0);
+
+		accumulator = 0;
 	}
 
 	@Override
@@ -107,15 +111,24 @@ public class DefaultNavAgent implements INavAgent {
 	}
 
 	@Override
-	public void move(final double unitsToMove) {
-		if ((path.isEmpty() && atWaypoint()) || unitsToMove < 1)
+	public void move(final double units) {
+		final double unitsToMove = units + accumulator;
+
+		if (unitsToMove < 1) {
+			accumulator = unitsToMove;
+			return;
+		}
+
+		if ((path.isEmpty() && atWaypoint()))
 			return;
 
-		if (atWaypoint() && !path.isEmpty()) {
+		while (atWaypoint() && !path.isEmpty()) {
 			final Point nextWaypoint = path.remove(0);
 			currentWaypointX = nextWaypoint.getX();
 			currentWaypointY = nextWaypoint.getY();
 		}
+
+		accumulator = 0;
 
 		DoubleVector totalMovementVector = DoubleVector.unitVectorTowardPoint(positionX, positionY, currentWaypointX, currentWaypointY).scale(unitsToMove);
 		DoubleVector movementToWaypointVector = new DoubleVector(currentWaypointX - positionX, currentWaypointY - positionY);
