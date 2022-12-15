@@ -10,8 +10,8 @@ import java.util.Map;
 import raptor.engine.collision.CollisionPlane;
 import raptor.engine.collision.api.ICollisionPlaneHandler;
 import raptor.engine.display.render.IDrawable;
-import raptor.engine.event.EventBroker;
-import raptor.engine.event.IEventBroker;
+import raptor.engine.event.EventBus;
+import raptor.engine.event.IEventBus;
 import raptor.engine.game.entity.DrawDepthEntityComparator;
 import raptor.engine.game.entity.IEntity;
 import raptor.engine.nav.api.INavigator;
@@ -22,14 +22,14 @@ import raptor.engine.util.ListSortingIterator;
 public abstract class Level implements IDrawable {
 	private static final Comparator<IEntity> DRAW_DEPTH_COMPARE = new DrawDepthEntityComparator();
 
-	private final IEventBroker eventBroker;
+	private final EventBus eventBus;
 	private final Map<Long, IEntity> entities;
 	private final IIdProvider entityIdProvider;
 	private final Map<Integer, INavigator> navigators;
 	private final Map<Integer, CollisionPlane> collisionPlanes;
 
 	public Level() {
-		this.eventBroker = new EventBroker();
+		this.eventBus = new EventBus();
 		this.entities = new HashMap<Long, IEntity>();
 		this.entityIdProvider = new IdProvider();
 		this.navigators = new HashMap<Integer, INavigator>();
@@ -49,7 +49,7 @@ public abstract class Level implements IDrawable {
 	}
 
 	public void tick(final long millisSinceLastFrame) {
-		eventBroker.distribute();
+		eventBus.update();
 
 		for (final IEntity e : entities.values())
 			e.update(millisSinceLastFrame);
@@ -68,8 +68,8 @@ public abstract class Level implements IDrawable {
 		return new InsertingDrawableIteratorWrapper(this, new ListSortingIterator<>(entities.values(), DRAW_DEPTH_COMPARE), null);
 	}
 
-	public IEventBroker getEventBroker() {
-		return eventBroker;
+	public IEventBus getEventBus() {
+		return eventBus;
 	}
 
 	public IIdProvider getEntityIdProvider() {
