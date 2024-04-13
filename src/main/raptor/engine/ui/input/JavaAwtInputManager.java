@@ -99,6 +99,9 @@ public class JavaAwtInputManager implements IInputManager, IMousePositionPoll, M
 	}
 
 	private void resolvePhysicalMouseMove(final MouseEvent event) {
+		if (event.getXOnScreen() == getPhysicalMouseX() && event.getYOnScreen() == getPhysicalMouseY())
+			return;
+
 		virtualMousePosition.setX(Math.min(Math.max(virtualMousePosition.getX() + event.getXOnScreen() - getPhysicalMouseX(), 0), viewport.getWidth()));
 		virtualMousePosition.setY(Math.min(Math.max(virtualMousePosition.getY() + event.getYOnScreen() - getPhysicalMouseY(), 0), viewport.getHeight()));
 		physicalMouseMover.mouseMove(getPhysicalMouseX(), getPhysicalMouseY());
