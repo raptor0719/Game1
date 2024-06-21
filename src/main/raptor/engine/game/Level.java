@@ -10,6 +10,7 @@ import java.util.Map;
 import raptor.engine.collision.CollisionPlane;
 import raptor.engine.collision.api.ICollisionPlaneHandler;
 import raptor.engine.display.render.IDrawable;
+import raptor.engine.display.render.RenderPlane;
 import raptor.engine.event.EventBus;
 import raptor.engine.event.IEventBus;
 import raptor.engine.game.entity.DrawDepthEntityComparator;
